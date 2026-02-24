@@ -1,9 +1,0 @@
-can you create different md file for List.
-
-List introduction.
-
-All the methods of List and how to use it with example and output.
-
-Transformation convert List of string to upper case.
-Remove, replace, serach, sort with asc and desc, add,
-convert from list to map, list to map groupby, partition by and all are the java 8 example cover 100% without missing it. Java interveriw code java 8 example and others . conver java 21 also if any other change
