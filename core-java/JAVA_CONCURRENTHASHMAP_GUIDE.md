@@ -1,0 +1,627 @@
+# Java ConcurrentHashMap — Complete Guide (Java 8, Java 21)
+
+Introduction to `ConcurrentHashMap`, thread-safety, all methods with examples and output, transformations, Map → List conversions, concurrent operations, and Java 8 / Java 21 examples.
+
+---
+
+## 1. ConcurrentHashMap introduction
+
+- **`ConcurrentHashMap<K, V>`** is a thread-safe, hash table-based implementation of the `Map` interface. It allows concurrent read and write operations without external synchronization.
+- **Key characteristics:**
+  - **Thread-safe** — multiple threads can read and write concurrently without blocking (for most operations).
+  - **No locking for reads** — read operations (get, containsKey, etc.) do not block.
+  - **Segment-based locking (Java 7)** / **CAS + synchronized (Java 8+)** — write operations lock only the bucket/segment, not the entire map.
+  - **No null keys or values** — throws `NullPointerException` if null is inserted.
+  - **Weakly consistent iterators** — iterators reflect the state at some point during iteration; may or may not show updates.
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+ConcurrentHashMap<String, Integer> withCapacity = new ConcurrentHashMap<>(16);
+ConcurrentHashMap<String, Integer> withLoadFactor = new ConcurrentHashMap<>(16, 0.75f, 4);  // capacity, load factor, concurrency level
+```
+
+**Note:** In Java 8+, `concurrencyLevel` parameter is ignored (kept for compatibility). The implementation uses dynamic resizing.
+
+---
+
+## 2. All ConcurrentHashMap methods with examples and output
+
+### 2.1 put, putIfAbsent, putAll
+
+| Method | Description |
+|--------|-------------|
+| `V put(K key, V value)` | Associates key with value; returns previous value (or null). **Thread-safe.** |
+| `V putIfAbsent(K key, V value)` | Puts only if key is absent; returns existing value or null. **Thread-safe.** |
+| `void putAll(Map<? extends K, ? extends V> m)` | Copies all mappings from m. **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+Integer old1 = map.put("apple", 10);        // old1 = null, map = {apple=10}
+Integer old2 = map.put("apple", 20);        // old2 = 10, map = {apple=20}
+Integer old3 = map.putIfAbsent("banana", 30); // old3 = null, map = {apple=20, banana=30}
+Integer old4 = map.putIfAbsent("apple", 25);  // old4 = 20 (unchanged), map = {apple=20, banana=30}
+map.putAll(Map.of("mango", 40, "berry", 50)); // map = {apple=20, banana=30, mango=40, berry=50}
+```
+
+**Output:** `old1 = null`, `old2 = 10`, `old3 = null`, `old4 = 20`; final map: `{apple=20, banana=30, mango=40, berry=50}`
+
+**Thread-safety:** All operations are thread-safe. Multiple threads can call `put` concurrently.
+
+---
+
+### 2.2 get, getOrDefault
+
+| Method | Description |
+|--------|-------------|
+| `V get(Object key)` | Value for key, or null if absent. **Non-blocking read.** |
+| `V getOrDefault(Object key, V defaultValue)` | Value for key, or defaultValue if absent. **Non-blocking read.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+Integer val1 = map.get("apple");              // 10
+Integer val2 = map.get("mango");              // null
+Integer val3 = map.getOrDefault("mango", 0);   // 0
+Integer val4 = map.getOrDefault("apple", 0);   // 10
+```
+
+**Output:** `val1 = 10`, `val2 = null`, `val3 = 0`, `val4 = 10`
+
+**Thread-safety:** Read operations do not block; multiple threads can read concurrently.
+
+---
+
+### 2.3 remove
+
+| Method | Description |
+|--------|-------------|
+| `V remove(Object key)` | Removes mapping for key; returns value (or null). **Thread-safe.** |
+| `boolean remove(Object key, Object value)` | Removes only if key maps to value; returns true if removed. **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20, "mango", 30));
+Integer removed1 = map.remove("banana");              // removed1 = 20, map = {apple=10, mango=30}
+boolean removed2 = map.remove("apple", 10);          // removed2 = true, map = {mango=30}
+boolean removed3 = map.remove("mango", 50);          // removed3 = false (value mismatch)
+Integer removed4 = map.remove("berry");               // removed4 = null
+```
+
+**Output:** `removed1 = 20`, `removed2 = true`, `removed3 = false`, `removed4 = null`; final map: `{mango=30}`
+
+---
+
+### 2.4 replace, replaceAll
+
+| Method | Description |
+|--------|-------------|
+| `V replace(K key, V value)` | Replaces value for key if present; returns old value (or null). **Thread-safe.** |
+| `boolean replace(K key, V oldValue, V newValue)` | Replaces only if key maps to oldValue; returns true if replaced. **Thread-safe (compare-and-swap).** |
+| `void replaceAll(BiFunction<? super K, ? super V, ? extends V> function)` | Replaces each value with function(key, value). **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+Integer old1 = map.replace("apple", 15);              // old1 = 10, map = {apple=15, banana=20}
+boolean replaced = map.replace("banana", 20, 25);     // replaced = true, map = {apple=15, banana=25}
+boolean notReplaced = map.replace("banana", 30, 35);  // notReplaced = false
+map.replaceAll((k, v) -> v * 2);                      // map = {apple=30, banana=50}
+```
+
+**Output:** `old1 = 10`, `replaced = true`, `notReplaced = false`; after replaceAll: `{apple=30, banana=50}`
+
+**Thread-safety:** `replace(key, oldValue, newValue)` uses **compare-and-swap (CAS)**, making it atomic.
+
+---
+
+### 2.5 containsKey, containsValue
+
+| Method | Description |
+|--------|-------------|
+| `boolean containsKey(Object key)` | true if map contains key. **Non-blocking.** |
+| `boolean containsValue(Object value)` | true if map contains value. **May scan entire map; slower.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+boolean hasKey = map.containsKey("apple");      // true
+boolean hasValue = map.containsValue(20);        // true
+boolean noKey = map.containsKey("mango");       // false
+boolean noValue = map.containsValue(100);       // false
+```
+
+**Output:** `hasKey = true`, `hasValue = true`, `noKey = false`, `noValue = false`
+
+---
+
+### 2.6 size, isEmpty, mappingCount (Java 8)
+
+| Method | Description |
+|--------|-------------|
+| `int size()` | Number of mappings. **May be inaccurate during concurrent updates.** |
+| `long mappingCount()` | Number of mappings as long. **More accurate for large maps.** |
+| `boolean isEmpty()` | true if size is 0 |
+| `void clear()` | Removes all mappings. **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1, "b", 2));
+int size = map.size();              // 2
+long count = map.mappingCount();     // 2L (Java 8+)
+boolean empty = map.isEmpty();       // false
+map.clear();                        // map = {}
+boolean emptyAfter = map.isEmpty(); // true
+```
+
+**Output:** `size = 2`, `count = 2L`, `empty = false`, after clear `emptyAfter = true`
+
+**Note:** `size()` may be inaccurate during concurrent modifications. Use `mappingCount()` for better accuracy.
+
+---
+
+### 2.7 keySet, values, entrySet
+
+| Method | Description |
+|--------|-------------|
+| `Set<K> keySet()` | Set view of keys. **Weakly consistent iterator.** |
+| `Collection<V> values()` | Collection view of values. **Weakly consistent iterator.** |
+| `Set<Map.Entry<K, V>> entrySet()` | Set view of entries. **Weakly consistent iterator.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+Set<String> keys = map.keySet();                    // [apple, banana] (order may vary)
+Collection<Integer> values = map.values();          // [10, 20]
+Set<Map.Entry<String, Integer>> entries = map.entrySet();
+// [apple=10, banana=20]
+keys.remove("apple");                               // map = {banana=20}
+```
+
+**Output:** `keys` and `values` collections; removing from `keySet` removes from map.
+
+**Thread-safety:** Iterators are **weakly consistent** — they reflect the state at some point during iteration and may or may not show concurrent updates.
+
+---
+
+### 2.8 compute, computeIfAbsent, computeIfPresent
+
+| Method | Description |
+|--------|-------------|
+| `V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)` | Computes new value; **thread-safe.** Removes if function returns null. |
+| `V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction)` | Computes value only if key is absent. **Thread-safe.** |
+| `V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)` | Computes value only if key is present. **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+map.put("apple", 10);
+
+// compute: always runs function (thread-safe)
+Integer computed = map.compute("apple", (k, v) -> v + 5);  // computed = 15, map = {apple=15}
+Integer computed2 = map.compute("banana", (k, v) -> 20);   // computed2 = 20, map = {apple=15, banana=20}
+map.compute("apple", (k, v) -> null);                      // removes apple, map = {banana=20}
+
+// computeIfAbsent: only if absent (thread-safe)
+map.put("apple", 10);
+Integer absent = map.computeIfAbsent("mango", k -> 30);    // absent = 30, map = {apple=10, banana=20, mango=30}
+Integer absent2 = map.computeIfAbsent("apple", k -> 50);   // absent2 = 10 (unchanged)
+
+// computeIfPresent: only if present (thread-safe)
+Integer present = map.computeIfPresent("apple", (k, v) -> v * 2); // present = 20, map = {apple=20, ...}
+Integer present2 = map.computeIfPresent("berry", (k, v) -> 100);  // present2 = null (no-op)
+```
+
+**Output:** Values as commented; map changes accordingly.
+
+**Thread-safety:** All compute methods are **atomic** — the remapping function is executed atomically for the key.
+
+---
+
+### 2.9 merge
+
+| Method | Description |
+|--------|-------------|
+| `V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)` | If key absent, puts value; if present, applies remappingFunction(oldValue, newValue). **Thread-safe.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+map.put("apple", 10);
+
+// merge: if absent, use value; if present, merge (thread-safe)
+Integer merged1 = map.merge("apple", 5, Integer::sum);     // merged1 = 15, map = {apple=15}
+Integer merged2 = map.merge("banana", 20, Integer::sum);    // merged2 = 20 (no merge, key absent)
+map.merge("apple", 10, (old, newVal) -> null);             // removes apple (function returns null)
+```
+
+**Output:** `merged1 = 15`, `merged2 = 20`; after null merge, apple is removed.
+
+**Thread-safety:** `merge` is **atomic** — useful for concurrent counters or aggregations.
+
+---
+
+### 2.10 forEach (Java 8)
+
+| Method | Description |
+|--------|-------------|
+| `void forEach(long parallelismThreshold, BiFunction<? super K, ? super V, ? extends U> transformer, BiConsumer<? super U, ? super K> action)` | Parallel forEach with transformer. |
+| `void forEach(BiConsumer<? super K, ? super V> action)` | Performs action for each entry. **Thread-safe iteration.** |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+map.forEach((k, v) -> System.out.println(k + " -> " + v));
+// apple -> 10
+// banana -> 20
+```
+
+---
+
+### 2.11 search, reduce (Java 8)
+
+| Method | Description |
+|--------|-------------|
+| `U search(long parallelismThreshold, BiFunction<? super K, ? super V, ? extends U> searchFunction)` | Searches for a non-null result; returns first found. |
+| `U reduce(long parallelismThreshold, BiFunction<? super K, ? super V, ? extends U> transformer, BiFunction<? super U, ? super U, ? extends U> reducer)` | Reduces entries using transformer and reducer. |
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20, "mango", 5));
+String found = map.search(1, (k, v) -> v > 15 ? k : null);  // "banana" or "apple"
+Integer sum = map.reduce(1, (k, v) -> v, Integer::sum);      // 35
+```
+
+**Output:** `found` is a key with value > 15; `sum = 35`.
+
+---
+
+### 2.12 Java 21: SequencedMap methods
+
+`ConcurrentHashMap` implements **`SequencedMap`** in Java 21. New methods:
+
+| Method | Description |
+|--------|-------------|
+| `SequencedMap<K, V> reversed()` | Reversed view (insertion order not guaranteed) |
+| `Map.Entry<K, V> firstEntry()` | First entry (may vary) |
+| `Map.Entry<K, V> lastEntry()` | Last entry (may vary) |
+| `Map.Entry<K, V> pollFirstEntry()` | Remove and return first |
+| `Map.Entry<K, V> pollLastEntry()` | Remove and return last |
+
+**Note:** `ConcurrentHashMap` does not maintain insertion order. These methods may return arbitrary entries.
+
+---
+
+## 3. Thread-safety and concurrent operations
+
+### 3.1 Concurrent reads and writes
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+// Thread 1: writes
+new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        map.put("key" + i, i);
+    }
+}).start();
+
+// Thread 2: reads (non-blocking)
+new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        Integer val = map.get("key" + i);  // may return null if write hasn't happened yet
+    }
+}).start();
+```
+
+**Key point:** Reads do not block writes, and writes do not block reads (except for the same bucket).
+
+---
+
+### 3.2 Atomic operations
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+// Atomic increment
+map.compute("counter", (k, v) -> v == null ? 1 : v + 1);
+
+// Atomic merge (useful for counters)
+map.merge("count", 1, Integer::sum);  // thread-safe increment
+
+// Atomic replace-if-equals
+map.replace("key", 10, 20);  // only replaces if current value is 10
+```
+
+---
+
+### 3.3 Concurrent updates with compute
+
+```java
+ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
+
+// Thread-safe: computeIfAbsent + add
+map.computeIfAbsent("fruits", k -> new CopyOnWriteArrayList<>()).add("apple");
+map.computeIfAbsent("fruits", k -> new CopyOnWriteArrayList<>()).add("banana");
+// {fruits=[apple, banana]}
+```
+
+**Note:** Use thread-safe collections (e.g., `CopyOnWriteArrayList`) as values if multiple threads modify them.
+
+---
+
+## 4. Transformations
+
+### 4.1 Transform values (thread-safe)
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+
+// replaceAll (in-place, thread-safe)
+map.replaceAll((k, v) -> v * 2);
+// map = {apple=20, banana=40}
+
+// Stream: new map (original unchanged)
+ConcurrentHashMap<String, Integer> doubled = map.entrySet().stream()
+        .collect(Collectors.toConcurrentMap(Map.Entry::getKey, e -> e.getValue() * 2));
+```
+
+**Output:** `{apple=20, banana=40}`
+
+---
+
+### 4.2 Filter entries (thread-safe)
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20, "mango", 5));
+
+// Keep only entries where value >= 10
+ConcurrentHashMap<String, Integer> filtered = map.entrySet().stream()
+        .filter(e -> e.getValue() >= 10)
+        .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
+// {apple=10, banana=20}
+```
+
+---
+
+## 5. Insertion operations (thread-safe)
+
+### 5.1 Basic insertion
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+map.put("apple", 10);           // {apple=10} (thread-safe)
+map.put("banana", 20);          // {apple=10, banana=20}
+map.put("apple", 15);           // {apple=15, banana=20} (replaced)
+```
+
+---
+
+### 5.2 Insert only if absent (atomic)
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+map.putIfAbsent("apple", 10);   // {apple=10}
+map.putIfAbsent("apple", 20);   // {apple=10} (unchanged, atomic)
+```
+
+---
+
+### 5.3 Insert with computeIfAbsent (atomic)
+
+```java
+ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
+map.computeIfAbsent("fruits", k -> new CopyOnWriteArrayList<>()).add("apple");
+map.computeIfAbsent("fruits", k -> new CopyOnWriteArrayList<>()).add("banana");
+// {fruits=[apple, banana]}
+```
+
+---
+
+## 6. Deletion operations (thread-safe)
+
+### 6.1 Remove by key
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+map.remove("apple");            // {banana=20} (thread-safe)
+```
+
+---
+
+### 6.2 Remove by key-value pair (atomic)
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+map.remove("apple", 10);        // true, {banana=20} (atomic compare-and-swap)
+map.remove("banana", 30);       // false (value mismatch)
+```
+
+---
+
+### 6.3 Remove entries matching condition
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20, "mango", 5));
+map.entrySet().removeIf(e -> e.getValue() < 10);
+// {apple=10, banana=20}
+```
+
+---
+
+## 7. Map to List conversions
+
+### 7.1 Keys to List
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20));
+List<String> keys = new ArrayList<>(map.keySet());
+// [apple, banana] (order may vary)
+```
+
+---
+
+### 7.2 Values to List
+
+```java
+List<Integer> values = new ArrayList<>(map.values());
+// [10, 20]
+```
+
+---
+
+### 7.3 Entries to List
+
+```java
+List<Map.Entry<String, Integer>> entries = new ArrayList<>(map.entrySet());
+// [apple=10, banana=20]
+```
+
+---
+
+### 7.4 Stream: keys to List
+
+```java
+List<String> keys = map.keySet().stream().collect(Collectors.toList());
+List<String> sortedKeys = map.keySet().stream()
+        .sorted()
+        .collect(Collectors.toList());
+```
+
+---
+
+## 8. List to ConcurrentHashMap conversions
+
+### 8.1 List to ConcurrentHashMap
+
+```java
+List<String> list = List.of("apple", "banana", "mango");
+ConcurrentHashMap<String, Integer> map = list.stream()
+        .collect(Collectors.toConcurrentMap(Function.identity(), String::length));
+// {apple=5, banana=6, mango=5}
+```
+
+---
+
+### 8.2 List to ConcurrentHashMap with duplicate keys (merge)
+
+```java
+List<String> list = List.of("apple", "banana", "apple", "mango");
+ConcurrentHashMap<String, Long> count = list.stream()
+        .collect(Collectors.toConcurrentMap(Function.identity(), v -> 1L, Long::sum));
+// {apple=2, banana=1, mango=1}
+```
+
+---
+
+## 9. Java 8 Stream operations with ConcurrentHashMap
+
+### 9.1 Parallel stream operations
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("apple", 10, "banana", 20, "mango", 5));
+
+// Parallel stream (thread-safe)
+Map<String, Integer> filtered = map.entrySet().parallelStream()
+        .filter(e -> e.getValue() >= 10)
+        .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
+```
+
+---
+
+### 9.2 Sort by value (thread-safe)
+
+```java
+ConcurrentHashMap<String, Integer> sortedByValue = map.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue())
+        .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue,
+                (e1, e2) -> e1, ConcurrentHashMap::new));
+```
+
+---
+
+## 10. Coding interview questions
+
+### 10.1 Thread-safe counter
+
+```java
+ConcurrentHashMap<String, Integer> counters = new ConcurrentHashMap<>();
+
+// Increment counter (thread-safe)
+counters.merge("count", 1, Integer::sum);
+
+// Or using compute
+counters.compute("count", (k, v) -> v == null ? 1 : v + 1);
+```
+
+---
+
+### 10.2 Concurrent frequency counter
+
+```java
+List<String> words = List.of("apple", "banana", "apple", "mango");
+ConcurrentHashMap<String, Long> freq = words.parallelStream()
+        .collect(Collectors.toConcurrentMap(Function.identity(), v -> 1L, Long::sum));
+// {apple=2, banana=1, mango=1}
+```
+
+---
+
+### 10.3 Thread-safe cache with computeIfAbsent
+
+```java
+ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
+
+String getValue(String key) {
+    return cache.computeIfAbsent(key, k -> expensiveOperation(k));
+}
+```
+
+---
+
+### 10.4 Concurrent map merge (sum values)
+
+```java
+ConcurrentHashMap<String, Integer> map1 = new ConcurrentHashMap<>(Map.of("a", 1, "b", 2));
+ConcurrentHashMap<String, Integer> map2 = new ConcurrentHashMap<>(Map.of("b", 3, "c", 4));
+
+map2.forEach((k, v) -> map1.merge(k, v, Integer::sum));
+// map1 = {a=1, b=5, c=4}
+```
+
+---
+
+### 10.5 Thread-safe accumulator
+
+```java
+ConcurrentHashMap<String, AtomicInteger> accumulators = new ConcurrentHashMap<>();
+
+void increment(String key) {
+    accumulators.computeIfAbsent(key, k -> new AtomicInteger(0)).incrementAndGet();
+}
+```
+
+---
+
+## 11. Differences: HashMap vs ConcurrentHashMap
+
+| Feature | HashMap | ConcurrentHashMap |
+|---------|---------|-------------------|
+| **Thread-safety** | No | Yes |
+| **Null keys/values** | One null key, multiple null values | No nulls (throws NPE) |
+| **Read performance** | Fast | Fast (non-blocking) |
+| **Write performance** | Fast | Slightly slower (locking) |
+| **Iterator** | Fail-fast (throws `ConcurrentModificationException`) | Weakly consistent |
+| **Size** | Accurate | May be inaccurate during concurrent updates |
+| **Use case** | Single-threaded or synchronized externally | Multi-threaded without external synchronization |
+
+---
+
+## 12. Quick reference table
+
+| Operation | Method / Code |
+|-----------|---------------|
+| Insert (thread-safe) | `map.put(key, value)` |
+| Insert if absent (atomic) | `map.putIfAbsent(key, value)` |
+| Get (non-blocking) | `map.get(key)` or `map.getOrDefault(key, defaultValue)` |
+| Remove (thread-safe) | `map.remove(key)` or `map.remove(key, value)` |
+| Replace (atomic) | `map.replace(key, value)` or `map.replace(key, oldValue, newValue)` |
+| Replace all (thread-safe) | `map.replaceAll((k, v) -> newValue)` |
+| Compute (atomic) | `map.compute(key, (k, v) -> newValue)` |
+| Compute if absent (atomic) | `map.computeIfAbsent(key, k -> value)` |
+| Merge (atomic) | `map.merge(key, value, (old, new) -> merged)` |
+| Thread-safe counter | `map.merge("key", 1, Integer::sum)` |
+| List → ConcurrentHashMap | `list.stream().collect(Collectors.toConcurrentMap(...))` |
+
+---
+
+All examples use **Java 8** streams and collectors; Java 21 **SequencedMap** methods are noted where applicable. **ConcurrentHashMap** is designed for high-concurrency scenarios where multiple threads access the map simultaneously.
