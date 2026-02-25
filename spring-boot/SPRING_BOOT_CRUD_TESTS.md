@@ -4,6 +4,35 @@ A complete example of a Spring Boot 3.x CRUD application (Java 21) with **unit t
 
 ---
 
+## Table of Contents
+
+- [1. Project setup and dependencies](#1-project-setup-and-dependencies)
+  - [Maven (pom.xml) — relevant parts](#maven-pom-xml-relevant-parts)
+  - [application-test.yml (optional, for integration tests)](#application-test-yml-optional-for-integration-tests)
+- [2. Application structure](#2-application-structure)
+- [3. Testing annotations reference](#3-testing-annotations-reference)
+- [4. Entity](#4-entity)
+- [5. Repository](#5-repository)
+- [6. Service](#6-service)
+- [7. Controller (REST API)](#7-controller-rest-api)
+- [8. Unit tests](#8-unit-tests)
+  - [8.1 Unit tests: ProductService](#8-1-unit-tests-productservice)
+  - [8.2 Unit tests: ProductController](#8-2-unit-tests-productcontroller)
+  - [8.3 Unit tests: ProductRepository](#8-3-unit-tests-productrepository)
+- [9. Integration tests](#9-integration-tests)
+  - [9.1 Repository integration: @DataJpaTest](#9-1-repository-integration-datajpatest)
+  - [9.2 Full API integration: @SpringBootTest + MockMvc](#9-2-full-api-integration-springboottest-mockmvc)
+  - [9.3 Full API integration: @SpringBootTest + TestRestTemplate](#9-3-full-api-integration-springboottest-testresttemplate)
+- [10. Test layout summary](#10-test-layout-summary)
+- [11. Running tests](#11-running-tests)
+- [12. Quick reference](#12-quick-reference)
+
+
+---
+
+
+
+
 ## 1. Project setup and dependencies
 
 ### Maven (pom.xml) — relevant parts

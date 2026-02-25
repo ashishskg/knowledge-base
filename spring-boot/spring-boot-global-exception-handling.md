@@ -4,6 +4,18 @@ Goal: define **custom exceptions** in your service layer and convert them into c
 
 ---
 
+## Table of Contents
+
+- [1) Standard error response model](#1-standard-error-response-model)
+- [2) Custom exceptions](#2-custom-exceptions)
+- [3) Global exception handler (`@RestControllerAdvice`)](#3-global-exception-handler-restcontrolleradvice)
+
+
+---
+
+
+
+
 ## 1) Standard error response model
 
 Example `ApiError`:

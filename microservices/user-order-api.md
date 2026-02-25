@@ -1,5 +1,46 @@
 # User & Order API (Java): how to start + endpoint design (step-by-step)
 
+
+
+
+## Table of Contents
+
+- [1) Before you write code: the step-by-step process](#1-before-you-write-code-the-step-by-step-process)
+  - [Step 1 — Define the use-cases (requirements)](#step-1-define-the-use-cases-requirements)
+  - [Step 2 — Identify resources and relationships](#step-2-identify-resources-and-relationships)
+  - [Step 3 — Define API conventions (standards)](#step-3-define-api-conventions-standards)
+  - [Step 4 — Design the contract first (endpoints + schemas)](#step-4-design-the-contract-first-endpoints-schemas)
+  - [Step 5 — Define validation rules and state transitions](#step-5-define-validation-rules-and-state-transitions)
+  - [Step 6 — Plan persistence and transactions](#step-6-plan-persistence-and-transactions)
+  - [Step 7 — Implementation structure (Java)](#step-7-implementation-structure-java)
+- [2) Resource model (example)](#2-resource-model-example)
+  - [User](#user)
+  - [Order](#order)
+  - [OrderItem](#orderitem)
+- [3) Endpoint design: User API](#3-endpoint-design-user-api)
+  - [3.1 Create user](#3-1-create-user)
+  - [3.2 Get user by id](#3-2-get-user-by-id)
+  - [3.3 List/search users](#3-3-list-search-users)
+  - [3.4 Update user (partial update)](#3-4-update-user-partial-update)
+  - [3.5 Delete/deactivate user](#3-5-delete-deactivate-user)
+- [4) Endpoint design: Order API](#4-endpoint-design-order-api)
+  - [4.1 Create order](#4-1-create-order)
+  - [4.2 Get order by id](#4-2-get-order-by-id)
+  - [4.3 List orders (with filters)](#4-3-list-orders-with-filters)
+  - [4.4 Cancel order (recommended as a command)](#4-4-cancel-order-recommended-as-a-command)
+- [4.5 User → Orders relationship endpoint (optional)](#4-5-user-orders-relationship-endpoint-optional)
+- [5) Status codes and standard error model](#5-status-codes-and-standard-error-model)
+  - [Suggested status code usage](#suggested-status-code-usage)
+  - [Standard error response](#standard-error-response)
+- [6) Implementation outline (typical Java)](#6-implementation-outline-typical-java)
+  - [Controllers (HTTP)](#controllers-http)
+  - [Services (business rules)](#services-business-rules)
+  - [Repositories/DAOs](#repositories-daos)
+  - [Tests](#tests)
+
+
+---
+
 ## 1) Before you write code: the step-by-step process
 
 ### Step 1 — Define the use-cases (requirements)

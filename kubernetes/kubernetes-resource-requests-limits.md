@@ -1,5 +1,66 @@
 # Kubernetes Resource Requests and Limits
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Key Concepts](#key-concepts)
+  - [1. Resource Requests (`requests`)](#1-resource-requests-requests)
+  - [2. Resource Limits (`limits`)](#2-resource-limits-limits)
+- [CPU vs Memory: Critical Differences](#cpu-vs-memory-critical-differences)
+  - [CPU Details](#cpu-details)
+  - [Memory Details](#memory-details)
+- [How Kubernetes Uses Requests and Limits](#how-kubernetes-uses-requests-and-limits)
+  - [Scheduling Decision (Requests)](#scheduling-decision-requests)
+  - [Resource Enforcement (Limits)](#resource-enforcement-limits)
+  - [Node Capacity Calculation](#node-capacity-calculation)
+- [Basic Example](#basic-example)
+- [Resource QoS Classes](#resource-qos-classes)
+  - [1. Guaranteed (Highest Priority)](#1-guaranteed-highest-priority)
+  - [2. Burstable (Medium Priority)](#2-burstable-medium-priority)
+  - [3. BestEffort (Lowest Priority)](#3-besteffort-lowest-priority)
+- [Complete Examples](#complete-examples)
+  - [Example 1: Web Application (Burstable)](#example-1-web-application-burstable)
+  - [Example 2: Database (Guaranteed)](#example-2-database-guaranteed)
+  - [Example 3: Batch Job (BestEffort)](#example-3-batch-job-besteffort)
+  - [Example 4: Multi-Container Pod](#example-4-multi-container-pod)
+- [Best Practices](#best-practices)
+  - [1. Always Set Requests](#1-always-set-requests)
+  - [2. Set Limits Based on Application Needs](#2-set-limits-based-on-application-needs)
+  - [3. Start Conservative, Monitor, Adjust](#3-start-conservative-monitor-adjust)
+  - [4. Use Different Values for Requests vs Limits](#4-use-different-values-for-requests-vs-limits)
+  - [5. Consider Application Type](#5-consider-application-type)
+  - [6. Monitor Resource Usage](#6-monitor-resource-usage)
+  - [7. Use Resource Quotas (Namespace Level)](#7-use-resource-quotas-namespace-level)
+  - [8. Use LimitRange (Default Limits)](#8-use-limitrange-default-limits)
+- [Common Patterns](#common-patterns)
+  - [Pattern 1: Small Web Service](#pattern-1-small-web-service)
+  - [Pattern 2: Medium Web Application](#pattern-2-medium-web-application)
+  - [Pattern 3: Large Application](#pattern-3-large-application)
+  - [Pattern 4: Microservice (Lightweight)](#pattern-4-microservice-lightweight)
+- [Troubleshooting](#troubleshooting)
+  - [Issue 1: Pod Not Scheduling (Pending)](#issue-1-pod-not-scheduling-pending)
+  - [Issue 2: Pod Killed (OOMKilled)](#issue-2-pod-killed-oomkilled)
+  - [Issue 3: Slow Performance (CPU Throttling)](#issue-3-slow-performance-cpu-throttling)
+  - [Issue 4: Resource Waste](#issue-4-resource-waste)
+- [Commands Reference](#commands-reference)
+  - [Check Resource Usage](#check-resource-usage)
+  - [Check Node Capacity](#check-node-capacity)
+  - [Check Resource Quotas](#check-resource-quotas)
+- [CPU and Memory Units Reference](#cpu-and-memory-units-reference)
+  - [CPU Units](#cpu-units)
+  - [Memory Units](#memory-units)
+- [Real-World Example: Spring Boot Application](#real-world-example-spring-boot-application)
+- [Summary](#summary)
+  - [Key Takeaways](#key-takeaways)
+  - [Quick Reference](#quick-reference)
+  - [Remember](#remember)
+
+
+---
+
 ## Overview
 
 Resource requests and limits are critical for managing compute resources (CPU and Memory) in Kubernetes. They help ensure:

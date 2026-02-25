@@ -4,6 +4,76 @@ Introduction to `HashMap`, all its methods with examples and output, transformat
 
 ---
 
+## Table of Contents
+
+- [1. HashMap introduction](#1-hashmap-introduction)
+- [2. All HashMap methods with examples and output](#2-all-hashmap-methods-with-examples-and-output)
+  - [2.1 put, putIfAbsent, putAll](#2-1-put-putifabsent-putall)
+  - [2.2 get, getOrDefault](#2-2-get-getordefault)
+  - [2.3 remove](#2-3-remove)
+  - [2.4 replace, replaceAll](#2-4-replace-replaceall)
+  - [2.5 containsKey, containsValue](#2-5-containskey-containsvalue)
+  - [2.6 size, isEmpty, clear](#2-6-size-isempty-clear)
+  - [2.7 keySet, values, entrySet](#2-7-keyset-values-entryset)
+  - [2.8 compute, computeIfAbsent, computeIfPresent](#2-8-compute-computeifabsent-computeifpresent)
+  - [2.9 merge](#2-9-merge)
+  - [2.10 forEach (Java 8)](#2-10-foreach-java-8)
+  - [2.11 Java 21: SequencedMap methods](#2-11-java-21-sequencedmap-methods)
+- [3. Transformations](#3-transformations)
+  - [3.1 Transform values (e.g., multiply all values by 2)](#3-1-transform-values-e-g-multiply-all-values-by-2)
+  - [3.2 Transform keys](#3-2-transform-keys)
+  - [3.3 Filter entries](#3-3-filter-entries)
+- [4. Insertion operations](#4-insertion-operations)
+  - [4.1 Basic insertion](#4-1-basic-insertion)
+  - [4.2 Insert only if absent](#4-2-insert-only-if-absent)
+  - [4.3 Insert with computeIfAbsent](#4-3-insert-with-computeifabsent)
+  - [4.4 Insert all from another map](#4-4-insert-all-from-another-map)
+- [5. Deletion operations](#5-deletion-operations)
+  - [5.1 Remove by key](#5-1-remove-by-key)
+  - [5.2 Remove by key-value pair](#5-2-remove-by-key-value-pair)
+  - [5.3 Remove entries matching condition](#5-3-remove-entries-matching-condition)
+  - [5.4 Clear all](#5-4-clear-all)
+- [6. Replace operations](#6-replace-operations)
+  - [6.1 Replace value for key](#6-1-replace-value-for-key)
+  - [6.2 Replace if value matches](#6-2-replace-if-value-matches)
+  - [6.3 Replace all values](#6-3-replace-all-values)
+- [7. Map to List conversions](#7-map-to-list-conversions)
+  - [7.1 Keys to List](#7-1-keys-to-list)
+  - [7.2 Values to List](#7-2-values-to-list)
+  - [7.3 Entries to List](#7-3-entries-to-list)
+  - [7.4 Stream: keys to List](#7-4-stream-keys-to-list)
+  - [7.5 Stream: values to List](#7-5-stream-values-to-list)
+  - [7.6 Stream: entries to List of custom objects](#7-6-stream-entries-to-list-of-custom-objects)
+  - [7.7 Map to List of keys sorted by values](#7-7-map-to-list-of-keys-sorted-by-values)
+- [8. List to Map conversions](#8-list-to-map-conversions)
+  - [8.1 List to Map (element as key, index as value)](#8-1-list-to-map-element-as-key-index-as-value)
+  - [8.2 List to Map (element as key, transformed value)](#8-2-list-to-map-element-as-key-transformed-value)
+  - [8.3 List to Map with duplicate keys (merge)](#8-3-list-to-map-with-duplicate-keys-merge)
+- [9. Java 8 Stream operations with Map](#9-java-8-stream-operations-with-map)
+  - [9.1 Filter entries](#9-1-filter-entries)
+  - [9.2 Map entries to different type](#9-2-map-entries-to-different-type)
+  - [9.3 Sort by key](#9-3-sort-by-key)
+  - [9.4 Sort by value](#9-4-sort-by-value)
+  - [9.5 Group by value](#9-5-group-by-value)
+- [10. Coding interview questions](#10-coding-interview-questions)
+  - [10.1 Count frequency of characters in string](#10-1-count-frequency-of-characters-in-string)
+  - [10.2 Find first non-repeated character](#10-2-find-first-non-repeated-character)
+  - [10.3 Two Sum (indices)](#10-3-two-sum-indices)
+  - [10.4 Group anagrams](#10-4-group-anagrams)
+  - [10.5 Merge two maps (sum values for same keys)](#10-5-merge-two-maps-sum-values-for-same-keys)
+  - [10.6 Find duplicate elements](#10-6-find-duplicate-elements)
+  - [10.7 Sort map by value (descending)](#10-7-sort-map-by-value-descending)
+  - [10.8 Invert map (swap keys and values)](#10-8-invert-map-swap-keys-and-values)
+  - [10.9 Find key with maximum value](#10-9-find-key-with-maximum-value)
+  - [10.10 Check if two maps are equal (ignoring order)](#10-10-check-if-two-maps-are-equal-ignoring-order)
+- [11. Quick reference table](#11-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. HashMap introduction
 
 - **`HashMap<K, V>`** is a hash table-based implementation of the `Map` interface. It stores key-value pairs, allows one null key and multiple null values, and does not guarantee order (Java 7 and earlier) or insertion order (Java 8+).

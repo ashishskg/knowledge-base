@@ -8,6 +8,56 @@ Assumptions:
 
 ---
 
+## Table of Contents
+
+- [1) Key concepts you must know](#1-key-concepts-you-must-know)
+  - [1.1 Owning side vs inverse side](#1-1-owning-side-vs-inverse-side)
+  - [1.2 `mappedBy`](#1-2-mappedby)
+  - [1.3 `cascade`](#1-3-cascade)
+  - [1.4 `fetch` (LAZY vs EAGER)](#1-4-fetch-lazy-vs-eager)
+  - [1.5 Orphan removal](#1-5-orphan-removal)
+- [2) Option A (recommended in most business apps): `User` has **many** `Address` records](#2-option-a-recommended-in-most-business-apps-user-has-many-address-records)
+  - [2.1 Mapping: `@OneToMany` + `@ManyToOne`](#2-1-mapping-onetomany-manytoone)
+    - [`UserEntity` (inverse side)](#userentity-inverse-side)
+    - [`AddressEntity` (owning side)](#addressentity-owning-side)
+  - [2.2 What tables are created?](#2-2-what-tables-are-created)
+  - [2.3 What SQL queries will be created? (typical Hibernate behavior)](#2-3-what-sql-queries-will-be-created-typical-hibernate-behavior)
+    - [Case 1: Persist user + addresses (with `cascade = ALL`)](#case-1-persist-user-addresses-with-cascade-all)
+    - [Case 2: Load user only](#case-2-load-user-only)
+    - [Case 3: Access lazy addresses](#case-3-access-lazy-addresses)
+    - [Case 4: N+1 issue](#case-4-n-1-issue)
+    - [Case 5: Remove an address (with `orphanRemoval = true`)](#case-5-remove-an-address-with-orphanremoval-true)
+- [3) Option B: `@OneToOne` (User has exactly one Address)](#3-option-b-onetoone-user-has-exactly-one-address)
+  - [3.1 Unidirectional `@OneToOne` (owning side has FK)](#3-1-unidirectional-onetoone-owning-side-has-fk)
+  - [3.2 Bidirectional `@OneToOne` using `mappedBy`](#3-2-bidirectional-onetoone-using-mappedby)
+- [4) Common mapping annotations you’ll see](#4-common-mapping-annotations-you-ll-see)
+  - [`@JoinColumn`](#joincolumn)
+  - [`@JoinTable`](#jointable)
+  - [`@OrderBy`](#orderby)
+  - [`@BatchSize` (Hibernate-specific)](#batchsize-hibernate-specific)
+- [5) Primary key ID generation in production (MySQL vs Oracle)](#5-primary-key-id-generation-in-production-mysql-vs-oracle)
+  - [5.1 Common strategies](#5-1-common-strategies)
+    - [`GenerationType.IDENTITY`](#generationtype-identity)
+    - [`GenerationType.SEQUENCE`](#generationtype-sequence)
+    - [UUID (application-generated)](#uuid-application-generated)
+  - [5.2 Recommendations](#5-2-recommendations)
+    - [MySQL (AWS RDS/Aurora MySQL)](#mysql-aws-rds-aurora-mysql)
+    - [Oracle](#oracle)
+    - [Avoid relying on `GenerationType.AUTO` in production](#avoid-relying-on-generationtype-auto-in-production)
+- [6) Identity provider choice (AWS MySQL managed DB and Oracle)](#6-identity-provider-choice-aws-mysql-managed-db-and-oracle)
+  - [6.1 Recommended default on AWS: Amazon Cognito](#6-1-recommended-default-on-aws-amazon-cognito)
+  - [6.2 Enterprise SSO: integrate with existing IdP (Okta / Azure AD / Ping)](#6-2-enterprise-sso-integrate-with-existing-idp-okta-azure-ad-ping)
+  - [6.3 Self-managed / on-prem style: Keycloak](#6-3-self-managed-on-prem-style-keycloak)
+  - [6.4 For service-to-service on AWS: IAM roles + JWT/OIDC (or mTLS)](#6-4-for-service-to-service-on-aws-iam-roles-jwt-oidc-or-mtls)
+  - [6.5 Oracle-specific environments](#6-5-oracle-specific-environments)
+- [Quick recommendation](#quick-recommendation)
+
+
+---
+
+
+
+
 ## 1) Key concepts you must know
 
 ### 1.1 Owning side vs inverse side

@@ -1,5 +1,53 @@
 # Singleton Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [UML Class Diagram](#uml-class-diagram)
+- [Structure](#structure)
+- [When to Use](#when-to-use)
+- [Implementation Variations](#implementation-variations)
+  - [1. Eager Initialization](#1-eager-initialization)
+  - [2. Lazy Initialization](#2-lazy-initialization)
+  - [3. Thread-Safe Lazy Initialization](#3-thread-safe-lazy-initialization)
+  - [4. Enum Singleton (Recommended)](#4-enum-singleton-recommended)
+- [Examples in This Repository](#examples-in-this-repository)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+- [Related Patterns](#related-patterns)
+- [System Architecture](#system-architecture)
+- [Sequence Diagram](#sequence-diagram)
+- [Implementation Comparison](#implementation-comparison)
+- [Code Example](#code-example)
+- [Testing Considerations](#testing-considerations)
+  - [Challenges](#challenges)
+  - [Solutions](#solutions)
+- [Thread Safety Considerations](#thread-safety-considerations)
+  - [Eager Initialization](#eager-initialization)
+  - [Lazy Initialization](#lazy-initialization)
+  - [Double-Checked Locking](#double-checked-locking)
+- [Memory Considerations](#memory-considerations)
+- [Design Considerations](#design-considerations)
+  - [When NOT to Use Singleton](#when-not-to-use-singleton)
+  - [Alternatives](#alternatives)
+- [Source Code](#source-code)
+  - [`DatabaseConnection.java`](#databaseconnection-java)
+  - [`EagerSingleton.java`](#eagersingleton-java)
+  - [`EnumSingleton.java`](#enumsingleton-java)
+  - [`LazySingleton.java`](#lazysingleton-java)
+  - [`Logger.java`](#logger-java)
+  - [`SingletonDemo.java`](#singletondemo-java)
+  - [`ThreadSafeLazySingleton.java`](#threadsafelazysingleton-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

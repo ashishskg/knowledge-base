@@ -6,6 +6,48 @@ A practical overview of **Java 21** (LTS, released September 2023) language and 
 
 ---
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+- [2. High-level feature table](#2-high-level-feature-table)
+- [3. Virtual Threads (JEP 444)](#3-virtual-threads-jep-444)
+  - [Concept](#concept)
+  - [Example 1: Simple virtual thread](#example-1-simple-virtual-thread)
+  - [Example 2: Many virtual threads with ExecutorService](#example-2-many-virtual-threads-with-executorservice)
+- [4. Structured Concurrency (JEP 453)](#4-structured-concurrency-jep-453)
+  - [Concept](#concept)
+  - [Example: ShutdownOnFailure – fetch two resources concurrently](#example-shutdownonfailure-fetch-two-resources-concurrently)
+- [5. Scoped Values (JEP 429)](#5-scoped-values-jep-429)
+  - [Concept](#concept)
+  - [Example: Bind and read a scoped value](#example-bind-and-read-a-scoped-value)
+- [6. Sequenced Collections (JEP 431)](#6-sequenced-collections-jep-431)
+  - [Concept](#concept)
+  - [Example: List – getFirst, getLast, addFirst, reversed](#example-list-getfirst-getlast-addfirst-reversed)
+  - [Example: LinkedHashMap – reversed view](#example-linkedhashmap-reversed-view)
+- [7. Pattern Matching for switch (JEP 441)](#7-pattern-matching-for-switch-jep-441)
+  - [Concept](#concept)
+  - [Example: Format by type with guards and null](#example-format-by-type-with-guards-and-null)
+- [8. Record Patterns (JEP 440)](#8-record-patterns-jep-440)
+  - [Concept](#concept)
+  - [Example: Point quadrant with record pattern](#example-point-quadrant-with-record-pattern)
+- [9. Unnamed Patterns & Variables (JEP 443, preview)](#9-unnamed-patterns-variables-jep-443-preview)
+  - [Concept](#concept)
+  - [Example: Ignore components in switch](#example-ignore-components-in-switch)
+- [10. String Templates (JEP 430, preview)](#10-string-templates-jep-430-preview)
+  - [Concept](#concept)
+  - [Example: STR processor](#example-str-processor)
+- [11. Foreign Function & Memory API (JEP 442)](#11-foreign-function-memory-api-jep-442)
+  - [Concept](#concept)
+  - [Example: Allocate, write, read in native memory](#example-allocate-write-read-in-native-memory)
+- [12. Other improvements (brief)](#12-other-improvements-brief)
+- [13. Quick reference table](#13-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. Introduction
 
 Java 21 is a **Long-Term Support (LTS)** release focused on:

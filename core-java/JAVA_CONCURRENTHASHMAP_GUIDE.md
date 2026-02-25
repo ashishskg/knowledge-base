@@ -4,6 +4,63 @@ Introduction to `ConcurrentHashMap`, thread-safety, all methods with examples an
 
 ---
 
+## Table of Contents
+
+- [1. ConcurrentHashMap introduction](#1-concurrenthashmap-introduction)
+- [2. All ConcurrentHashMap methods with examples and output](#2-all-concurrenthashmap-methods-with-examples-and-output)
+  - [2.1 put, putIfAbsent, putAll](#2-1-put-putifabsent-putall)
+  - [2.2 get, getOrDefault](#2-2-get-getordefault)
+  - [2.3 remove](#2-3-remove)
+  - [2.4 replace, replaceAll](#2-4-replace-replaceall)
+  - [2.5 containsKey, containsValue](#2-5-containskey-containsvalue)
+  - [2.6 size, isEmpty, mappingCount (Java 8)](#2-6-size-isempty-mappingcount-java-8)
+  - [2.7 keySet, values, entrySet](#2-7-keyset-values-entryset)
+  - [2.8 compute, computeIfAbsent, computeIfPresent](#2-8-compute-computeifabsent-computeifpresent)
+  - [2.9 merge](#2-9-merge)
+  - [2.10 forEach (Java 8)](#2-10-foreach-java-8)
+  - [2.11 search, reduce (Java 8)](#2-11-search-reduce-java-8)
+  - [2.12 Java 21: SequencedMap methods](#2-12-java-21-sequencedmap-methods)
+- [3. Thread-safety and concurrent operations](#3-thread-safety-and-concurrent-operations)
+  - [3.1 Concurrent reads and writes](#3-1-concurrent-reads-and-writes)
+  - [3.2 Atomic operations](#3-2-atomic-operations)
+  - [3.3 Concurrent updates with compute](#3-3-concurrent-updates-with-compute)
+- [4. Transformations](#4-transformations)
+  - [4.1 Transform values (thread-safe)](#4-1-transform-values-thread-safe)
+  - [4.2 Filter entries (thread-safe)](#4-2-filter-entries-thread-safe)
+- [5. Insertion operations (thread-safe)](#5-insertion-operations-thread-safe)
+  - [5.1 Basic insertion](#5-1-basic-insertion)
+  - [5.2 Insert only if absent (atomic)](#5-2-insert-only-if-absent-atomic)
+  - [5.3 Insert with computeIfAbsent (atomic)](#5-3-insert-with-computeifabsent-atomic)
+- [6. Deletion operations (thread-safe)](#6-deletion-operations-thread-safe)
+  - [6.1 Remove by key](#6-1-remove-by-key)
+  - [6.2 Remove by key-value pair (atomic)](#6-2-remove-by-key-value-pair-atomic)
+  - [6.3 Remove entries matching condition](#6-3-remove-entries-matching-condition)
+- [7. Map to List conversions](#7-map-to-list-conversions)
+  - [7.1 Keys to List](#7-1-keys-to-list)
+  - [7.2 Values to List](#7-2-values-to-list)
+  - [7.3 Entries to List](#7-3-entries-to-list)
+  - [7.4 Stream: keys to List](#7-4-stream-keys-to-list)
+- [8. List to ConcurrentHashMap conversions](#8-list-to-concurrenthashmap-conversions)
+  - [8.1 List to ConcurrentHashMap](#8-1-list-to-concurrenthashmap)
+  - [8.2 List to ConcurrentHashMap with duplicate keys (merge)](#8-2-list-to-concurrenthashmap-with-duplicate-keys-merge)
+- [9. Java 8 Stream operations with ConcurrentHashMap](#9-java-8-stream-operations-with-concurrenthashmap)
+  - [9.1 Parallel stream operations](#9-1-parallel-stream-operations)
+  - [9.2 Sort by value (thread-safe)](#9-2-sort-by-value-thread-safe)
+- [10. Coding interview questions](#10-coding-interview-questions)
+  - [10.1 Thread-safe counter](#10-1-thread-safe-counter)
+  - [10.2 Concurrent frequency counter](#10-2-concurrent-frequency-counter)
+  - [10.3 Thread-safe cache with computeIfAbsent](#10-3-thread-safe-cache-with-computeifabsent)
+  - [10.4 Concurrent map merge (sum values)](#10-4-concurrent-map-merge-sum-values)
+  - [10.5 Thread-safe accumulator](#10-5-thread-safe-accumulator)
+- [11. Differences: HashMap vs ConcurrentHashMap](#11-differences-hashmap-vs-concurrenthashmap)
+- [12. Quick reference table](#12-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. ConcurrentHashMap introduction
 
 - **`ConcurrentHashMap<K, V>`** is a thread-safe, hash table-based implementation of the `Map` interface. It allows concurrent read and write operations without external synchronization.

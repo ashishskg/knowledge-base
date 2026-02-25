@@ -1,5 +1,44 @@
 # Flyweight Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+  - [State Classification](#state-classification)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Character Flyweight](#example-1-character-flyweight)
+  - [Example 2: Tree Type Flyweight](#example-2-tree-type-flyweight)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`Character.java`](#character-java)
+  - [`CharacterFactory.java`](#characterfactory-java)
+  - [`FlyweightDemo.java`](#flyweightdemo-java)
+  - [`Tree.java`](#tree-java)
+  - [`TreeFactory.java`](#treefactory-java)
+  - [`TreeType.java`](#treetype-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

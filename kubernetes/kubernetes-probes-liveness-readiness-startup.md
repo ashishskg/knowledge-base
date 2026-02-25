@@ -1,5 +1,53 @@
 # Kubernetes Probes: Liveness vs Readiness vs Startup
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [1. Liveness Probe](#1-liveness-probe)
+  - [Purpose](#purpose)
+  - [When to Use](#when-to-use)
+  - [Behavior](#behavior)
+  - [Example Scenarios](#example-scenarios)
+- [2. Readiness Probe](#2-readiness-probe)
+  - [Purpose](#purpose)
+  - [When to Use](#when-to-use)
+  - [Behavior](#behavior)
+  - [Example Scenarios](#example-scenarios)
+- [3. Startup Probe](#3-startup-probe)
+  - [Purpose](#purpose)
+  - [When to Use](#when-to-use)
+  - [Behavior](#behavior)
+  - [Example Scenarios](#example-scenarios)
+- [Key Differences Summary](#key-differences-summary)
+- [Probe Configuration Options](#probe-configuration-options)
+  - [1. HTTP GET Probe](#1-http-get-probe)
+  - [2. TCP Socket Probe](#2-tcp-socket-probe)
+  - [3. Exec Command Probe](#3-exec-command-probe)
+  - [Configuration Parameters](#configuration-parameters)
+- [Complete Example: All Three Probes](#complete-example-all-three-probes)
+- [Best Practices](#best-practices)
+  - [1. Always Use Readiness Probes](#1-always-use-readiness-probes)
+  - [2. Use Startup Probes for Slow-Starting Apps](#2-use-startup-probes-for-slow-starting-apps)
+  - [3. Use Liveness Probes Carefully](#3-use-liveness-probes-carefully)
+  - [4. Set Appropriate Timeouts](#4-set-appropriate-timeouts)
+  - [5. Use Different Endpoints](#5-use-different-endpoints)
+  - [6. Consider Probe Frequency](#6-consider-probe-frequency)
+  - [7. Set Realistic Failure Thresholds](#7-set-realistic-failure-thresholds)
+- [Common Patterns](#common-patterns)
+  - [Pattern 1: Fast-Starting Application](#pattern-1-fast-starting-application)
+  - [Pattern 2: Slow-Starting Application (Java/Legacy)](#pattern-2-slow-starting-application-java-legacy)
+  - [Pattern 3: Database-Dependent Application](#pattern-3-database-dependent-application)
+- [Troubleshooting](#troubleshooting)
+  - [Check Probe Status](#check-probe-status)
+  - [Common Issues](#common-issues)
+- [Summary](#summary)
+
+
+---
+
 ## Overview
 
 Kubernetes provides three types of health check probes to ensure your containers are running correctly and ready to serve traffic. Understanding when and how to use each probe is crucial for building resilient applications.

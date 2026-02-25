@@ -1,5 +1,34 @@
 # Mediator Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Chat Room Mediator](#chat-room-mediator)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`ChatMediator.java`](#chatmediator-java)
+  - [`ChatMediatorImpl.java`](#chatmediatorimpl-java)
+  - [`ChatUser.java`](#chatuser-java)
+  - [`MediatorDemo.java`](#mediatordemo-java)
+  - [`User.java`](#user-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

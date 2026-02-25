@@ -1,5 +1,47 @@
 # Composite Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: File System Composite](#example-1-file-system-composite)
+  - [Example 2: Organization Hierarchy](#example-2-organization-hierarchy)
+- [Detailed Code Flow](#detailed-code-flow)
+  - [File System Example](#file-system-example)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Implementation Considerations](#implementation-considerations)
+  - [Best Practices](#best-practices)
+  - [Common Pitfalls](#common-pitfalls)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`CompositeDemo.java`](#compositedemo-java)
+  - [`Directory.java`](#directory-java)
+  - [`Employee.java`](#employee-java)
+  - [`File.java`](#file-java)
+  - [`FileSystemComponent.java`](#filesystemcomponent-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

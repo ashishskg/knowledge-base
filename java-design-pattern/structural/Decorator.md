@@ -1,5 +1,48 @@
 # Decorator Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Coffee Decorator](#example-1-coffee-decorator)
+  - [Example 2: Text Decorator](#example-2-text-decorator)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`BoldDecorator.java`](#bolddecorator-java)
+  - [`Coffee.java`](#coffee-java)
+  - [`CoffeeDecorator.java`](#coffeedecorator-java)
+  - [`DecoratorDemo.java`](#decoratordemo-java)
+  - [`ItalicDecorator.java`](#italicdecorator-java)
+  - [`MilkDecorator.java`](#milkdecorator-java)
+  - [`PlainText.java`](#plaintext-java)
+  - [`SimpleCoffee.java`](#simplecoffee-java)
+  - [`SugarDecorator.java`](#sugardecorator-java)
+  - [`TextComponent.java`](#textcomponent-java)
+  - [`TextDecorator.java`](#textdecorator-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

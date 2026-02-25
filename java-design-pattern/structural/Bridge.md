@@ -1,5 +1,54 @@
 # Bridge Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Shape Drawing Bridge](#example-1-shape-drawing-bridge)
+  - [Example 2: Device Remote Control Bridge](#example-2-device-remote-control-bridge)
+- [Detailed Code Flow](#detailed-code-flow)
+  - [Shape Drawing Example](#shape-drawing-example)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Comparison with Similar Patterns](#comparison-with-similar-patterns)
+- [Implementation Considerations](#implementation-considerations)
+  - [Best Practices](#best-practices)
+  - [Common Pitfalls](#common-pitfalls)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`BasicRemote.java`](#basicremote-java)
+  - [`BridgeDemo.java`](#bridgedemo-java)
+  - [`Circle.java`](#circle-java)
+  - [`Device.java`](#device-java)
+  - [`DrawAPI.java`](#drawapi-java)
+  - [`GreenCircle.java`](#greencircle-java)
+  - [`Radio.java`](#radio-java)
+  - [`RedCircle.java`](#redcircle-java)
+  - [`RemoteControl.java`](#remotecontrol-java)
+  - [`Shape.java`](#shape-java)
+  - [`TV.java`](#tv-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

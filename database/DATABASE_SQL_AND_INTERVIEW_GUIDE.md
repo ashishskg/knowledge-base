@@ -4,6 +4,59 @@ A single reference for SQL concepts, keywords, joins, ranking, subqueries, proce
 
 ---
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+  - [1.1 Example schema: Employee and Department](#1-1-example-schema-employee-and-department)
+- [2. SQL keywords and clauses (with examples)](#2-sql-keywords-and-clauses-with-examples)
+  - [2.1 SELECT, FROM, WHERE](#2-1-select-from-where)
+  - [2.2 DISTINCT](#2-2-distinct)
+  - [2.3 ORDER BY](#2-3-order-by)
+  - [2.4 LIMIT (MySQL) vs FETCH / ROWNUM (Oracle)](#2-4-limit-mysql-vs-fetch-rownum-oracle)
+  - [2.5 Aggregate functions: COUNT, SUM, AVG, MIN, MAX](#2-5-aggregate-functions-count-sum-avg-min-max)
+  - [2.6 GROUP BY and HAVING](#2-6-group-by-and-having)
+  - [2.7 CASE / WHEN](#2-7-case-when)
+- [3. Join operations](#3-join-operations)
+  - [3.1 INNER JOIN](#3-1-inner-join)
+  - [3.2 LEFT JOIN](#3-2-left-join)
+  - [3.3 RIGHT JOIN](#3-3-right-join)
+  - [3.4 FULL OUTER JOIN](#3-4-full-outer-join)
+  - [3.5 CROSS JOIN](#3-5-cross-join)
+  - [3.6 SELF JOIN](#3-6-self-join)
+- [4. Ranking and window functions](#4-ranking-and-window-functions)
+  - [4.1 ROW_NUMBER, RANK, DENSE_RANK](#4-1-row-number-rank-dense-rank)
+  - [4.2 NTILE](#4-2-ntile)
+- [5. Subqueries](#5-subqueries)
+  - [5.1 Scalar subquery](#5-1-scalar-subquery)
+  - [5.2 IN subquery](#5-2-in-subquery)
+  - [5.3 EXISTS](#5-3-exists)
+  - [5.4 Correlated subquery](#5-4-correlated-subquery)
+- [6. Procedures (and functions)](#6-procedures-and-functions)
+  - [6.1 MySQL: Get employees by department_id](#6-1-mysql-get-employees-by-department-id)
+  - [6.2 Oracle: Get employees by department_id (OUT cursor)](#6-2-oracle-get-employees-by-department-id-out-cursor)
+- [7. DELETE vs TRUNCATE](#7-delete-vs-truncate)
+- [8. Partition and index](#8-partition-and-index)
+  - [8.1 Partition](#8-1-partition)
+  - [8.2 Index](#8-2-index)
+  - [8.3 Database performance: read and write](#8-3-database-performance-read-and-write)
+- [9. Interview Q&A (11+ years)](#9-interview-q-a-11-years)
+  - [Q1: Second-highest salary by department_id](#q1-second-highest-salary-by-department-id)
+  - [Q2: N+1 problem – what is it and how to solve?](#q2-n-1-problem-what-is-it-and-how-to-solve)
+  - [Q3: Get nth row (e.g. 5th highest salary)](#q3-get-nth-row-e-g-5th-highest-salary)
+  - [Q4: DELETE vs TRUNCATE](#q4-delete-vs-truncate)
+  - [Q5: When to use an index?](#q5-when-to-use-an-index)
+  - [Q6: When to use partition?](#q6-when-to-use-partition)
+- [10. Quick reference tables](#10-quick-reference-tables)
+  - [10.1 SQL keyword summary](#10-1-sql-keyword-summary)
+  - [10.2 Join types](#10-2-join-types)
+  - [10.3 MySQL vs Oracle (selected differences)](#10-3-mysql-vs-oracle-selected-differences)
+
+
+---
+
+
+
+
 ## 1. Introduction
 
 This guide covers:

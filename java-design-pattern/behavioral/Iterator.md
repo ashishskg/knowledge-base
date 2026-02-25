@@ -1,5 +1,33 @@
 # Iterator Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Name Repository Iterator](#name-repository-iterator)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`Container.java`](#container-java)
+  - [`Iterator.java`](#iterator-java)
+  - [`IteratorDemo.java`](#iteratordemo-java)
+  - [`NameRepository.java`](#namerepository-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

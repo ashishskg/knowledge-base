@@ -1,5 +1,59 @@
 # Adapter Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+  - [Implementation Approaches](#implementation-approaches)
+    - [1. Class Adapter (Inheritance-based)](#1-class-adapter-inheritance-based)
+    - [2. Object Adapter (Composition-based)](#2-object-adapter-composition-based)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Media Player Adapter](#example-1-media-player-adapter)
+  - [Example 2: Payment Adapter](#example-2-payment-adapter)
+- [Detailed Code Flow](#detailed-code-flow)
+  - [Media Player Example](#media-player-example)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Comparison with Similar Patterns](#comparison-with-similar-patterns)
+- [Implementation Considerations](#implementation-considerations)
+  - [Best Practices](#best-practices)
+  - [Common Pitfalls](#common-pitfalls)
+- [Code Example](#code-example)
+- [System Architecture](#system-architecture)
+- [Testing Strategy](#testing-strategy)
+- [Performance Considerations](#performance-considerations)
+- [Source Code](#source-code)
+  - [`AdapterDemo.java`](#adapterdemo-java)
+  - [`AdvancedMediaPlayer.java`](#advancedmediaplayer-java)
+  - [`AudioPlayer.java`](#audioplayer-java)
+  - [`MediaAdapter.java`](#mediaadapter-java)
+  - [`MediaPlayer.java`](#mediaplayer-java)
+  - [`Mp4Player.java`](#mp4player-java)
+  - [`PaymentAdapter.java`](#paymentadapter-java)
+  - [`PaymentProcessor.java`](#paymentprocessor-java)
+  - [`ThirdPartyPaymentGateway.java`](#thirdpartypaymentgateway-java)
+  - [`VlcPlayer.java`](#vlcplayer-java)
+- [References](#references)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

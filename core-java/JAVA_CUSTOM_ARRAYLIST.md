@@ -4,6 +4,49 @@ Guide to creating a custom `ArrayList` implementation from scratch, understandin
 
 ---
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+- [2. Basic structure](#2-basic-structure)
+  - [2.1 Class skeleton](#2-1-class-skeleton)
+- [3. Core methods implementation](#3-core-methods-implementation)
+  - [3.1 size, isEmpty, clear](#3-1-size-isempty-clear)
+  - [3.2 get, set](#3-2-get-set)
+  - [3.3 add (append and insert)](#3-3-add-append-and-insert)
+  - [3.4 ensureCapacity (resize when needed)](#3-4-ensurecapacity-resize-when-needed)
+  - [3.5 remove (by index and by object)](#3-5-remove-by-index-and-by-object)
+  - [3.6 indexOf, lastIndexOf, contains](#3-6-indexof-lastindexof-contains)
+  - [3.7 addAll, removeAll, retainAll](#3-7-addall-removeall-retainall)
+  - [3.8 containsAll](#3-8-containsall)
+  - [3.9 toArray](#3-9-toarray)
+  - [3.10 subList](#3-10-sublist)
+- [4. Iterator implementation](#4-iterator-implementation)
+  - [4.1 Basic iterator](#4-1-basic-iterator)
+  - [4.2 ListIterator](#4-2-listiterator)
+- [5. Complete implementation example](#5-complete-implementation-example)
+  - [5.1 Full CustomArrayList class](#5-1-full-customarraylist-class)
+- [6. Testing the custom ArrayList](#6-testing-the-custom-arraylist)
+  - [6.1 Basic operations test](#6-1-basic-operations-test)
+- [7. Advanced features](#7-advanced-features)
+  - [7.1 trimToSize (reduce capacity to size)](#7-1-trimtosize-reduce-capacity-to-size)
+  - [7.2 ensureCapacity (public method)](#7-2-ensurecapacity-public-method)
+  - [7.3 replaceAll (Java 8)](#7-3-replaceall-java-8)
+  - [7.4 sort (Java 8)](#7-4-sort-java-8)
+- [8. Performance considerations](#8-performance-considerations)
+  - [8.1 Time complexity](#8-1-time-complexity)
+  - [8.2 Space complexity](#8-2-space-complexity)
+- [9. Common pitfalls and solutions](#9-common-pitfalls-and-solutions)
+  - [9.1 Generic array creation](#9-1-generic-array-creation)
+  - [9.2 Index bounds checking](#9-2-index-bounds-checking)
+  - [9.3 Capacity vs size](#9-3-capacity-vs-size)
+- [10. Quick reference](#10-quick-reference)
+
+
+---
+
+
+
+
 ## 1. Introduction
 
 A custom `ArrayList` is a resizable array-based implementation of the `List` interface. We'll build it step-by-step, implementing core methods and understanding how Java's `ArrayList` works internally.

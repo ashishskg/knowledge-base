@@ -4,6 +4,43 @@ A practical guide to writing unit tests for simple methods: with parameters, wit
 
 ---
 
+## Table of Contents
+
+- [1. Setup (Java 21 + JUnit 5)](#1-setup-java-21-junit-5)
+  - [Maven (pom.xml)](#maven-pom-xml)
+  - [Gradle (build.gradle)](#gradle-build-gradle)
+  - [Module (module-info.java) — if using modules](#module-module-info-java-if-using-modules)
+- [2. Methods That Accept Parameters and Return Values](#2-methods-that-accept-parameters-and-return-values)
+  - [Example class](#example-class)
+  - [Test class](#test-class)
+  - [Assertions for return values](#assertions-for-return-values)
+- [3. Methods That Return Values (No Parameters or Default Inputs)](#3-methods-that-return-values-no-parameters-or-default-inputs)
+  - [Example class](#example-class)
+  - [Test class](#test-class)
+- [4. Void Methods With No Parameters](#4-void-methods-with-no-parameters)
+  - [4a. Void method that changes internal state](#4a-void-method-that-changes-internal-state)
+  - [4b. Void method that throws (no parameters)](#4b-void-method-that-throws-no-parameters)
+  - [4c. Void method with dependencies (mock interactions)](#4c-void-method-with-dependencies-mock-interactions)
+    - [What are @Mock and @InjectMocks?](#what-are-mock-and-injectmocks)
+- [5. Testing Static Methods](#5-testing-static-methods)
+  - [Option A: Test the real static method (no mock)](#option-a-test-the-real-static-method-no-mock)
+  - [Option B: Mock the static method (Mockito inline)](#option-b-mock-the-static-method-mockito-inline)
+  - [Option C: Prefer instance methods (design for testability)](#option-c-prefer-instance-methods-design-for-testability)
+- [6. Testing Private Methods](#6-testing-private-methods)
+  - [Option A: Test via public methods (preferred)](#option-a-test-via-public-methods-preferred)
+  - [Option B: Reflection (use sparingly)](#option-b-reflection-use-sparingly)
+  - [Option C: Package-private visibility](#option-c-package-private-visibility)
+  - [Summary](#summary)
+- [7. Summary Cheat Sheet](#7-summary-cheat-sheet)
+- [8. Naming and structure](#8-naming-and-structure)
+- [9. Running tests (Java 21)](#9-running-tests-java-21)
+
+
+---
+
+
+
+
 ## 1. Setup (Java 21 + JUnit 5)
 
 ### Maven (pom.xml)

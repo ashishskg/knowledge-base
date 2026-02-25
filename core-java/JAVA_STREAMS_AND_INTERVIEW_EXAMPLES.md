@@ -11,6 +11,49 @@ import java.util.function.*;
 
 ---
 
+## Table of Contents
+
+- [1. Stream API essentials (with output)](#1-stream-api-essentials-with-output)
+  - [1.1 filter, map, flatMap](#1-1-filter-map-flatmap)
+  - [1.2 distinct, sorted, limit, skip](#1-2-distinct-sorted-limit-skip)
+  - [1.3 reduce (with and without identity)](#1-3-reduce-with-and-without-identity)
+  - [1.4 collect: toList, toSet, toMap, joining, groupingBy, partitioningBy](#1-4-collect-tolist-toset-tomap-joining-groupingby-partitioningby)
+  - [1.5 Optional: findFirst, findAny, max, min](#1-5-optional-findfirst-findany-max-min)
+  - [1.6 Primitive streams: IntStream.range, mapToInt, sum](#1-6-primitive-streams-intstream-range-maptoint-sum)
+- [2. Conversions (with output)](#2-conversions-with-output)
+  - [2.1 List → Map (element as key, index as value)](#2-1-list-map-element-as-key-index-as-value)
+  - [2.2 List → Map with duplicate-key merge](#2-2-list-map-with-duplicate-key-merge)
+  - [2.3 Map → List (keys, values, entries, keys sorted by value)](#2-3-map-list-keys-values-entries-keys-sorted-by-value)
+  - [2.4 flatMap: list of lists → single list; string → words/chars](#2-4-flatmap-list-of-lists-single-list-string-words-chars)
+- [3. General interview examples (with output)](#3-general-interview-examples-with-output)
+  - [3.1 Count frequency (list and string)](#3-1-count-frequency-list-and-string)
+  - [3.2 First non-repeated character](#3-2-first-non-repeated-character)
+  - [3.3 Sort by frequency then by value](#3-3-sort-by-frequency-then-by-value)
+  - [3.4 Two lists → Map](#3-4-two-lists-map)
+  - [3.5 Chunk list into sublists of size n](#3-5-chunk-list-into-sublists-of-size-n)
+  - [3.6 Remove duplicates preserving order](#3-6-remove-duplicates-preserving-order)
+  - [3.7 Second largest / nth element](#3-7-second-largest-nth-element)
+  - [3.8 Partition by predicate (evens/odds)](#3-8-partition-by-predicate-evens-odds)
+  - [3.9 Group anagrams](#3-9-group-anagrams)
+  - [3.10 Two Sum (indices)](#3-10-two-sum-indices)
+  - [3.11 Merge two maps (sum values for same key)](#3-11-merge-two-maps-sum-values-for-same-key)
+- [4. String operations (with output)](#4-string-operations-with-output)
+  - [4.1 Search: contains, indexOf, lastIndexOf, stream findFirst](#4-1-search-contains-indexof-lastindexof-stream-findfirst)
+  - [4.2 Replace: replace, replaceAll, replaceFirst](#4-2-replace-replace-replaceall-replacefirst)
+  - [4.3 Word reverse (reverse each word in sentence)](#4-3-word-reverse-reverse-each-word-in-sentence)
+  - [4.4 Find word: first/last occurrence, all indices](#4-4-find-word-first-last-occurrence-all-indices)
+  - [4.5 Palindrome: check if string is palindrome](#4-5-palindrome-check-if-string-is-palindrome)
+  - [4.6 Palindrome: list palindromic substrings (short example)](#4-6-palindrome-list-palindromic-substrings-short-example)
+  - [4.7 Permutation: check if two strings are permutations](#4-7-permutation-check-if-two-strings-are-permutations)
+  - [4.8 Permutation: generate all permutations of a string](#4-8-permutation-generate-all-permutations-of-a-string)
+- [5. Quick reference table](#5-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. Stream API essentials (with output)
 
 ### 1.1 filter, map, flatMap

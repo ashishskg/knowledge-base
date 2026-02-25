@@ -1,5 +1,22 @@
 # Kubernetes Imperative Approach (Formatted)
 
+
+
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [1) Create a Pod](#1-create-a-pod)
+- [2) Expose the Pod (NodePort Service)](#2-expose-the-pod-nodeport-service)
+- [3) ReplicaSet (create from YAML)](#3-replicaset-create-from-yaml)
+- [4) Deployment (imperative)](#4-deployment-imperative)
+- [5) Update and rollback a deployment](#5-update-and-rollback-a-deployment)
+- [6) Cleanup](#6-cleanup)
+
+
+---
+
 ## Introduction
 
 The **imperative approach** uses `kubectl` commands to create and manage resources directly. It is fast for demos and troubleshooting, but it is harder to track changes in version control compared to declarative YAML.

@@ -1,3 +1,20 @@
+
+## Table of Contents
+
+- [Docker Compose – Complete Guide](#docker-compose-complete-guide)
+  - [1. What is Docker Compose?](#1-what-is-docker-compose)
+  - [2. High‑level architecture (diagram)](#2-high-level-architecture-diagram)
+  - [3. Minimal `compose.yaml` example (Spring Boot + Postgres)](#3-minimal-compose-yaml-example-spring-boot-postgres)
+  - [4. Common Docker Compose commands (Docker CLI v2)](#4-common-docker-compose-commands-docker-cli-v2)
+  - [5. Real‑world example: app + DB + Redis + admin tools](#5-real-world-example-app-db-redis-admin-tools)
+  - [6. Summary](#6-summary)
+  - [7. Dockerfile vs Docker Compose – differences & when to use both](#7-dockerfile-vs-docker-compose-differences-when-to-use-both)
+    - [7.1 What is a Dockerfile?](#7-1-what-is-a-dockerfile)
+    - [7.2 What is Docker Compose?](#7-2-what-is-docker-compose)
+    - [7.3 Do we have to use both?](#7-3-do-we-have-to-use-both)
+
+---
+
 ## Docker Compose – Complete Guide
 
 ### 1. What is Docker Compose?

@@ -1,5 +1,43 @@
 # Template Method Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+  - [Method Types](#method-types)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example: Game Template](#example-game-template)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [Hook Methods](#hook-methods)
+- [Best Practices](#best-practices)
+- [Source Code](#source-code)
+  - [`Cricket.java`](#cricket-java)
+  - [`Football.java`](#football-java)
+  - [`Game.java`](#game-java)
+  - [`TemplateMethodDemo.java`](#templatemethoddemo-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

@@ -4,6 +4,35 @@ This guide shows the end-to-end steps to deploy a basic Spring Boot API (no exis
 
 ---
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [1) Build the application artifact (JAR)](#1-build-the-application-artifact-jar)
+  - [Maven](#maven)
+  - [Gradle](#gradle)
+- [2) Containerize the application](#2-containerize-the-application)
+  - [Option A: Dockerfile (simple and common)](#option-a-dockerfile-simple-and-common)
+  - [Option B: Spring Boot Buildpacks (no Dockerfile)](#option-b-spring-boot-buildpacks-no-dockerfile)
+- [3) Push the image to a container registry](#3-push-the-image-to-a-container-registry)
+- [4) Create Kubernetes manifests](#4-create-kubernetes-manifests)
+  - [4.1 Deployment (3 replicas)](#4-1-deployment-3-replicas)
+  - [4.2 Service (ClusterIP)](#4-2-service-clusterip)
+- [5) Apply manifests to Kubernetes](#5-apply-manifests-to-kubernetes)
+- [6) Verify 3 instances are running](#6-verify-3-instances-are-running)
+- [7) Access the service](#7-access-the-service)
+  - [Option A: Port-forward (quick dev test)](#option-a-port-forward-quick-dev-test)
+  - [Option B: Expose externally](#option-b-expose-externally)
+    - [`LoadBalancer` (simple)](#loadbalancer-simple)
+    - [Ingress (recommended in many setups)](#ingress-recommended-in-many-setups)
+- [8) Recommended production additions](#8-recommended-production-additions)
+- [Quick recap](#quick-recap)
+
+
+---
+
+
+
+
 ## Prerequisites
 - A working Spring Boot app that listens on a port (commonly `8080`).
 - Java + Maven/Gradle installed locally.

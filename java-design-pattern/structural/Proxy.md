@@ -1,5 +1,49 @@
 # Proxy Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [Proxy Types](#proxy-types)
+  - [1. Virtual Proxy (Lazy Loading)](#1-virtual-proxy-lazy-loading)
+  - [2. Protection Proxy (Access Control)](#2-protection-proxy-access-control)
+  - [3. Remote Proxy](#3-remote-proxy)
+  - [4. Smart Reference Proxy](#4-smart-reference-proxy)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Image Proxy (Virtual Proxy)](#example-1-image-proxy-virtual-proxy)
+  - [Example 2: Internet Proxy (Protection Proxy)](#example-2-internet-proxy-protection-proxy)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`Image.java`](#image-java)
+  - [`ImageProxy.java`](#imageproxy-java)
+  - [`Internet.java`](#internet-java)
+  - [`InternetProxy.java`](#internetproxy-java)
+  - [`ProxyDemo.java`](#proxydemo-java)
+  - [`RealImage.java`](#realimage-java)
+  - [`RealInternet.java`](#realinternet-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

@@ -1,5 +1,29 @@
 # Builder Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [UML Class Diagram](#uml-class-diagram)
+- [Structure](#structure)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+- [Related Patterns](#related-patterns)
+- [Source Code](#source-code)
+  - [`BuilderDemo.java`](#builderdemo-java)
+  - [`Computer.java`](#computer-java)
+  - [`Pizza.java`](#pizza-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

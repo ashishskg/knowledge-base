@@ -7,6 +7,63 @@ A single reference for Java threading: classic APIs (Thread, Runnable, Executor,
 
 ---
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+- [2. Core concepts (simple examples)](#2-core-concepts-simple-examples)
+  - [2.1 Thread class: extend Thread vs pass Runnable](#2-1-thread-class-extend-thread-vs-pass-runnable)
+  - [2.2 Runnable and lambda](#2-2-runnable-and-lambda)
+  - [2.3 join() – wait for thread to finish](#2-3-join-wait-for-thread-to-finish)
+  - [2.4 Thread lifecycle (brief)](#2-4-thread-lifecycle-brief)
+- [3. Synchronization and shared state](#3-synchronization-and-shared-state)
+  - [3.1 synchronized (method and block)](#3-1-synchronized-method-and-block)
+  - [3.2 volatile – visibility only](#3-2-volatile-visibility-only)
+  - [3.3 ReentrantLock – lock/unlock and tryLock](#3-3-reentrantlock-lock-unlock-and-trylock)
+  - [3.4 wait() and notify()](#3-4-wait-and-notify)
+  - [3.5 Race condition – before and after fix](#3-5-race-condition-before-and-after-fix)
+- [4. Deadlock](#4-deadlock)
+  - [4.1 What is deadlock](#4-1-what-is-deadlock)
+  - [4.2 Classic deadlock example](#4-2-classic-deadlock-example)
+  - [4.3 How to avoid deadlock](#4-3-how-to-avoid-deadlock)
+  - [4.4 Detection](#4-4-detection)
+- [5. Executors and thread pools (old way)](#5-executors-and-thread-pools-old-way)
+  - [5.1 ExecutorService – fixed thread pool](#5-1-executorservice-fixed-thread-pool)
+  - [5.2 Callable and Future](#5-2-callable-and-future)
+  - [5.3 invokeAll and invokeAny](#5-3-invokeall-and-invokeany)
+  - [5.4 Thread pool types](#5-4-thread-pool-types)
+- [6. Java 21: Virtual threads and structured concurrency](#6-java-21-virtual-threads-and-structured-concurrency)
+  - [6.1 Virtual threads – concept](#6-1-virtual-threads-concept)
+  - [6.2 Creating and using virtual threads](#6-2-creating-and-using-virtual-threads)
+  - [6.3 When to use virtual threads](#6-3-when-to-use-virtual-threads)
+  - [6.4 Structured concurrency – StructuredTaskScope](#6-4-structured-concurrency-structuredtaskscope)
+  - [6.5 Old way vs Java 21](#6-5-old-way-vs-java-21)
+- [7. Advanced topics (interview-style)](#7-advanced-topics-interview-style)
+  - [7.1 CompletableFuture](#7-1-completablefuture)
+  - [7.2 CountDownLatch – wait for N completions](#7-2-countdownlatch-wait-for-n-completions)
+  - [7.3 CyclicBarrier – start N tasks together](#7-3-cyclicbarrier-start-n-tasks-together)
+  - [7.4 Phaser (brief)](#7-4-phaser-brief)
+  - [7.5 ThreadLocal and ScopedValue (Java 21)](#7-5-threadlocal-and-scopedvalue-java-21)
+  - [7.6 Concurrent collections](#7-6-concurrent-collections)
+- [8. Interview Q&A (11+ years level)](#8-interview-q-a-11-years-level)
+  - [Q1: Difference between synchronized and ReentrantLock?](#q1-difference-between-synchronized-and-reentrantlock)
+  - [Q2: How would you design a thread-safe cache?](#q2-how-would-you-design-a-thread-safe-cache)
+  - [Q3: Why don’t virtual threads replace reactive (e.g. WebFlux) in all cases?](#q3-why-don-t-virtual-threads-replace-reactive-e-g-webflux-in-all-cases)
+  - [Q4: How to avoid deadlock in a payment transfer (two accounts)?](#q4-how-to-avoid-deadlock-in-a-payment-transfer-two-accounts)
+  - [Q5: ExecutorService (platform) vs virtual thread executor – when to use which?](#q5-executorservice-platform-vs-virtual-thread-executor-when-to-use-which)
+  - [Q6: How does join() work internally?](#q6-how-does-join-work-internally)
+- [9. Spring Boot with Java 21 virtual threads](#9-spring-boot-with-java-21-virtual-threads)
+  - [9.1 Enable virtual threads](#9-1-enable-virtual-threads)
+  - [9.2 What it does](#9-2-what-it-does)
+  - [9.3 When to use](#9-3-when-to-use)
+  - [9.4 Minimal example (conceptual)](#9-4-minimal-example-conceptual)
+- [10. Quick reference table](#10-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. Introduction
 
 This guide covers:

@@ -4,6 +4,76 @@ Introduction to `List`, all its methods with examples and output, transformation
 
 ---
 
+## Table of Contents
+
+- [1. List introduction](#1-list-introduction)
+- [2. All List methods with examples and output](#2-all-list-methods-with-examples-and-output)
+  - [2.1 add, addAll](#2-1-add-addall)
+  - [2.2 get, set, size, isEmpty, clear](#2-2-get-set-size-isempty-clear)
+  - [2.3 remove](#2-3-remove)
+  - [2.4 removeAll, retainAll](#2-4-removeall-retainall)
+  - [2.5 contains, containsAll, indexOf, lastIndexOf](#2-5-contains-containsall-indexof-lastindexof)
+  - [2.6 subList](#2-6-sublist)
+  - [2.7 iterator, listIterator](#2-7-iterator-listiterator)
+  - [2.8 toArray](#2-8-toarray)
+  - [2.9 equals, hashCode](#2-9-equals-hashcode)
+  - [2.10 replaceAll (Java 8)](#2-10-replaceall-java-8)
+  - [2.11 sort (Java 8)](#2-11-sort-java-8)
+  - [2.12 Java 21: reversed, getFirst, getLast, removeFirst, removeLast (SequencedCollection)](#2-12-java-21-reversed-getfirst-getlast-removefirst-removelast-sequencedcollection)
+- [3. Transform: List of String to uppercase](#3-transform-list-of-string-to-uppercase)
+- [4. Remove, replace, search, sort (asc/desc), add](#4-remove-replace-search-sort-asc-desc-add)
+  - [4.1 Remove](#4-1-remove)
+  - [4.2 Replace](#4-2-replace)
+  - [4.3 Search](#4-3-search)
+  - [4.4 Sort ascending and descending](#4-4-sort-ascending-and-descending)
+  - [4.5 Add (recap)](#4-5-add-recap)
+- [5. List to Map (Java 8)](#5-list-to-map-java-8)
+  - [5.1 List to Map (key = element, value = something)](#5-1-list-to-map-key-element-value-something)
+  - [5.2 List to Map with duplicate keys (merge)](#5-2-list-to-map-with-duplicate-keys-merge)
+  - [5.3 List to Map with custom key and value](#5-3-list-to-map-with-custom-key-and-value)
+- [6. groupBy (Java 8)](#6-groupby-java-8)
+  - [6.1 groupingBy(classifier)](#6-1-groupingby-classifier)
+  - [6.2 groupingBy(classifier, downstream)](#6-2-groupingby-classifier-downstream)
+  - [6.3 groupingBy(classifier, mapFactory, downstream)](#6-3-groupingby-classifier-mapfactory-downstream)
+- [7. Partition by (Java 8)](#7-partition-by-java-8)
+- [8. Java 8 Stream + List — full coverage](#8-java-8-stream-list-full-coverage)
+  - [8.1 filter, map, flatMap](#8-1-filter-map-flatmap)
+  - [8.2 takeWhile, dropWhile (Java 9+)](#8-2-takewhile-dropwhile-java-9)
+  - [8.3 distinct, sorted, limit, skip](#8-3-distinct-sorted-limit-skip)
+  - [8.4 peek, forEach](#8-4-peek-foreach)
+  - [8.5 reduce](#8-5-reduce)
+  - [8.6 collect — toList, toSet, toMap, joining](#8-6-collect-tolist-toset-tomap-joining)
+  - [8.7 summarizingInt / Double / Long](#8-7-summarizingint-double-long)
+  - [8.8 mapping, filtering, flatMapping (downstream)](#8-8-mapping-filtering-flatmapping-downstream)
+  - [8.9 minBy, maxBy (Collectors)](#8-9-minby-maxby-collectors)
+  - [8.10 collectingAndThen](#8-10-collectingandthen)
+  - [8.11 teeing (Java 12+)](#8-11-teeing-java-12)
+  - [8.12 Optional from Stream](#8-12-optional-from-stream)
+- [9. Java 8 interview-style examples](#9-java-8-interview-style-examples)
+  - [9.1 Count frequency of each element](#9-1-count-frequency-of-each-element)
+  - [9.2 First non-repeated character (from list of chars / strings)](#9-2-first-non-repeated-character-from-list-of-chars-strings)
+  - [9.3 Sort by frequency then by value](#9-3-sort-by-frequency-then-by-value)
+  - [9.4 List of lists → flat list](#9-4-list-of-lists-flat-list)
+  - [9.5 Two lists → Map (key from first, value from second)](#9-5-two-lists-map-key-from-first-value-from-second)
+  - [9.6 Chunk list into sublists of size n](#9-6-chunk-list-into-sublists-of-size-n)
+  - [9.7 Remove duplicates preserving order](#9-7-remove-duplicates-preserving-order)
+  - [9.8 Second largest / nth element](#9-8-second-largest-nth-element)
+  - [9.9 List to Map with list index as value](#9-9-list-to-map-with-list-index-as-value)
+  - [9.10 Partition by predicate (two lists)](#9-10-partition-by-predicate-two-lists)
+- [10. Java 21 changes relevant to List](#10-java-21-changes-relevant-to-list)
+  - [10.1 SequencedCollection (reversed, getFirst, getLast, addFirst, addLast, removeFirst, removeLast)](#10-1-sequencedcollection-reversed-getfirst-getlast-addfirst-addlast-removefirst-removelast)
+  - [10.2 toList() returns unmodifiable (Java 16+)](#10-2-tolist-returns-unmodifiable-java-16)
+  - [10.3 List.of / List.copyOf](#10-3-list-of-list-copyof)
+  - [10.4 Pattern matching for switch (Java 21)](#10-4-pattern-matching-for-switch-java-21)
+  - [10.5 SequencedCollections.reversed() and new collection types](#10-5-sequencedcollections-reversed-and-new-collection-types)
+- [11. Quick reference table](#11-quick-reference-table)
+
+
+---
+
+
+
+
 ## 1. List introduction
 
 - **`List`** is an ordered, index-based collection that allows duplicates. It extends **`Collection`** and **`Iterable`**.

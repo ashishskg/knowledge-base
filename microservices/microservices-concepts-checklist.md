@@ -4,6 +4,36 @@ This is a practical checklist of the common **concepts, tools, and configuration
 
 ---
 
+## Table of Contents
+
+- [1) Service discovery](#1-service-discovery)
+- [2) API Gateway](#2-api-gateway)
+- [3) Centralized configuration](#3-centralized-configuration)
+- [4) Secrets management](#4-secrets-management)
+- [5) Resilience patterns](#5-resilience-patterns)
+- [6) Distributed tracing](#6-distributed-tracing)
+- [7) Centralized logging](#7-centralized-logging)
+- [8) Metrics / monitoring / alerting](#8-metrics-monitoring-alerting)
+- [9) Security (authn/authz)](#9-security-authn-authz)
+- [10) Service-to-service communication](#10-service-to-service-communication)
+- [11) Messaging / event streaming](#11-messaging-event-streaming)
+  - [Often required extra service: Schema Registry](#often-required-extra-service-schema-registry)
+- [12) Data management](#12-data-management)
+- [13) Deployment platform (Kubernetes)](#13-deployment-platform-kubernetes)
+- [14) CI/CD](#14-ci-cd)
+- [15) Container image registry](#15-container-image-registry)
+- [16) Feature flags](#16-feature-flags)
+- [17) Service mesh (optional but common at scale)](#17-service-mesh-optional-but-common-at-scale)
+- [18) Rate limiting and WAF (edge)](#18-rate-limiting-and-waf-edge)
+- [19) Governance / platform standards](#19-governance-platform-standards)
+- [Summary: “do we need any other tool/service?”](#summary-do-we-need-any-other-tool-service)
+
+
+---
+
+
+
+
 ## 1) Service discovery
 **Why**
 - Services find each other without hardcoding host/ports.

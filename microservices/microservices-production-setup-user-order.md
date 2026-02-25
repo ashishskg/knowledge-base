@@ -12,6 +12,58 @@ Assumptions:
 
 ---
 
+## Table of Contents
+
+- [1) Service naming + ports (baseline)](#1-service-naming-ports-baseline)
+  - [user-service `application.yml`](#user-service-application-yml)
+  - [order-service `application.yml`](#order-service-application-yml)
+- [2) Service discovery](#2-service-discovery)
+  - [Option A (recommended on Kubernetes): Kubernetes DNS](#option-a-recommended-on-kubernetes-kubernetes-dns)
+  - [Option B (non-K8s): Eureka/Consul](#option-b-non-k8s-eureka-consul)
+- [3) API Gateway](#3-api-gateway)
+  - [Typical responsibilities](#typical-responsibilities)
+  - [Spring Cloud Gateway (example)](#spring-cloud-gateway-example)
+- [4) Centralized configuration](#4-centralized-configuration)
+  - [Option A: Kubernetes ConfigMap + env vars (common)](#option-a-kubernetes-configmap-env-vars-common)
+  - [Option B: Spring Cloud Config / AWS SSM](#option-b-spring-cloud-config-aws-ssm)
+- [5) Secrets management](#5-secrets-management)
+  - [Common options](#common-options)
+- [6) Resilience (timeouts + circuit breaker + retry)](#6-resilience-timeouts-circuit-breaker-retry)
+  - [Key rule](#key-rule)
+  - [Library (Resilience4j)](#library-resilience4j)
+  - [Example: order-service calling user-service with circuit breaker](#example-order-service-calling-user-service-with-circuit-breaker)
+  - [Production-style Resilience4j config (order-service)](#production-style-resilience4j-config-order-service)
+- [7) Distributed tracing (OpenTelemetry)](#7-distributed-tracing-opentelemetry)
+  - [Goal](#goal)
+  - [Typical production setup](#typical-production-setup)
+  - [Spring Boot config (example)](#spring-boot-config-example)
+- [8) Centralized logging](#8-centralized-logging)
+  - [Requirements](#requirements)
+- [9) Metrics + monitoring + alerting](#9-metrics-monitoring-alerting)
+  - [Expose metrics](#expose-metrics)
+- [10) Security (OAuth2/OIDC)](#10-security-oauth2-oidc)
+  - [Recommended model](#recommended-model)
+- [11) Service-to-service auth](#11-service-to-service-auth)
+- [12) Data layer](#12-data-layer)
+  - [Typical production requirements](#typical-production-requirements)
+- [13) Messaging/eventing (optional but common)](#13-messaging-eventing-optional-but-common)
+- [14) Kubernetes deployment (user-service and order-service)](#14-kubernetes-deployment-user-service-and-order-service)
+  - [Deployment (3 replicas)](#deployment-3-replicas)
+  - [Service](#service)
+- [15) Autoscaling (HPA)](#15-autoscaling-hpa)
+- [16) CI/CD](#16-ci-cd)
+- [17) Container image registry](#17-container-image-registry)
+- [18) Service mesh (optional)](#18-service-mesh-optional)
+- [19) Edge protection (WAF + rate limiting)](#19-edge-protection-waf-rate-limiting)
+- [20) Governance / platform standards](#20-governance-platform-standards)
+- [“Any other tools/services required?” (common production add-ons)](#any-other-tools-services-required-common-production-add-ons)
+
+
+---
+
+
+
+
 ## 1) Service naming + ports (baseline)
 
 ### user-service `application.yml`

@@ -10,6 +10,30 @@ This document shows common patterns with examples.
 
 ---
 
+## Table of Contents
+
+- [1) Dynamic routing (dynamic path variables)](#1-dynamic-routing-dynamic-path-variables)
+  - [Example](#example)
+- [2) Dynamic filtering + sorting + pagination (most common)](#2-dynamic-filtering-sorting-pagination-most-common)
+  - [Goal](#goal)
+  - [Recommended approach](#recommended-approach)
+  - [Controller example](#controller-example)
+  - [Implementation options (pick based on persistence)](#implementation-options-pick-based-on-persistence)
+  - [JPA Specification sketch](#jpa-specification-sketch)
+- [3) Dynamic partial updates (PATCH)](#3-dynamic-partial-updates-patch)
+  - [Option A (recommended): patch DTO with nullable fields](#option-a-recommended-patch-dto-with-nullable-fields)
+  - [Option B: JSON Merge Patch / JSON Patch (more “dynamic”)](#option-b-json-merge-patch-json-patch-more-dynamic)
+- [4) Dynamic fields in response (field projection)](#4-dynamic-fields-in-response-field-projection)
+- [5) Schema-less “dynamic JSON” request bodies (use carefully)](#5-schema-less-dynamic-json-request-bodies-use-carefully)
+- [6) Practical guidance (what interviewers look for)](#6-practical-guidance-what-interviewers-look-for)
+- [7) Common pitfalls](#7-common-pitfalls)
+
+
+---
+
+
+
+
 ## 1) Dynamic routing (dynamic path variables)
 
 ### Example

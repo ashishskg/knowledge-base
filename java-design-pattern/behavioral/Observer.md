@@ -1,5 +1,46 @@
 # Observer Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example: News Agency Observer](#example-news-agency-observer)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Implementation Variations](#implementation-variations)
+  - [Push Model](#push-model)
+  - [Pull Model](#pull-model)
+- [Code Example](#code-example)
+- [Thread Safety Considerations](#thread-safety-considerations)
+- [Performance Considerations](#performance-considerations)
+- [Source Code](#source-code)
+  - [`NewsAgency.java`](#newsagency-java)
+  - [`NewsChannel.java`](#newschannel-java)
+  - [`Observer.java`](#observer-java)
+  - [`ObserverDemo.java`](#observerdemo-java)
+  - [`Subject.java`](#subject-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

@@ -1,3 +1,15 @@
+
+## Table of Contents
+
+- [Food Delivery System – Spring Boot, Dockerfile & Docker Compose](#food-delivery-system-spring-boot-dockerfile-docker-compose)
+  - [1. Microservices overview (ports, DBs, dependencies)](#1-microservices-overview-ports-dbs-dependencies)
+  - [2. Architecture diagram (logical)](#2-architecture-diagram-logical)
+  - [3. Common Spring Boot Dockerfile (used by each service)](#3-common-spring-boot-dockerfile-used-by-each-service)
+  - [4. `docker-compose.yml` for the food delivery system](#4-docker-compose-yml-for-the-food-delivery-system)
+  - [5. How to run the full stack](#5-how-to-run-the-full-stack)
+
+---
+
 ## Food Delivery System – Spring Boot, Dockerfile & Docker Compose
 
 This document defines a sample **food delivery microservices architecture** using Spring Boot, Docker, and Docker Compose, plus concrete `Dockerfile` and `compose.yaml` examples.

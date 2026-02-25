@@ -1,5 +1,43 @@
 # Chain of Responsibility Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example 1: Logger Chain](#example-1-logger-chain)
+  - [Example 2: Approval Chain](#example-2-approval-chain)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+- [Code Example](#code-example)
+- [Source Code](#source-code)
+  - [`ApprovalHandler.java`](#approvalhandler-java)
+  - [`CEO.java`](#ceo-java)
+  - [`ChainOfResponsibilityDemo.java`](#chainofresponsibilitydemo-java)
+  - [`ConsoleLogger.java`](#consolelogger-java)
+  - [`Director.java`](#director-java)
+  - [`ErrorLogger.java`](#errorlogger-java)
+  - [`FileLogger.java`](#filelogger-java)
+  - [`Logger.java`](#logger-java)
+  - [`Manager.java`](#manager-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

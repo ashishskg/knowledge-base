@@ -9,6 +9,71 @@ Notes:
 
 ---
 
+## Table of Contents
+
+- [1) Jakarta Validation (`jakarta.validation.*`)](#1-jakarta-validation-jakarta-validation)
+  - [1.1 Core validation annotations](#1-1-core-validation-annotations)
+    - [`@NotNull`](#notnull)
+    - [`@NotBlank` (String cannot be null/empty/whitespace)](#notblank-string-cannot-be-null-empty-whitespace)
+    - [`@NotEmpty` (collections/arrays/strings)](#notempty-collections-arrays-strings)
+    - [`@Size` (String/collection length)](#size-string-collection-length)
+    - [`@Min`, `@Max`](#min-max)
+    - [`@Positive`, `@PositiveOrZero`, `@Negative`, `@NegativeOrZero`](#positive-positiveorzero-negative-negativeorzero)
+    - [`@Email`](#email)
+    - [`@Pattern`](#pattern)
+    - [`@Past`, `@PastOrPresent`, `@Future`, `@FutureOrPresent`](#past-pastorpresent-future-futureorpresent)
+    - [`@AssertTrue`, `@AssertFalse`](#asserttrue-assertfalse)
+  - [1.2 Nested validation](#1-2-nested-validation)
+    - [`@Valid`](#valid)
+  - [1.3 Creating your own constraint](#1-3-creating-your-own-constraint)
+    - [`@Constraint` + custom validator](#constraint-custom-validator)
+- [2) Jakarta Annotations (lifecycle) (`jakarta.annotation.*`)](#2-jakarta-annotations-lifecycle-jakarta-annotation)
+  - [`@PostConstruct`](#postconstruct)
+  - [`@PreDestroy`](#predestroy)
+  - [`@Resource`](#resource)
+- [3) Dependency Injection (CDI) (`jakarta.inject.*`, `jakarta.enterprise.context.*`, `jakarta.enterprise.inject.*`)](#3-dependency-injection-cdi-jakarta-inject-jakarta-enterprise-context-jakarta-enterprise-inject)
+  - [`@Inject`](#inject)
+  - [`@Named`](#named)
+  - [Scopes (examples)](#scopes-examples)
+  - [Qualifiers](#qualifiers)
+- [4) Jakarta Persistence / JPA (`jakarta.persistence.*`)](#4-jakarta-persistence-jpa-jakarta-persistence)
+  - [4.1 Entity mapping](#4-1-entity-mapping)
+    - [`@Entity`, `@Table`](#entity-table)
+    - [`@Id`, `@GeneratedValue`](#id-generatedvalue)
+    - [`@Column`](#column)
+    - [`@Enumerated`](#enumerated)
+    - [`@Embedded`, `@Embeddable`](#embedded-embeddable)
+  - [4.2 Relationships](#4-2-relationships)
+    - [`@OneToMany`, `@ManyToOne`, `@JoinColumn`](#onetomany-manytoone-joincolumn)
+    - [`@JoinTable` (many-to-many)](#jointable-many-to-many)
+  - [4.3 EntityManager and queries](#4-3-entitymanager-and-queries)
+    - [`@PersistenceContext`](#persistencecontext)
+    - [`@Query` is not Jakarta; it’s Spring Data JPA.](#query-is-not-jakarta-it-s-spring-data-jpa)
+- [5) Jakarta Transactions (`jakarta.transaction.*`)](#5-jakarta-transactions-jakarta-transaction)
+  - [`@Transactional`](#transactional)
+- [6) JAX-RS (Jakarta REST) (`jakarta.ws.rs.*`)](#6-jax-rs-jakarta-rest-jakarta-ws-rs)
+  - [6.1 Resource class and routing](#6-1-resource-class-and-routing)
+    - [`@Path`, `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`](#path-get-post-put-delete-patch)
+  - [6.2 Parameters](#6-2-parameters)
+  - [6.3 Exception mapping](#6-3-exception-mapping)
+    - [`ExceptionMapper<T>`](#exceptionmapper-t)
+- [7) Servlet API (`jakarta.servlet.*`)](#7-servlet-api-jakarta-servlet)
+  - [`@WebServlet`](#webservlet)
+  - [`@WebFilter`](#webfilter)
+- [8) Security (Jakarta EE) (`jakarta.annotation.security.*`)](#8-security-jakarta-ee-jakarta-annotation-security)
+  - [`@RolesAllowed`](#rolesallowed)
+  - [`@PermitAll`, `@DenyAll`](#permitall-denyall)
+- [9) Quick mapping: where you’ll see these in Spring Boot](#9-quick-mapping-where-you-ll-see-these-in-spring-boot)
+- [10) Practical examples (User/Order)](#10-practical-examples-user-order)
+  - [Validate a request DTO](#validate-a-request-dto)
+  - [Ensure cleanup](#ensure-cleanup)
+
+
+---
+
+
+
+
 ## 1) Jakarta Validation (`jakarta.validation.*`) 
 
 Used to validate request DTOs, method parameters, and entities.

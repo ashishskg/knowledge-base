@@ -1,5 +1,46 @@
 # State Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example: Player States](#example-player-states)
+- [System Architecture](#system-architecture)
+- [State Transition Diagram](#state-transition-diagram)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [State Machine Patterns](#state-machine-patterns)
+  - [State-Driven Transitions](#state-driven-transitions)
+  - [Context-Driven Transitions](#context-driven-transitions)
+- [Best Practices](#best-practices)
+- [Source Code](#source-code)
+  - [`Context.java`](#context-java)
+  - [`StartState.java`](#startstate-java)
+  - [`State.java`](#state-java)
+  - [`StateDemo.java`](#statedemo-java)
+  - [`StopState.java`](#stopstate-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images

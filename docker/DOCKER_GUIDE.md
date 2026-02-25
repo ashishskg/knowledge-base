@@ -4,6 +4,31 @@ A practical guide to Dockerfile basics and a production-style Dockerfile for a S
 
 ---
 
+## Table of Contents
+
+- [1. Dockerfile instructions – quick reference](#1-dockerfile-instructions-quick-reference)
+- [2. Core instructions with short examples](#2-core-instructions-with-short-examples)
+  - [2.1 FROM](#2-1-from)
+  - [2.2 RUN](#2-2-run)
+  - [2.3 COPY vs ADD](#2-3-copy-vs-add)
+  - [2.4 WORKDIR](#2-4-workdir)
+  - [2.5 ENV & ARG](#2-5-env-arg)
+  - [2.6 CMD vs ENTRYPOINT](#2-6-cmd-vs-entrypoint)
+  - [2.7 EXPOSE, VOLUME, USER, HEALTHCHECK](#2-7-expose-volume-user-healthcheck)
+- [3. Production-style Dockerfile for Spring Boot (Java 21)](#3-production-style-dockerfile-for-spring-boot-java-21)
+  - [3.1 Build and run commands](#3-1-build-and-run-commands)
+- [4. Build stage vs package stage (Maven & Docker)](#4-build-stage-vs-package-stage-maven-docker)
+  - [4.1 Maven lifecycle: build vs package](#4-1-maven-lifecycle-build-vs-package)
+  - [4.2 Docker multi-stage: build vs runtime (using the package)](#4-2-docker-multi-stage-build-vs-runtime-using-the-package)
+  - [4.3 Real-world production multi-stage Dockerfile (Spring Boot, Java 21)](#4-3-real-world-production-multi-stage-dockerfile-spring-boot-java-21)
+- [5. Common docker CLI commands – quick reference](#5-common-docker-cli-commands-quick-reference)
+
+
+---
+
+
+
+
 ## 1. Dockerfile instructions – quick reference
 
 | Instruction | Basic syntax | Description | Typical use |

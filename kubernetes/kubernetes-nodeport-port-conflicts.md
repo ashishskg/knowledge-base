@@ -1,5 +1,60 @@
 # Kubernetes NodePort Port Conflicts in Multi-Namespace Scenarios
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Understanding NodePort](#understanding-nodeport)
+  - [What is NodePort?](#what-is-nodeport)
+  - [NodePort Service Structure](#nodeport-service-structure)
+- [The Port Conflict Problem](#the-port-conflict-problem)
+  - [Why Conflicts Occur](#why-conflicts-occur)
+  - [Example Scenario](#example-scenario)
+- [Demonstrating Port Conflicts](#demonstrating-port-conflicts)
+  - [Scenario 1: Explicit NodePort Conflict](#scenario-1-explicit-nodeport-conflict)
+  - [Scenario 2: Auto-Assigned Port Conflict](#scenario-2-auto-assigned-port-conflict)
+- [Solutions and Best Practices](#solutions-and-best-practices)
+  - [Solution 1: Use Different NodePorts (Manual Assignment)](#solution-1-use-different-nodeports-manual-assignment)
+  - [Solution 2: Let Kubernetes Auto-Assign (Recommended for Dev/Test)](#solution-2-let-kubernetes-auto-assign-recommended-for-dev-test)
+  - [Solution 3: Use LoadBalancer or Ingress (Production Best Practice)](#solution-3-use-loadbalancer-or-ingress-production-best-practice)
+    - [Option A: LoadBalancer Service](#option-a-loadbalancer-service)
+    - [Option B: Ingress Controller](#option-b-ingress-controller)
+  - [Solution 4: Use Service Per Namespace with Different Ports](#solution-4-use-service-per-namespace-with-different-ports)
+- [Checking for Port Conflicts](#checking-for-port-conflicts)
+  - [Method 1: List All NodePort Services](#method-1-list-all-nodeport-services)
+  - [Method 2: Check Specific Port](#method-2-check-specific-port)
+  - [Method 3: Describe Service to See Conflicts](#method-3-describe-service-to-see-conflicts)
+- [Complete Examples](#complete-examples)
+  - [Example 1: Multi-Namespace Setup Without Conflicts](#example-1-multi-namespace-setup-without-conflicts)
+  - [Example 2: Auto-Assigned Ports (No Conflicts)](#example-2-auto-assigned-ports-no-conflicts)
+  - [Example 3: Production Setup with Ingress (No NodePort Conflicts)](#example-3-production-setup-with-ingress-no-nodeport-conflicts)
+- [Troubleshooting Port Conflicts](#troubleshooting-port-conflicts)
+  - [Error: Port Already Allocated](#error-port-already-allocated)
+  - [Error: Port Out of Range](#error-port-out-of-range)
+  - [Check Current Port Usage](#check-current-port-usage)
+- [Best Practices](#best-practices)
+  - [1. Port Allocation Strategy](#1-port-allocation-strategy)
+  - [2. Use Ingress for Production](#2-use-ingress-for-production)
+  - [3. Document Port Usage](#3-document-port-usage)
+- [Development](#development)
+- [Staging](#staging)
+- [Production](#production)
+  - [4. Use Helm Values for Port Management](#4-use-helm-values-for-port-management)
+  - [5. Validate Before Deployment](#5-validate-before-deployment)
+- [Commands Reference](#commands-reference)
+  - [Create NodePort Service](#create-nodeport-service)
+  - [Check Port Conflicts](#check-port-conflicts)
+  - [Update NodePort](#update-nodeport)
+- [Summary](#summary)
+  - [Key Points](#key-points)
+  - [Quick Decision Guide](#quick-decision-guide)
+  - [Remember](#remember)
+
+
+---
+
 ## Overview
 
 **NodePort** services expose applications on a specific port on every node in the cluster. Unlike other Kubernetes resources, **NodePorts are cluster-wide**, meaning port conflicts can occur across different namespaces.

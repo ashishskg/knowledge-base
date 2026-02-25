@@ -1,5 +1,44 @@
 # Strategy Pattern
 
+
+
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Diagram Images](#diagram-images)
+- [Intent](#intent)
+- [Type](#type)
+- [Problem](#problem)
+- [Solution](#solution)
+- [UML Class Diagram](#uml-class-diagram)
+- [Sequence Diagram](#sequence-diagram)
+- [Structure](#structure)
+  - [Components](#components)
+- [When to Use](#when-to-use)
+- [Examples in This Repository](#examples-in-this-repository)
+  - [Example: Calculation Strategies](#example-calculation-strategies)
+- [System Architecture](#system-architecture)
+- [Pros](#pros)
+- [Cons](#cons)
+- [Real-World Applications](#real-world-applications)
+  - [Software Development](#software-development)
+  - [Specific Examples](#specific-examples)
+- [Related Patterns](#related-patterns)
+- [Code Example](#code-example)
+- [Comparison with State Pattern](#comparison-with-state-pattern)
+- [Best Practices](#best-practices)
+- [Source Code](#source-code)
+  - [`AddStrategy.java`](#addstrategy-java)
+  - [`Context.java`](#context-java)
+  - [`MultiplyStrategy.java`](#multiplystrategy-java)
+  - [`Strategy.java`](#strategy-java)
+  - [`StrategyDemo.java`](#strategydemo-java)
+  - [`SubtractStrategy.java`](#subtractstrategy-java)
+
+
+---
+
 ## Overview
 
 ## Diagram Images
