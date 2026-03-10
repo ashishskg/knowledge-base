@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JavaScript Built-ins (for Angular) — Examples + Output</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --faint: rgba(255,255,255,.52);
+      --link: #8bd5ff;
+      --shadow: 0 10px 28px rgba(0,0,0,.28);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --radius: 16px;
+      --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      line-height: 1.45;
+      background:
+        radial-gradient(1100px 700px at 20% 10%, rgba(139, 213, 255, 0.18), transparent 60%),
+        radial-gradient(900px 650px at 90% 20%, rgba(183, 247, 209, 0.18), transparent 55%),
+        radial-gradient(900px 700px at 70% 95%, rgba(255, 209, 154, 0.14), transparent 55%),
+        var(--bg);
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 18px 16px 60px; }
+
+    header.hero {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 { margin: 0 0 8px; font-size: 26px; }
+    .hero p { margin: 0; color: var(--muted); max-width: 95ch; }
+
+    .grid { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+    nav.toc {
+      position: sticky;
+      top: 16px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    nav.toc h2 { margin: 0 0 10px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .toc a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--text); }
+    .toc a:hover { background: rgba(255,255,255,.08); text-decoration: none; }
+
+    main {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    section.block {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      margin-bottom: 14px;
+    }
+
+    section.block:last-child { margin-bottom: 0; }
+    .block > header { display:flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 10px; }
+    .block h2 { margin: 0; font-size: 18px; }
+    .hint { margin: 0; color: var(--faint); font-size: 13px; }
+
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+
+    article.card {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      display:flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .desc { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+
+    .code {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .code .label {
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--faint);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.90);
+      white-space: pre;
+    }
+
+    .out {
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,.22);
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+
+    .out-head {
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--faint);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .out-body {
+      padding: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.9);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .toolbar {
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button.btn {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button.btn:hover { background: rgba(255,255,255,.10); }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    footer.page { margin-top: 14px; color: var(--faint); font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>JavaScript Built-ins (for Angular) — Examples + Output</h1>
+      <p>This is a single-file reference you can use while learning Angular: common JavaScript methods you’ll use inside components/services (mapping data, formatting strings, safe cloning, date handling, etc.). Each card shows <strong>sample code</strong> and the <strong>actual output</strong>.</p>
+      <p style="margin-top: 10px; color: var(--muted);">File: <code style="font-family: var(--mono);">angular/js-builtins.html</code></p>
+    </header>
+
+    <div class="grid">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Contents</h2>
+        <a href="#arrays">Arrays</a>
+        <a href="#strings">Strings</a>
+        <a href="#objects">Objects</a>
+        <a href="#dates">Dates</a>
+        <a href="#numbers">Numbers</a>
+        <a href="#promises">Promises / async</a>
+        <a href="#patterns">Angular-style patterns</a>
+      </nav>
+
+      <main>
+        <section class="block" id="arrays">
+          <header>
+            <h2>Arrays</h2>
+            <p class="hint">You’ll use these constantly in Angular templates and services.</p>
+          </header>
+          <div class="cards" id="cards-arrays"></div>
+        </section>
+
+        <section class="block" id="strings">
+          <header>
+            <h2>Strings</h2>
+            <p class="hint">Formatting labels, parsing input, and text utilities.</p>
+          </header>
+          <div class="cards" id="cards-strings"></div>
+        </section>
+
+        <section class="block" id="objects">
+          <header>
+            <h2>Objects</h2>
+            <p class="hint">Transforming objects and safely reading values.</p>
+          </header>
+          <div class="cards" id="cards-objects"></div>
+        </section>
+
+        <section class="block" id="dates">
+          <header>
+            <h2>Dates</h2>
+            <p class="hint">Often used before you later move formatting into Angular pipes.</p>
+          </header>
+          <div class="cards" id="cards-dates"></div>
+        </section>
+
+        <section class="block" id="numbers">
+          <header>
+            <h2>Numbers</h2>
+            <p class="hint">Rounding, parsing, and safe number operations.</p>
+          </header>
+          <div class="cards" id="cards-numbers"></div>
+        </section>
+
+        <section class="block" id="promises">
+          <header>
+            <h2>Promises / async</h2>
+            <p class="hint">Used in services, data loading, and effects.</p>
+          </header>
+          <div class="cards" id="cards-promises"></div>
+        </section>
+
+        <section class="block" id="patterns">
+          <header>
+            <h2>Angular-style patterns</h2>
+            <p class="hint">Common transformations you do before showing data.</p>
+          </header>
+          <div class="cards" id="cards-patterns"></div>
+        </section>
+
+        <div class="note">
+          <div><strong>Tip for Angular templates</strong>: Do heavy transformations in TypeScript (component/service) instead of writing complex logic in the template. Example: compute <code style="font-family: var(--mono);">filteredUsers</code> in TS and bind it with <code style="font-family: var(--mono);">*ngFor</code>.</div>
+        </div>
+
+        <footer class="page">
+          <p style="margin:0;">Open this file in the browser. The outputs are computed live by running the code snippets.</p>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function stableStringify(value) {
+      const seen = new WeakSet();
+      return JSON.stringify(value, function (key, val) {
+        if (typeof val === 'object' && val !== null) {
+          if (seen.has(val)) return '[Circular]';
+          seen.add(val);
+
+          if (Array.isArray(val)) return val;
+
+          const out = {};
+          for (const k of Object.keys(val).sort()) out[k] = val[k];
+          return out;
+        }
+        return val;
+      }, 2);
+    }
+
+    function format(v) {
+      if (typeof v === 'string') return v;
+      return stableStringify(v);
+    }
+
+    function createCard({ title, tag, description, code, run }) {
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      const h3 = document.createElement('h3');
+      h3.innerHTML = `<span>${escapeHtml(title)}</span> <span class="chip">${escapeHtml(tag)}</span>`;
+
+      const p = document.createElement('p');
+      p.className = 'desc';
+      p.textContent = description;
+
+      const codeBox = document.createElement('div');
+      codeBox.className = 'code';
+      codeBox.innerHTML = `
+        <div class="label"><span>Sample code</span><span>JS</span></div>
+        <pre></pre>
+      `;
+      codeBox.querySelector('pre').textContent = code.trim();
+
+      const out = document.createElement('div');
+      out.className = 'out';
+      out.innerHTML = `
+        <div class="out-head">
+          <span>Output</span>
+          <span class="toolbar">
+            <button class="btn" type="button">Run</button>
+          </span>
+        </div>
+        <div class="out-body"></div>
+      `;
+
+      const outBody = out.querySelector('.out-body');
+      const runBtn = out.querySelector('button');
+
+      async function runNow() {
+        try {
+          const result = await run();
+          outBody.textContent = format(result);
+        } catch (e) {
+          outBody.textContent = 'Error: ' + (e?.message ?? String(e));
+        }
+      }
+
+      runBtn.addEventListener('click', runNow);
+
+      card.appendChild(h3);
+      card.appendChild(p);
+      card.appendChild(codeBox);
+      card.appendChild(out);
+
+      // Auto-run once for convenience
+      runNow();
+
+      return card;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    // Examples
+
+    const arrays = [
+      {
+        title: 'slice()',
+        tag: 'Array.prototype.slice',
+        description: 'Returns a copy of part of an array (non-mutating). Common for pagination, preview lists, and safe copies.',
+        code: `const a = [10, 20, 30, 40, 50];\nconst out1 = a.slice(1, 4);   // [20, 30, 40]\nconst out2 = a.slice(-2);    // last 2 items\n({ original: a, out1, out2 });`,
+        run: () => {
+          const a = [10, 20, 30, 40, 50];
+          const out1 = a.slice(1, 4);
+          const out2 = a.slice(-2);
+          return { original: a, out1, out2 };
+        }
+      },
+      {
+        title: 'splice()',
+        tag: 'Array.prototype.splice',
+        description: 'Changes the array in-place (mutating). Used to insert/remove items in state — be careful in Angular; prefer immutable updates when possible.',
+        code: `const a = ['a','b','c','d'];\nconst removed = a.splice(1, 2, 'X', 'Y');\n({ removed, after: a });`,
+        run: () => {
+          const a = ['a','b','c','d'];
+          const removed = a.splice(1, 2, 'X', 'Y');
+          return { removed, after: a };
+        }
+      },
+      {
+        title: 'map()',
+        tag: 'Array.prototype.map',
+        description: 'Transforms each element into a new array. Very common before rendering in templates.',
+        code: `const users = [{name:'Asha'},{name:'Ravi'}];\nconst names = users.map(u => u.name.toUpperCase());\nnames;`,
+        run: () => {
+          const users = [{name:'Asha'},{name:'Ravi'}];
+          const names = users.map(u => u.name.toUpperCase());
+          return names;
+        }
+      },
+      {
+        title: 'filter()',
+        tag: 'Array.prototype.filter',
+        description: 'Keeps only items that match a condition (non-mutating).',
+        code: `const nums = [1,2,3,4,5,6];\nnums.filter(n => n % 2 === 0);`,
+        run: () => {
+          const nums = [1,2,3,4,5,6];
+          return nums.filter(n => n % 2 === 0);
+        }
+      },
+      {
+        title: 'reduce()',
+        tag: 'Array.prototype.reduce',
+        description: 'Accumulates into a single value (sum, group, map). Great for dashboard counts.',
+        code: `const items = [{status:'todo'},{status:'done'},{status:'todo'}];\nconst counts = items.reduce((acc, it) => {\n  acc[it.status] = (acc[it.status] ?? 0) + 1;\n  return acc;\n}, {});\ncounts;`,
+        run: () => {
+          const items = [{status:'todo'},{status:'done'},{status:'todo'}];
+          const counts = items.reduce((acc, it) => {
+            acc[it.status] = (acc[it.status] ?? 0) + 1;
+            return acc;
+          }, {});
+          return counts;
+        }
+      },
+      {
+        title: 'find() / findIndex()',
+        tag: 'Array.prototype.find',
+        description: 'Finds the first matching item (or index). Useful for selection / editing.',
+        code: `const users = [{id:1,name:'A'},{id:2,name:'B'}];\n({\n  user: users.find(u => u.id === 2),\n  idx: users.findIndex(u => u.id === 2)\n});`,
+        run: () => {
+          const users = [{id:1,name:'A'},{id:2,name:'B'}];
+          return {
+            user: users.find(u => u.id === 2),
+            idx: users.findIndex(u => u.id === 2)
+          };
+        }
+      },
+      {
+        title: 'some() / every()',
+        tag: 'Array.prototype.some',
+        description: 'some: at least one matches. every: all match. Great for validation.',
+        code: `const vals = [2,4,6];\n({\n  someOdd: vals.some(v => v % 2 === 1),\n  allEven: vals.every(v => v % 2 === 0)\n});`,
+        run: () => {
+          const vals = [2,4,6];
+          return {
+            someOdd: vals.some(v => v % 2 === 1),
+            allEven: vals.every(v => v % 2 === 0)
+          };
+        }
+      },
+      {
+        title: 'includes()',
+        tag: 'Array.prototype.includes',
+        description: 'Checks if an array contains a value (uses SameValueZero, like NaN equals NaN).',
+        code: `const a = [1,2,NaN];\n({ has2: a.includes(2), hasNaN: a.includes(NaN) });`,
+        run: () => {
+          const a = [1,2,NaN];
+          return { has2: a.includes(2), hasNaN: a.includes(NaN) };
+        }
+      },
+      {
+        title: 'sort() (copy safely)',
+        tag: 'Array.prototype.sort',
+        description: 'sort() mutates. In Angular, often do a copy first to avoid unexpected UI changes.',
+        code: `const a = [3,1,10,2];\nconst sorted = [...a].sort((x,y) => x - y);\n({ original: a, sorted });`,
+        run: () => {
+          const a = [3,1,10,2];
+          const sorted = [...a].sort((x,y) => x - y);
+          return { original: a, sorted };
+        }
+      },
+      {
+        title: 'flat() / flatMap()',
+        tag: 'Array.prototype.flat',
+        description: 'Flatten nested arrays; flatMap maps and flattens one level.',
+        code: `const a = [1,[2,3],[4,[5]]];\nconst flat1 = a.flat();\nconst flat2 = a.flat(2);\nconst fm = [1,2,3].flatMap(x => [x, x*10]);\n({ flat1, flat2, fm });`,
+        run: () => {
+          const a = [1,[2,3],[4,[5]]];
+          const flat1 = a.flat();
+          const flat2 = a.flat(2);
+          const fm = [1,2,3].flatMap(x => [x, x*10]);
+          return { flat1, flat2, fm };
+        }
+      }
+    ];
+
+    const strings = [
+      {
+        title: 'slice() / substring()',
+        tag: 'String.prototype.slice',
+        description: 'Extract parts of strings. slice supports negative indexes; substring does not.',
+        code: `const s = 'Angular';\n({\n  slice1: s.slice(0, 3),\n  sliceNeg: s.slice(-3),\n  substring: s.substring(1, 4)\n});`,
+        run: () => {
+          const s = 'Angular';
+          return {
+            slice1: s.slice(0, 3),
+            sliceNeg: s.slice(-3),
+            substring: s.substring(1, 4)
+          };
+        }
+      },
+      {
+        title: 'split() + join()',
+        tag: 'String.prototype.split',
+        description: 'Turn strings into arrays and back; useful for tags, CSV, etc.',
+        code: `const tags = 'ui,angular,css';\nconst arr = tags.split(',');\nconst out = arr.map(s => s.trim()).join(' | ');\n({ arr, out });`,
+        run: () => {
+          const tags = 'ui,angular,css';
+          const arr = tags.split(',');
+          const out = arr.map(s => s.trim()).join(' | ');
+          return { arr, out };
+        }
+      },
+      {
+        title: 'replace() / replaceAll()',
+        tag: 'String.prototype.replaceAll',
+        description: 'Replace substrings. replace only replaces first match unless you use a regex with /g.',
+        code: `const s = 'a-b-c';\n({\n  replace: s.replace('-', '/'),\n  replaceAll: s.replaceAll('-', '/')\n});`,
+        run: () => {
+          const s = 'a-b-c';
+          return {
+            replace: s.replace('-', '/'),
+            replaceAll: s.replaceAll('-', '/')
+          };
+        }
+      },
+      {
+        title: 'trim()',
+        tag: 'String.prototype.trim',
+        description: 'Remove whitespace from both ends; common for input sanitization.',
+        code: `const s = '  hello  ';\n({ raw: s, trimmed: s.trim() });`,
+        run: () => {
+          const s = '  hello  ';
+          return { raw: s, trimmed: s.trim() };
+        }
+      },
+      {
+        title: 'startsWith() / endsWith()',
+        tag: 'String.prototype.startsWith',
+        description: 'Prefix/suffix checks; useful for routing, validation, file types.',
+        code: `const file = 'photo.png';\n({\n  isPng: file.endsWith('.png'),\n  starts: file.startsWith('ph')\n});`,
+        run: () => {
+          const file = 'photo.png';
+          return { isPng: file.endsWith('.png'), starts: file.startsWith('ph') };
+        }
+      }
+    ];
+
+    const objects = [
+      {
+        title: 'Object.keys / values / entries',
+        tag: 'Object.*',
+        description: 'Enumerate an object. entries is handy for ngFor over key-value pairs (after transforming).',
+        code: `const o = { a: 1, b: 2 };\n({ keys: Object.keys(o), values: Object.values(o), entries: Object.entries(o) });`,
+        run: () => {
+          const o = { a: 1, b: 2 };
+          return { keys: Object.keys(o), values: Object.values(o), entries: Object.entries(o) };
+        }
+      },
+      {
+        title: 'Object.assign',
+        tag: 'Object.assign',
+        description: 'Merge properties. (Shallow) copy/merge common in immutable updates.',
+        code: `const base = { a: 1 };\nconst out = Object.assign({}, base, { b: 2 });\n({ base, out });`,
+        run: () => {
+          const base = { a: 1 };
+          const out = Object.assign({}, base, { b: 2 });
+          return { base, out };
+        }
+      },
+      {
+        title: 'Spread {...obj}',
+        tag: 'Object spread',
+        description: 'Common immutable update style in Angular state.',
+        code: `const user = { id: 1, name: 'Asha', role: 'user' };\nconst updated = { ...user, role: 'admin' };\n({ user, updated });`,
+        run: () => {
+          const user = { id: 1, name: 'Asha', role: 'user' };
+          const updated = { ...user, role: 'admin' };
+          return { user, updated };
+        }
+      },
+      {
+        title: 'Optional chaining + nullish coalescing',
+        tag: '?. and ??',
+        description: 'Safely read deep values and provide defaults (very common with API data).',
+        code: `const api = { user: null };\nconst name = api.user?.profile?.name ?? 'Guest';\nname;`,
+        run: () => {
+          const api = { user: null };
+          const name = api.user?.profile?.name ?? 'Guest';
+          return name;
+        }
+      }
+    ];
+
+    const dates = [
+      {
+        title: 'Date to ISO',
+        tag: 'Date',
+        description: 'Convert Date to ISO string for APIs or storage.',
+        code: `const d = new Date('2026-03-02T10:20:30Z');\nd.toISOString();`,
+        run: () => {
+          const d = new Date('2026-03-02T10:20:30Z');
+          return d.toISOString();
+        }
+      },
+      {
+        title: 'Intl.DateTimeFormat',
+        tag: 'Intl',
+        description: 'Locale-aware formatting (often used in services before pipes).',
+        code: `const d = new Date('2026-03-02T10:20:30Z');\nnew Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(d);`,
+        run: () => {
+          const d = new Date('2026-03-02T10:20:30Z');
+          return new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(d);
+        }
+      }
+    ];
+
+    const numbers = [
+      {
+        title: 'parseInt / parseFloat',
+        tag: 'Number parsing',
+        description: 'Convert strings to numbers (validate NaN).',
+        code: `const a = parseInt('42', 10);\nconst b = parseFloat('3.14');\n({ a, b, isNaN: Number.isNaN(parseInt('x', 10)) });`,
+        run: () => {
+          const a = parseInt('42', 10);
+          const b = parseFloat('3.14');
+          return { a, b, isNaN: Number.isNaN(parseInt('x', 10)) };
+        }
+      },
+      {
+        title: 'Math.round / floor / ceil',
+        tag: 'Math',
+        description: 'Rounding operations (prices, UI counters).',
+        code: `const x = 4.6;\n({ round: Math.round(x), floor: Math.floor(x), ceil: Math.ceil(x) });`,
+        run: () => {
+          const x = 4.6;
+          return { round: Math.round(x), floor: Math.floor(x), ceil: Math.ceil(x) };
+        }
+      }
+    ];
+
+    const promises = [
+      {
+        title: 'Promise.all',
+        tag: 'Promise',
+        description: 'Run requests in parallel (e.g., load projects + tasks together).',
+        code: `const p1 = Promise.resolve('A');\nconst p2 = Promise.resolve('B');\nawait Promise.all([p1, p2]);`,
+        run: async () => {
+          const p1 = Promise.resolve('A');
+          const p2 = Promise.resolve('B');
+          const out = await Promise.all([p1, p2]);
+          return out;
+        }
+      },
+      {
+        title: 'async/await + try/catch',
+        tag: 'async',
+        description: 'Pattern for service calls (later you might use RxJS in Angular, but the JS basics matter).',
+        code: `async function load() {\n  try {\n    return await Promise.resolve({ ok: true });\n  } catch {\n    return { ok: false };\n  }\n}\nawait load();`,
+        run: async () => {
+          async function load() {
+            try {
+              return await Promise.resolve({ ok: true });
+            } catch {
+              return { ok: false };
+            }
+          }
+          return await load();
+        }
+      }
+    ];
+
+    const patterns = [
+      {
+        title: 'Immutable update (array)',
+        tag: 'Angular-friendly state',
+        description: 'Create a new array instead of mutating (helps change detection and predictable UI).',
+        code: `const tasks = [{id:1,s:'todo'},{id:2,s:'doing'}];\nconst updated = tasks.map(t => t.id === 2 ? { ...t, s: 'done' } : t);\n({ tasks, updated });`,
+        run: () => {
+          const tasks = [{id:1,s:'todo'},{id:2,s:'doing'}];
+          const updated = tasks.map(t => t.id === 2 ? { ...t, s: 'done' } : t);
+          return { tasks, updated };
+        }
+      },
+      {
+        title: 'Group by using reduce()',
+        tag: 'Common in dashboards',
+        description: 'Group items by a key (status, category, projectId).',
+        code: `const items = [{k:'a',v:1},{k:'a',v:2},{k:'b',v:3}];\nconst grouped = items.reduce((acc, it) => {\n  (acc[it.k] ??= []).push(it.v);\n  return acc;\n}, {});\ngrouped;`,
+        run: () => {
+          const items = [{k:'a',v:1},{k:'a',v:2},{k:'b',v:3}];
+          const grouped = items.reduce((acc, it) => {
+            (acc[it.k] ??= []).push(it.v);
+            return acc;
+          }, {});
+          return grouped;
+        }
+      },
+      {
+        title: 'Safe UI display: fallback with ??',
+        tag: 'Defensive UI',
+        description: 'When API fields may be null/undefined, provide a fallback.',
+        code: `const apiUser = { name: null };\nconst uiName = apiUser.name ?? 'Unknown';\nuiName;`,
+        run: () => {
+          const apiUser = { name: null };
+          const uiName = apiUser.name ?? 'Unknown';
+          return uiName;
+        }
+      }
+    ];
+
+    function mount(sectionId, list) {
+      const el = document.getElementById(sectionId);
+      for (const item of list) {
+        el.appendChild(createCard(item));
+      }
+    }
+
+    mount('cards-arrays', arrays);
+    mount('cards-strings', strings);
+    mount('cards-objects', objects);
+    mount('cards-dates', dates);
+    mount('cards-numbers', numbers);
+    mount('cards-promises', promises);
+    mount('cards-patterns', patterns);
+  </script>
+</body>
+</html>

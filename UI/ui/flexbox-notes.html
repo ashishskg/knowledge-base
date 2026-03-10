@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flexbox Notes (Basic → Advanced)</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --faint: rgba(255,255,255,.52);
+      --link: #8bd5ff;
+      --accent: #b7f7d1;
+      --shadow: 0 10px 28px rgba(0,0,0,.28);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      line-height: 1.45;
+      background:
+        radial-gradient(1100px 700px at 20% 10%, rgba(139, 213, 255, 0.18), transparent 60%),
+        radial-gradient(900px 650px at 90% 20%, rgba(183, 247, 209, 0.18), transparent 55%),
+        radial-gradient(900px 700px at 70% 95%, rgba(255, 209, 154, 0.14), transparent 55%),
+        var(--bg);
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 18px 16px 60px; }
+
+    header.hero {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: 16px;
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 { margin: 0 0 8px; font-size: 28px; }
+    .hero p { margin: 0; color: var(--muted); max-width: 90ch; }
+
+    .grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+    nav.toc {
+      position: sticky;
+      top: 16px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    nav.toc h2 { margin: 0 0 10px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .toc a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--text); }
+    .toc a:hover { background: rgba(255,255,255,.08); text-decoration: none; }
+
+    main {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    section.block {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      margin-bottom: 14px;
+    }
+
+    section.block:last-child { margin-bottom: 0; }
+
+    .block > header { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 10px; }
+    .block h2 { margin: 0; font-size: 18px; }
+    .hint { margin: 0; color: var(--faint); font-size: 13px; }
+
+    .demos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 820px) { .demos { grid-template-columns: 1fr; } }
+
+    article.demo {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .demo h3 { margin: 0 0 6px; font-size: 14px; }
+    .demo h3 code { font-family: var(--mono); font-size: 13px; padding: 2px 8px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.04); }
+    .demo p { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+
+    .code {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .code .label {
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--faint);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.9);
+      white-space: pre;
+    }
+
+    .preview {
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,.22);
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+
+    .preview-head {
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--faint);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+    }
+
+    iframe {
+      width: 100%;
+      height: 220px;
+      border: 0;
+      background: #fff;
+    }
+
+    .note {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer.page { margin-top: 14px; color: var(--faint); font-size: 12px; text-align: center; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      nav.toc { position: static; }
+      header.hero, nav.toc, main, section.block, article.demo, .code { box-shadow: none; }
+      header.hero, nav.toc, main { background: #fff; }
+      a { color: #000; text-decoration: underline; }
+      .code { background: #fff; }
+      pre { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Flexbox Notes (Basic → Advanced)</h1>
+      <p>A complete Flexbox learning sheet: every major concept with <strong>code</strong> and a <strong>live preview output</strong>. Flexbox is for <em>one-dimensional</em> layouts (row or column).</p>
+      <p style="margin-top:10px; color: var(--muted);">Quick navigation: <a href="#basics">Basics</a> · <a href="#container">Container properties</a> · <a href="#items">Item properties</a> · <a href="#patterns">Common patterns</a> · <a href="#debug">Debug tips</a></p>
+    </header>
+
+    <div class="grid">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Contents</h2>
+        <a href="#basics">Basics & mental model</a>
+        <a href="#container">Flex container properties</a>
+        <a href="#items">Flex item properties</a>
+        <a href="#advanced">Advanced / edge cases</a>
+        <a href="#patterns">Practical UI patterns</a>
+        <a href="#debug">Debug & learning checklist</a>
+      </nav>
+
+      <main>
+        <section class="block" id="basics">
+          <header>
+            <h2>Basics & mental model</h2>
+            <p class="hint">Main axis vs cross axis; container vs items.</p>
+          </header>
+
+          <div class="note">
+            <div><strong>Flex container</strong> = the parent with <code style="font-family: var(--mono);">display: flex</code>.</div>
+            <div style="margin-top:6px;"><strong>Flex items</strong> = direct children of the container.</div>
+            <div style="margin-top:6px;"><strong>Main axis</strong> depends on <code style="font-family: var(--mono);">flex-direction</code>. <strong>Cross axis</strong> is perpendicular.</div>
+          </div>
+
+          <div class="demos" style="margin-top: 12px;">
+            <article class="demo">
+              <h3><code>display: flex</code></h3>
+              <p>Turns the parent into a flex container (items line up in a row by default).</p>
+              <div class="code"><div class="label"><span>Code</span><span>HTML + CSS</span></div><pre>&lt;div class="row"&gt;
+  &lt;div class="box"&gt;1&lt;/div&gt;
+  &lt;div class="box"&gt;2&lt;/div&gt;
+  &lt;div class="box"&gt;3&lt;/div&gt;
+&lt;/div&gt;
+
+.row { display: flex; gap: 10px; }
+.box { width: 60px; height: 50px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box">1</div>
+  <div class="box">2</div>
+  <div class="box">3</div>
+</div>
+              </template>
+              <template data-css>
+.row { display: flex; gap: 10px; }
+.box { width: 60px; height: 50px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>display: inline-flex</code></h3>
+              <p>Like flex, but the container behaves like inline content (shrinks to content width).</p>
+              <div class="code"><div class="label"><span>Code</span><span>HTML + CSS</span></div><pre>&lt;p&gt;Before &lt;span class="pill"&gt;...
+&lt;/span&gt; After&lt;/p&gt;
+
+.pill { display: inline-flex; gap: 8px; padding: 10px; border-radius: 999px; border: 1px solid #ddd; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #7ad6ff; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<p>Before <span class="pill"><span class="dot"></span><span>Inline flex</span></span> After</p>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.pill { display: inline-flex; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid #ddd; align-items: center; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #0ea5e9; }
+              </template>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="container">
+          <header>
+            <h2>Flex container properties</h2>
+            <p class="hint">These go on the parent (container).</p>
+          </header>
+
+          <div class="demos">
+            <article class="demo">
+              <h3><code>flex-direction</code></h3>
+              <p>Controls the main axis direction: <code style="font-family: var(--mono);">row</code>, <code style="font-family: var(--mono);">row-reverse</code>, <code style="font-family: var(--mono);">column</code>, <code style="font-family: var(--mono);">column-reverse</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Try switching row/column</span></div><pre>.wrap { display: flex; flex-direction: row; gap: 10px; }
+
+/* Try: column */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="wrap">
+  <div class="box">A</div>
+  <div class="box">B</div>
+  <div class="box">C</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.wrap { display: flex; flex-direction: row; gap: 10px; }
+.box { width: 64px; height: 48px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex-wrap</code></h3>
+              <p>Controls whether items wrap onto multiple lines: <code style="font-family: var(--mono);">nowrap</code> (default), <code style="font-family: var(--mono);">wrap</code>, <code style="font-family: var(--mono);">wrap-reverse</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>wrap vs nowrap</span></div><pre>.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.item { width: 120px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="item">One</div>
+  <div class="item">Two</div>
+  <div class="item">Three</div>
+  <div class="item">Four</div>
+  <div class="item">Five</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.item { width: 120px; padding: 10px; border-radius: 12px; border: 1px solid #ddd; background: #fff; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>justify-content</code></h3>
+              <p>Aligns items along the <strong>main axis</strong>: <code style="font-family: var(--mono);">flex-start</code>, <code style="font-family: var(--mono);">center</code>, <code style="font-family: var(--mono);">flex-end</code>, <code style="font-family: var(--mono);">space-between</code>, <code style="font-family: var(--mono);">space-around</code>, <code style="font-family: var(--mono);">space-evenly</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Try center / space-between</span></div><pre>.row { display: flex; justify-content: space-between; }
+/* Also try: center */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box">1</div>
+  <div class="box">2</div>
+  <div class="box">3</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; justify-content: space-between; padding: 10px; border: 1px solid #ddd; border-radius: 14px; background: #fff; }
+.box { width: 52px; height: 44px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>align-items</code></h3>
+              <p>Aligns items along the <strong>cross axis</strong>: <code style="font-family: var(--mono);">stretch</code> (default), <code style="font-family: var(--mono);">flex-start</code>, <code style="font-family: var(--mono);">center</code>, <code style="font-family: var(--mono);">flex-end</code>, <code style="font-family: var(--mono);">baseline</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Try center / baseline</span></div><pre>.row { display: flex; align-items: baseline; gap: 10px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="chip" style="font-size: 14px;">Small</div>
+  <div class="chip" style="font-size: 22px;">Big</div>
+  <div class="chip" style="font-size: 16px;">Medium</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; align-items: baseline; gap: 10px; padding: 10px; border-radius: 14px; border: 1px solid #ddd; background: #fff; }
+.chip { padding: 10px 12px; border-radius: 14px; border: 1px solid #eee; background: #f7f7fb; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>gap</code></h3>
+              <p>Sets spacing between items (use instead of margins between children).</p>
+              <div class="code"><div class="label"><span>Code</span><span>Clean spacing</span></div><pre>.row { display: flex; gap: 16px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box">A</div>
+  <div class="box">B</div>
+  <div class="box">C</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 16px; }
+.box { width: 64px; height: 48px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>align-content</code></h3>
+              <p>Aligns <em>lines</em> in a multi-line flex container (only works with wrapping + extra space). Try: <code style="font-family: var(--mono);">stretch</code>, <code style="font-family: var(--mono);">center</code>, <code style="font-family: var(--mono);">space-between</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Needs wrap + height</span></div><pre>.wrap { display: flex; flex-wrap: wrap; align-content: space-between; height: 160px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="wrap">
+  <div class="cell">1</div><div class="cell">2</div><div class="cell">3</div>
+  <div class="cell">4</div><div class="cell">5</div><div class="cell">6</div>
+  <div class="cell">7</div><div class="cell">8</div><div class="cell">9</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.wrap { display: flex; flex-wrap: wrap; align-content: space-between; gap: 10px; height: 160px; padding: 10px; border-radius: 14px; border: 1px solid #ddd; background: #fff; }
+.cell { width: 70px; height: 34px; border-radius: 12px; border: 1px solid #eee; background: #f7f7fb; display: grid; place-items: center; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex-flow</code></h3>
+              <p>Shorthand for <code style="font-family: var(--mono);">flex-direction</code> + <code style="font-family: var(--mono);">flex-wrap</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Shorthand</span></div><pre>.row { display: flex; flex-flow: row wrap; gap: 10px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="pill">One</div>
+  <div class="pill">Two</div>
+  <div class="pill">Three</div>
+  <div class="pill">Four</div>
+  <div class="pill">Five</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; flex-flow: row wrap; gap: 10px; }
+.pill { padding: 10px 12px; border-radius: 999px; border: 1px solid #ddd; background: #fff; }
+              </template>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="items">
+          <header>
+            <h2>Flex item properties</h2>
+            <p class="hint">These go on the children (items).</p>
+          </header>
+
+          <div class="demos">
+            <article class="demo">
+              <h3><code>flex-grow</code></h3>
+              <p>How much an item grows to fill available free space (relative to siblings).</p>
+              <div class="code"><div class="label"><span>Code</span><span>2 grows more than 1</span></div><pre>.a { flex-grow: 1; }
+.b { flex-grow: 2; }
+.c { flex-grow: 1; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box a">A</div>
+  <div class="box b">B</div>
+  <div class="box c">C</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; }
+.box { height: 48px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: #111; min-width: 64px; }
+.a { flex-grow: 1; }
+.b { flex-grow: 2; background: #0f172a; }
+.c { flex-grow: 1; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex-shrink</code></h3>
+              <p>How items shrink when the container is too small. Set to <code style="font-family: var(--mono);">0</code> to prevent shrinking.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Prevent shrink</span></div><pre>.noShrink { flex-shrink: 0; width: 180px; }
+.shrink { flex-shrink: 1; width: 180px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="card noShrink">No shrink</div>
+  <div class="card shrink">Shrink</div>
+  <div class="card shrink">Shrink</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; width: 320px; border: 1px solid #ddd; border-radius: 14px; padding: 10px; background: #fff; }
+.card { height: 48px; border-radius: 12px; border: 1px solid #eee; background: #f7f7fb; display: grid; place-items: center; }
+.noShrink { flex-shrink: 0; width: 180px; }
+.shrink { flex-shrink: 1; width: 180px; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex-basis</code></h3>
+              <p>The item’s initial size before free space is distributed. Often combined with <code style="font-family: var(--mono);">flex-grow</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Basis sets starting width</span></div><pre>.item { flex: 1 1 140px; }
+/* grow shrink basis */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="item">One</div>
+  <div class="item">Two</div>
+  <div class="item">Three</div>
+  <div class="item">Four</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.item { flex: 1 1 140px; padding: 10px; border-radius: 12px; border: 1px solid #ddd; background: #fff; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex</code> shorthand</h3>
+              <p>Shorthand: <code style="font-family: var(--mono);">flex: grow shrink basis</code>. Common patterns: <code style="font-family: var(--mono);">flex: 1</code>, <code style="font-family: var(--mono);">flex: 0 0 auto</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>flex: 1 vs fixed</span></div><pre>.fill { flex: 1; }
+.fixed { flex: 0 0 120px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="fixed">Fixed</div>
+  <div class="fill">Fills remaining space</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; }
+.fixed { flex: 0 0 120px; padding: 10px; border-radius: 12px; border: 1px solid #ddd; background: #fff; }
+.fill { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid #ddd; background: #f7f7fb; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>order</code></h3>
+              <p>Reorders items visually (does not change DOM order). Use carefully for accessibility.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Move C to front</span></div><pre>.c { order: -1; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box a">A</div>
+  <div class="box b">B</div>
+  <div class="box c">C</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; }
+.box { width: 64px; height: 48px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+.c { order: -1; background: #0f172a; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>align-self</code></h3>
+              <p>Overrides <code style="font-family: var(--mono);">align-items</code> for a single item.</p>
+              <div class="code"><div class="label"><span>Code</span><span>One item moves</span></div><pre>.row { align-items: flex-start; }
+.b { align-self: flex-end; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="box a">A</div>
+  <div class="box b">B</div>
+  <div class="box c">C</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; align-items: flex-start; height: 140px; padding: 10px; border-radius: 14px; border: 1px solid #ddd; background: #fff; }
+.box { width: 64px; height: 48px; background: #111; color: #fff; display: grid; place-items: center; border-radius: 12px; }
+.b { align-self: flex-end; background: #0f172a; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>margin-left: auto</code></h3>
+              <p>A practical trick: use auto margins to push items away (common in navbars).</p>
+              <div class="code"><div class="label"><span>Code</span><span>Push right</span></div><pre>.row { display: flex; }
+.right { margin-left: auto; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="pill">Logo</div>
+  <div class="pill">Docs</div>
+  <div class="pill">Pricing</div>
+  <div class="pill right">Sign in</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 14px; border: 1px solid #ddd; background: #fff; }
+.pill { padding: 8px 10px; border-radius: 999px; border: 1px solid #eee; background: #f7f7fb; }
+.right { margin-left: auto; background: #111; color: #fff; border-color: #111; }
+              </template>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="advanced">
+          <header>
+            <h2>Advanced / edge cases</h2>
+            <p class="hint">Min-width, overflow, equal heights, nested flex.</p>
+          </header>
+
+          <div class="demos">
+            <article class="demo">
+              <h3><code>min-width: 0</code> (important)</h3>
+              <p>In flex layouts, long content can overflow. Setting <code style="font-family: var(--mono);">min-width: 0</code> on the flexible item allows it to shrink.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Fix overflow</span></div><pre>.row { display: flex; }
+.content { flex: 1; min-width: 0; }
+/* Without min-width:0, text may overflow */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="side">Sidebar</div>
+  <div class="content">
+    <div class="title">A very very very very very very very long title that should wrap instead of overflowing</div>
+  </div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; width: 320px; border-radius: 14px; border: 1px solid #ddd; padding: 10px; background: #fff; }
+.side { flex: 0 0 110px; padding: 10px; border-radius: 12px; border: 1px solid #eee; background: #f7f7fb; }
+.content { flex: 1; min-width: 0; padding: 10px; border-radius: 12px; border: 1px solid #eee; background: #fff; }
+.title { font-weight: 800; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3>Equal height cards</h3>
+              <p>Flex makes equal-height columns easy (items stretch by default on the cross axis).</p>
+              <div class="code"><div class="label"><span>Code</span><span>Stretch</span></div><pre>.row { display: flex; gap: 10px; }
+.card { flex: 1; }
+/* Default align-items: stretch */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="card">
+    <h3>Short</h3>
+    <p>Just a bit.</p>
+  </div>
+  <div class="card">
+    <h3>Longer</h3>
+    <p>More text to make the height bigger. More text. More text.</p>
+  </div>
+  <div class="card">
+    <h3>Medium</h3>
+    <p>Some text here.</p>
+  </div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; }
+.card { flex: 1; border-radius: 14px; border: 1px solid #ddd; background: #fff; padding: 12px; }
+.card h3 { margin: 0 0 6px; }
+.card p { margin: 0; color: #444; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3>Nested flex layouts</h3>
+              <p>Flex inside flex: common in real UIs (sidebar layout + toolbar rows).</p>
+              <div class="code"><div class="label"><span>Code</span><span>Layout inside layout</span></div><pre>.app { display: flex; }
+.sidebar { flex: 0 0 120px; }
+.main { flex: 1; display: flex; flex-direction: column; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="app">
+  <aside class="sidebar">Sidebar</aside>
+  <div class="main">
+    <div class="top">Top bar</div>
+    <div class="content">Content area</div>
+  </div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.app { display: flex; height: 160px; border-radius: 14px; border: 1px solid #ddd; overflow: hidden; background: #fff; }
+.sidebar { flex: 0 0 120px; background: #f7f7fb; padding: 12px; border-right: 1px solid #eee; }
+.main { flex: 1; display: flex; flex-direction: column; }
+.top { padding: 12px; border-bottom: 1px solid #eee; background: #fff; }
+.content { flex: 1; padding: 12px; background: #fff; display: grid; place-items: center; color: #444; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3><code>flex</code> vs <code>width</code></h3>
+              <p>If both are set, <code style="font-family: var(--mono);">flex-basis</code> often wins for the base size. Prefer using <code style="font-family: var(--mono);">flex</code> for flex items sizing.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Prefer flex-basis</span></div><pre>.item { flex: 0 1 160px; }
+/* Think: basis is the starting size */</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="item">160px basis</div>
+  <div class="item">160px basis</div>
+  <div class="item">160px basis</div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.item { flex: 0 1 160px; padding: 10px; border-radius: 12px; border: 1px solid #ddd; background: #fff; }
+              </template>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="patterns">
+          <header>
+            <h2>Practical UI patterns</h2>
+            <p class="hint">Patterns you’ll build constantly.</p>
+          </header>
+
+          <div class="demos">
+            <article class="demo">
+              <h3>Navbar with right-aligned CTA</h3>
+              <p>Combine <code style="font-family: var(--mono);">display:flex</code>, <code style="font-family: var(--mono);">gap</code>, and <code style="font-family: var(--mono);">margin-left:auto</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Navbar</span></div><pre>.nav { display: flex; gap: 10px; align-items: center; }
+.cta { margin-left: auto; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<header class="nav">
+  <strong class="brand">Acme</strong>
+  <a href="#">Docs</a>
+  <a href="#">Pricing</a>
+  <a href="#">About</a>
+  <button class="cta" type="button">Sign in</button>
+</header>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; background: #f7f7fb; }
+.nav { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border: 1px solid #e7e7ef; border-radius: 16px; background: #fff; }
+.nav a { color: #111; text-decoration: none; padding: 8px 10px; border-radius: 10px; }
+.nav a:hover { background: #f3f3f7; }
+.brand { padding: 8px 10px; }
+.cta { margin-left: auto; padding: 10px 12px; border-radius: 12px; border: 1px solid #111; background: #111; color: #fff; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3>Sticky footer (page layout)</h3>
+              <p>Make the body a column flex container and push footer down with <code style="font-family: var(--mono);">flex:1</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Column layout</span></div><pre>body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="page">
+  <header class="hdr">Header</header>
+  <main class="main">Main content</main>
+  <footer class="ftr">Footer at bottom</footer>
+</div>
+              </template>
+              <template data-css>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+.page { min-height: 220px; display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 16px; overflow: hidden; }
+.hdr, .ftr { padding: 12px; background: #fff; }
+.hdr { border-bottom: 1px solid #eee; }
+.main { flex: 1; padding: 12px; background: #f7f7fb; display: grid; place-items: center; }
+.ftr { border-top: 1px solid #eee; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3>Responsive card row (wrap)</h3>
+              <p>Use <code style="font-family: var(--mono);">flex-wrap: wrap</code> and a basis like <code style="font-family: var(--mono);">220px</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Responsive cards</span></div><pre>.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.card { flex: 1 1 220px; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <article class="card">Card A</article>
+  <article class="card">Card B</article>
+  <article class="card">Card C</article>
+  <article class="card">Card D</article>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; background: #f7f7fb; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.card { flex: 1 1 220px; padding: 14px; border-radius: 16px; border: 1px solid #e7e7ef; background: #fff; }
+              </template>
+            </article>
+
+            <article class="demo">
+              <h3>Media object (icon + text)</h3>
+              <p>A classic pattern: fixed media + flexible content using <code style="font-family: var(--mono);">gap</code> and <code style="font-family: var(--mono);">min-width:0</code>.</p>
+              <div class="code"><div class="label"><span>Code</span><span>Icon + content</span></div><pre>.row { display: flex; gap: 12px; }
+.icon { flex: 0 0 44px; }
+.content { flex: 1; min-width: 0; }</pre></div>
+              <div class="preview"><div class="preview-head">Output</div><iframe data-demo></iframe></div>
+              <template data-html>
+<div class="row">
+  <div class="icon">i</div>
+  <div class="content">
+    <div class="title">A long heading that should wrap nicely without breaking layout</div>
+    <div class="sub">Secondary text</div>
+  </div>
+</div>
+              </template>
+              <template data-css>
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; padding: 18px; background: #f7f7fb; }
+.row { display: flex; gap: 12px; padding: 12px; border-radius: 16px; border: 1px solid #e7e7ef; background: #fff; align-items: flex-start; width: 100%; }
+.icon { flex: 0 0 44px; height: 44px; border-radius: 14px; background: #111; color: #fff; display: grid; place-items: center; font-weight: 900; }
+.content { flex: 1; min-width: 0; }
+.title { font-weight: 900; }
+.sub { margin-top: 4px; color: #444; }
+              </template>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="debug">
+          <header>
+            <h2>Debug & learning checklist</h2>
+            <p class="hint">How to avoid the most common Flexbox confusion.</p>
+          </header>
+
+          <div class="note">
+            <div><strong>1) Identify container vs items</strong>: Flexbox properties apply either to the parent or the children, not both.</div>
+            <div style="margin-top:6px;"><strong>2) Decide main axis</strong> by checking <code style="font-family: var(--mono);">flex-direction</code>.</div>
+            <div style="margin-top:6px;"><strong>3) Use gap</strong> for spacing between items.</div>
+            <div style="margin-top:6px;"><strong>4) When text overflows</strong> in a flex item, add <code style="font-family: var(--mono);">min-width: 0</code> to the flexible item.</div>
+            <div style="margin-top:6px;"><strong>5) For two-dimensional card layouts</strong>, prefer CSS Grid. Use Flexbox for rows/columns.</div>
+          </div>
+
+          <footer class="page">
+            <p style="margin:0;">File: <code style="font-family: var(--mono);">flexbox-notes.html</code></p>
+          </footer>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function renderDemos() {
+      const iframes = document.querySelectorAll('iframe[data-demo]');
+      for (const iframe of iframes) {
+        const root = iframe.closest('article.demo');
+        const html = root.querySelector('template[data-html]')?.innerHTML?.trim() ?? '';
+        const css = root.querySelector('template[data-css]')?.innerHTML?.trim() ?? '';
+        const doc = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>${css}</style>
+</head>
+<body>
+${html}
+</body>
+</html>`;
+        iframe.srcdoc = doc;
+      }
+    }
+    renderDemos();
+  </script>
+</body>
+</html>

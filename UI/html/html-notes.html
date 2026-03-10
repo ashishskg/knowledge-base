@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTML Tags Notes (Modern)</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #0b1220;
+      --panel: rgba(255, 255, 255, 0.06);
+      --panel2: rgba(255, 255, 255, 0.08);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --faint: rgba(255, 255, 255, 0.52);
+      --border: rgba(255, 255, 255, 0.14);
+      --link: #8bd5ff;
+      --accent: #b7f7d1;
+      --warn: #ffd19a;
+      --shadow: 0 10px 28px rgba(0,0,0,.28);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: radial-gradient(1100px 700px at 20% 10%, rgba(139, 213, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 650px at 90% 20%, rgba(183, 247, 209, 0.18), transparent 55%),
+                  radial-gradient(900px 700px at 70% 95%, rgba(255, 209, 154, 0.14), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    header.hero {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: 16px;
+      padding: 20px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 80ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      margin-top: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    nav.toc {
+      position: sticky;
+      top: 16px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    nav.toc h2 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .toc a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 10px;
+      color: var(--text);
+    }
+
+    .toc a:hover { background: rgba(255,255,255,.08); text-decoration: none; }
+
+    main {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    section.category {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      margin-bottom: 14px;
+    }
+
+    section.category:last-child { margin-bottom: 0; }
+
+    section.category > header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    section.category h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.2px;
+    }
+
+    section.category .hint {
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+    }
+
+    .tags {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .tags { grid-template-columns: 1fr; }
+    }
+
+    article.tag {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .tag h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .tag h3 code {
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 2px 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .desc {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .code {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      overflow: hidden;
+    }
+
+    .code .label {
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--faint);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.9);
+      white-space: pre;
+    }
+
+    .demo {
+      border: 1px dashed rgba(255,255,255,.22);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .demo > .demo-title {
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: var(--faint);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .demo .chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(183, 247, 209, 0.16);
+      border: 1px solid rgba(183, 247, 209, 0.25);
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+    }
+
+    .demo .box {
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+    }
+
+    footer.page {
+      margin-top: 14px;
+      color: var(--faint);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      nav.toc { position: static; }
+      header.hero, nav.toc, main, section.category, article.tag, .code { box-shadow: none; }
+      header.hero, nav.toc, main { background: #fff; }
+      a { color: #000; text-decoration: underline; }
+      .code { background: #fff; }
+      pre { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>HTML Tags Notes (Modern)</h1>
+      <p>Category-wise notes for common modern HTML tags. Each card shows what the tag is for, a minimal example, and a small demo preview.</p>
+    </header>
+
+    <div class="grid">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Contents</h2>
+        <a href="#skeleton">Document skeleton</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#scripting">Scripting & styling hooks</a>
+        <a href="#text">Text content</a>
+        <a href="#inline">Inline semantics</a>
+        <a href="#quotes">Quotes & citations</a>
+        <a href="#edits">Edits</a>
+        <a href="#lists">Lists</a>
+        <a href="#media">Media</a>
+        <a href="#embedding">Embedding</a>
+        <a href="#tables">Tables</a>
+        <a href="#forms">Forms</a>
+        <a href="#layout">Semantic layout</a>
+        <a href="#grouping">Grouping</a>
+        <a href="#interactive">Disclosure / interactive</a>
+        <a href="#templates">Templates & web components hooks</a>
+      </nav>
+
+      <main>
+        <section class="category" id="skeleton">
+          <header>
+            <h2>Document skeleton</h2>
+            <p class="hint">Core structure tags.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-doctype">
+              <h3><code>&lt;!doctype html&gt;</code></h3>
+              <p class="desc">Declares the document as HTML5 so browsers use standards mode.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Declaration</span></div>
+                  <pre>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;...&lt;/head&gt;
+  &lt;body&gt;...&lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">This tag is a declaration and doesn’t render visible content.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-html">
+              <h3><code>&lt;html&gt;</code></h3>
+              <p class="desc">Root element that wraps the entire HTML document.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Root</span></div>
+                  <pre>&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;...&lt;/head&gt;
+  &lt;body&gt;...&lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Root wrapper (not directly visible).</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-head">
+              <h3><code>&lt;head&gt;</code></h3>
+              <p class="desc">Contains metadata, styles, title, and other resources for the document.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Metadata container</span></div>
+                  <pre>&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot; /&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+&lt;/head&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Not directly visible on the page.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-body">
+              <h3><code>&lt;body&gt;</code></h3>
+              <p class="desc">Contains all visible content of the page.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Content container</span></div>
+                  <pre>&lt;body&gt;
+  &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;p&gt;Visible content lives here.&lt;/p&gt;
+&lt;/body&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <h4 style="margin:0 0 4px;">Hello</h4>
+                    <p style="margin:0; color: rgba(255,255,255,.82);">Visible content lives here.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="metadata">
+          <header>
+            <h2>Metadata</h2>
+            <p class="hint">Head-only tags that describe the document.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-title">
+              <h3><code>&lt;title&gt;</code></h3>
+              <p class="desc">Sets the browser tab title and the page title used by bookmarks/search.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Head</span></div>
+                  <pre>&lt;head&gt;
+  &lt;title&gt;HTML Notes&lt;/title&gt;
+&lt;/head&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">See your browser tab title.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-meta">
+              <h3><code>&lt;meta&gt;</code></h3>
+              <p class="desc">Defines metadata such as charset, viewport, description, and more.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Head</span></div>
+                  <pre>&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Not directly visible; affects encoding & responsive layout.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-link">
+              <h3><code>&lt;link&gt;</code></h3>
+              <p class="desc">Links external resources like stylesheets and icons.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Head</span></div>
+                  <pre>&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot; /&gt;
+&lt;link rel=&quot;icon&quot; href=&quot;favicon.ico&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Not directly visible; affects styling and icons.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-base">
+              <h3><code>&lt;base&gt;</code></h3>
+              <p class="desc">Sets a base URL for relative links in the document (use carefully).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Head</span></div>
+                  <pre>&lt;base href=&quot;https://example.com/&quot; /&gt;
+&lt;a href=&quot;docs&quot;&gt;Docs&lt;/a&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Affects how relative URLs resolve.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="scripting">
+          <header>
+            <h2>Scripting &amp; styling hooks</h2>
+            <p class="hint">Load scripts and define fallback content.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-style">
+              <h3><code>&lt;style&gt;</code></h3>
+              <p class="desc">Embeds CSS directly in the document.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">CSS</span></div>
+                  <pre>&lt;style&gt;
+  .note { color: teal; }
+&lt;/style&gt;
+&lt;p class=&quot;note&quot;&gt;Styled text&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box"><span style="color: #8bd5ff;">Styled text (in-page)</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-script">
+              <h3><code>&lt;script&gt;</code></h3>
+              <p class="desc">Adds JavaScript either inline or via a linked file.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">JS</span></div>
+                  <pre>&lt;button id=&quot;btn&quot;&gt;Click&lt;/button&gt;
+&lt;script&gt;
+  document.getElementById('btn').addEventListener('click', () =&gt; {
+    alert('Hello');
+  });
+&lt;/script&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Scripts run in the browser (open this file to test).</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-noscript">
+              <h3><code>&lt;noscript&gt;</code></h3>
+              <p class="desc">Content shown when JavaScript is disabled or unsupported.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Fallback</span></div>
+                  <pre>&lt;noscript&gt;
+  &lt;p&gt;This site works best with JavaScript enabled.&lt;/p&gt;
+&lt;/noscript&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Turn off JS to see it in action.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="text">
+          <header>
+            <h2>Text content</h2>
+            <p class="hint">Headings, paragraphs, breaks, and thematic changes.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-h1">
+              <h3><code>&lt;h1&gt;</code> … <code>&lt;h6&gt;</code></h3>
+              <p class="desc">Headings represent the outline of your page. Use them in order for good structure and accessibility.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Headings</span></div>
+                  <pre>&lt;h1&gt;Page title&lt;/h1&gt;
+&lt;h2&gt;Section&lt;/h2&gt;
+&lt;h3&gt;Subsection&lt;/h3&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <h1 style="margin:0 0 6px; font-size: 18px;">Page title</h1>
+                    <h2 style="margin:0 0 4px; font-size: 16px;">Section</h2>
+                    <h3 style="margin:0; font-size: 14px; color: rgba(255,255,255,.86);">Subsection</h3>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-p">
+              <h3><code>&lt;p&gt;</code></h3>
+              <p class="desc">Represents a paragraph of text.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Paragraph</span></div>
+                  <pre>&lt;p&gt;This is a paragraph.&lt;/p&gt;
+&lt;p&gt;This is another paragraph.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <p style="margin:0 0 6px;">This is a paragraph.</p>
+                    <p style="margin:0;">This is another paragraph.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-br">
+              <h3><code>&lt;br&gt;</code></h3>
+              <p class="desc">Inserts a line break inside text. Use sparingly (not for layout).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Line break</span></div>
+                  <pre>&lt;p&gt;Line one&lt;br /&gt;Line two&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Line one<br />Line two</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-hr">
+              <h3><code>&lt;hr&gt;</code></h3>
+              <p class="desc">Represents a thematic break between paragraphs/sections.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Separator</span></div>
+                  <pre>&lt;p&gt;Part A&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Part B&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <div>Part A</div>
+                    <hr style="border-color: rgba(255,255,255,.18);" />
+                    <div>Part B</div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="inline">
+          <header>
+            <h2>Inline semantics</h2>
+            <p class="hint">Inline tags that add meaning or behavior to text.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-a">
+              <h3><code>&lt;a&gt;</code></h3>
+              <p class="desc">Creates a hyperlink to another page, a section on the page, or a downloadable resource.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Link</span></div>
+                  <pre>&lt;a href=&quot;https://example.com&quot;&gt;Visit Example&lt;/a&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box"><a href="#metadata">Jump to Metadata section</a></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-em">
+              <h3><code>&lt;em&gt;</code></h3>
+              <p class="desc">Marks text as emphasized (typically italic), and changes meaning for screen readers.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Emphasis</span></div>
+                  <pre>&lt;p&gt;This is &lt;em&gt;important&lt;/em&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">This is <em>important</em>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-strong">
+              <h3><code>&lt;strong&gt;</code></h3>
+              <p class="desc">Marks text as strongly important (typically bold), with semantic meaning.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Importance</span></div>
+                  <pre>&lt;p&gt;Do &lt;strong&gt;not&lt;/strong&gt; share your password.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Do <strong>not</strong> share your password.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-small">
+              <h3><code>&lt;small&gt;</code></h3>
+              <p class="desc">Represents side comments and small print.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Fine print</span></div>
+                  <pre>&lt;p&gt;Offer ends soon. &lt;small&gt;Terms apply.&lt;/small&gt;&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Offer ends soon. <small>Terms apply.</small></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-mark">
+              <h3><code>&lt;mark&gt;</code></h3>
+              <p class="desc">Highlights text as relevant or marked for reference (like a search highlight).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Highlight</span></div>
+                  <pre>&lt;p&gt;Find the &lt;mark&gt;keyword&lt;/mark&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Find the <mark>keyword</mark>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-code-pre">
+              <h3><code>&lt;code&gt;</code> and <code>&lt;pre&gt;</code></h3>
+              <p class="desc"><code>&lt;code&gt;</code> is for inline code; <code>&lt;pre&gt;</code> preserves whitespace for blocks.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Code</span></div>
+                  <pre>&lt;p&gt;Use &lt;code&gt;npm install&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;line 1
+line 2&lt;/code&gt;&lt;/pre&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <div>Use <code>npm install</code>.</div>
+                    <pre style="margin: 8px 0 0; background: rgba(0,0,0,.22); padding: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12);"><code>line 1
+line 2</code></pre>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-kbd">
+              <h3><code>&lt;kbd&gt;</code></h3>
+              <p class="desc">Represents user input, typically from a keyboard.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Keyboard</span></div>
+                  <pre>&lt;p&gt;Press &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;S&lt;/kbd&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Press <kbd>Ctrl</kbd> + <kbd>S</kbd>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-sub-sup">
+              <h3><code>&lt;sub&gt;</code> and <code>&lt;sup&gt;</code></h3>
+              <p class="desc">Subscript and superscript text (math, footnotes, chemical formulas).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Sub/Sup</span></div>
+                  <pre>&lt;p&gt;H&lt;sub&gt;2&lt;/sub&gt;O and x&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">H<sub>2</sub>O and x<sup>2</sup>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-time">
+              <h3><code>&lt;time&gt;</code></h3>
+              <p class="desc">Represents a specific date/time in a machine-readable way.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Time</span></div>
+                  <pre>&lt;p&gt;Published on &lt;time datetime=&quot;2026-03-01&quot;&gt;March 1, 2026&lt;/time&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Published on <time datetime="2026-03-01">March 1, 2026</time>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-span">
+              <h3><code>&lt;span&gt;</code></h3>
+              <p class="desc">Generic inline container used when no other semantic element fits.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Inline container</span></div>
+                  <pre>&lt;p&gt;A &lt;span class=&quot;chip&quot;&gt;small highlight&lt;/span&gt; inside text.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">A <span class="chip">small highlight</span> inside text.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-bdi-bdo">
+              <h3><code>&lt;bdi&gt;</code> and <code>&lt;bdo&gt;</code></h3>
+              <p class="desc"><code>&lt;bdi&gt;</code> isolates bidirectional text; <code>&lt;bdo&gt;</code> overrides text direction.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Direction</span></div>
+                  <pre>&lt;p&gt;User: &lt;bdi&gt;اسم&lt;/bdi&gt;&lt;/p&gt;
+&lt;p&gt;&lt;bdo dir=&quot;rtl&quot;&gt;Reversed direction&lt;/bdo&gt;&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <div>User: <bdi>اسم</bdi></div>
+                    <div><bdo dir="rtl">Reversed direction</bdo></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-wbr">
+              <h3><code>&lt;wbr&gt;</code></h3>
+              <p class="desc">Optional word break opportunity in long strings (URLs, long words).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Word break</span></div>
+                  <pre>&lt;p&gt;verylongword&lt;wbr /&gt;breakhere&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box" style="max-width: 240px;">verylongword<wbr />breakhere</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="quotes">
+          <header>
+            <h2>Quotes &amp; citations</h2>
+            <p class="hint">Quoting text and marking citations.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-blockquote">
+              <h3><code>&lt;blockquote&gt;</code></h3>
+              <p class="desc">A block-level quotation from another source.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Quote</span></div>
+                  <pre>&lt;blockquote&gt;
+  &lt;p&gt;Simplicity is the soul of efficiency.&lt;/p&gt;
+&lt;/blockquote&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box" style="border-left: 4px solid rgba(139,213,255,.5);">
+                    <p style="margin:0;">Simplicity is the soul of efficiency.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-q">
+              <h3><code>&lt;q&gt;</code></h3>
+              <p class="desc">An inline quotation (browsers often add quotation marks).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Inline quote</span></div>
+                  <pre>&lt;p&gt;She said, &lt;q&gt;hello&lt;/q&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">She said, <q>hello</q>.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-cite">
+              <h3><code>&lt;cite&gt;</code></h3>
+              <p class="desc">Marks the title of a work (book, paper, movie), not a person’s name.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Work title</span></div>
+                  <pre>&lt;p&gt;My favorite book is &lt;cite&gt;Clean Code&lt;/cite&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">My favorite book is <cite>Clean Code</cite>.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="edits">
+          <header>
+            <h2>Edits</h2>
+            <p class="hint">Show changes to text content.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-del">
+              <h3><code>&lt;del&gt;</code></h3>
+              <p class="desc">Represents text that has been deleted from the document.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Deleted</span></div>
+                  <pre>&lt;p&gt;Price: &lt;del&gt;$50&lt;/del&gt; $35&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Price: <del>$50</del> $35</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-ins">
+              <h3><code>&lt;ins&gt;</code></h3>
+              <p class="desc">Represents text that has been inserted into the document.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Inserted</span></div>
+                  <pre>&lt;p&gt;We now support &lt;ins&gt;dark mode&lt;/ins&gt;.&lt;/p&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">We now support <ins>dark mode</ins>.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="lists">
+          <header>
+            <h2>Lists</h2>
+            <p class="hint">Ordered, unordered, and description lists.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-ul-ol-li">
+              <h3><code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code></h3>
+              <p class="desc">Unordered and ordered lists; <code>&lt;li&gt;</code> is a list item.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">List</span></div>
+                  <pre>&lt;ul&gt;
+  &lt;li&gt;Apple&lt;/li&gt;
+  &lt;li&gt;Banana&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Step one&lt;/li&gt;
+  &lt;li&gt;Step two&lt;/li&gt;
+&lt;/ol&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <ul style="margin:0 0 8px; padding-left: 18px;">
+                      <li>Apple</li>
+                      <li>Banana</li>
+                    </ul>
+                    <ol style="margin:0; padding-left: 18px;">
+                      <li>Step one</li>
+                      <li>Step two</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-dl">
+              <h3><code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code></h3>
+              <p class="desc">Description list: term (<code>&lt;dt&gt;</code>) and description (<code>&lt;dd&gt;</code>).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Description list</span></div>
+                  <pre>&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;Markup language for the web.&lt;/dd&gt;
+&lt;/dl&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <dl style="margin:0;">
+                      <dt style="font-weight: 700;">HTML</dt>
+                      <dd style="margin: 0 0 0 16px; color: rgba(255,255,255,.82);">Markup language for the web.</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="media">
+          <header>
+            <h2>Media</h2>
+            <p class="hint">Images, responsive images, and audio/video.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-img">
+              <h3><code>&lt;img&gt;</code></h3>
+              <p class="desc">Embeds an image. Always include meaningful alternative text.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Image</span></div>
+                  <pre>&lt;img src=&quot;photo.jpg&quot; alt=&quot;A sunset over the ocean&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Image demo depends on a real file path.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-picture-source">
+              <h3><code>&lt;picture&gt;</code> and <code>&lt;source&gt;</code></h3>
+              <p class="desc">Provides responsive images with multiple sources; browser picks the best match.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Responsive</span></div>
+                  <pre>&lt;picture&gt;
+  &lt;source media=&quot;(min-width: 800px)&quot; srcset=&quot;large.jpg&quot; /&gt;
+  &lt;img src=&quot;small.jpg&quot; alt=&quot;A mountain&quot; /&gt;
+&lt;/picture&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Requires actual image files.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-audio">
+              <h3><code>&lt;audio&gt;</code></h3>
+              <p class="desc">Embeds audio playback controls.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Audio</span></div>
+                  <pre>&lt;audio controls&gt;
+  &lt;source src=&quot;song.mp3&quot; type=&quot;audio/mpeg&quot; /&gt;
+&lt;/audio&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Requires a real audio file.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-video">
+              <h3><code>&lt;video&gt;</code> and <code>&lt;track&gt;</code></h3>
+              <p class="desc">Embeds video playback; <code>&lt;track&gt;</code> can provide captions/subtitles.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Video</span></div>
+                  <pre>&lt;video controls width=&quot;320&quot;&gt;
+  &lt;source src=&quot;clip.mp4&quot; type=&quot;video/mp4&quot; /&gt;
+  &lt;track kind=&quot;captions&quot; src=&quot;captions.vtt&quot; srclang=&quot;en&quot; label=&quot;English&quot; /&gt;
+&lt;/video&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Requires a real video file.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-figure">
+              <h3><code>&lt;figure&gt;</code> and <code>&lt;figcaption&gt;</code></h3>
+              <p class="desc">Wraps media or code examples with an optional caption.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Caption</span></div>
+                  <pre>&lt;figure&gt;
+  &lt;img src=&quot;diagram.png&quot; alt=&quot;Architecture diagram&quot; /&gt;
+  &lt;figcaption&gt;System architecture&lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <figure style="margin:0;">
+                      <div style="padding: 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.18);">Media goes here</div>
+                      <figcaption style="margin-top: 6px; color: rgba(255,255,255,.72);">System architecture</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="embedding">
+          <header>
+            <h2>Embedding</h2>
+            <p class="hint">Embed other documents or external content.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-iframe">
+              <h3><code>&lt;iframe&gt;</code></h3>
+              <p class="desc">Embeds another HTML page within the current page.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Frame</span></div>
+                  <pre>&lt;iframe src=&quot;https://example.com&quot; title=&quot;Example site&quot;&gt;&lt;/iframe&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Embedding external sites may be blocked by security headers.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-embed">
+              <h3><code>&lt;embed&gt;</code></h3>
+              <p class="desc">Embeds an external resource (often plugins/documents); use when appropriate.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Resource</span></div>
+                  <pre>&lt;embed src=&quot;file.pdf&quot; type=&quot;application/pdf&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">(Requires a real file and browser support.)</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-object">
+              <h3><code>&lt;object&gt;</code> and <code>&lt;param&gt;</code></h3>
+              <p class="desc">Embeds an external resource; <code>&lt;param&gt;</code> provides parameters to the resource.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Object</span></div>
+                  <pre>&lt;object data=&quot;file.pdf&quot; type=&quot;application/pdf&quot;&gt;
+  &lt;param name=&quot;view&quot; value=&quot;FitH&quot; /&gt;
+  &lt;p&gt;PDF could not be displayed.&lt;/p&gt;
+&lt;/object&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Fallback content can show if embedding fails.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="tables">
+          <header>
+            <h2>Tables</h2>
+            <p class="hint">Tabular data: headings, rows, body, footers.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-table">
+              <h3><code>&lt;table&gt;</code> family</h3>
+              <p class="desc">Use tables for data (not layout). Combine <code>&lt;caption&gt;</code>, head/body/foot, and header cells for accessibility.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Table</span></div>
+                  <pre>&lt;table&gt;
+  &lt;caption&gt;Scores&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Score&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Asha&lt;/td&gt;&lt;td&gt;95&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Ravi&lt;/td&gt;&lt;td&gt;88&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <table style="width:100%; border-collapse: collapse;">
+                      <caption style="caption-side: top; text-align: left; color: rgba(255,255,255,.78); padding-bottom: 6px;">Scores</caption>
+                      <thead>
+                        <tr>
+                          <th style="text-align:left; border-bottom: 1px solid rgba(255,255,255,.18); padding: 6px;">Name</th>
+                          <th style="text-align:left; border-bottom: 1px solid rgba(255,255,255,.18); padding: 6px;">Score</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="padding: 6px; border-bottom: 1px solid rgba(255,255,255,.10);">Asha</td>
+                          <td style="padding: 6px; border-bottom: 1px solid rgba(255,255,255,.10);">95</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 6px;">Ravi</td>
+                          <td style="padding: 6px;">88</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-colgroup">
+              <h3><code>&lt;colgroup&gt;</code> and <code>&lt;col&gt;</code></h3>
+              <p class="desc">Defines a group of columns so you can style/target them together.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Columns</span></div>
+                  <pre>&lt;table&gt;
+  &lt;colgroup&gt;
+    &lt;col style=&quot;background: #f3f3f3;&quot; /&gt;
+    &lt;col /&gt;
+  &lt;/colgroup&gt;
+  ...
+&lt;/table&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Useful for styling whole columns.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="forms">
+          <header>
+            <h2>Forms</h2>
+            <p class="hint">Collect user input: fields, choices, and feedback.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-form">
+              <h3><code>&lt;form&gt;</code></h3>
+              <p class="desc">Wraps input controls that can be submitted to a server.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Form</span></div>
+                  <pre>&lt;form&gt;
+  &lt;label&gt;Name &lt;input /&gt;&lt;/label&gt;
+  &lt;button type=&quot;submit&quot;&gt;Send&lt;/button&gt;
+&lt;/form&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <form onsubmit="return false;" style="display:flex; gap:8px; align-items:center; flex-wrap: wrap;">
+                      <label>Name <input style="margin-left: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" /></label>
+                      <button type="submit" style="padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: var(--text);">Send</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-label">
+              <h3><code>&lt;label&gt;</code></h3>
+              <p class="desc">Labels an input control; improves usability and accessibility.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Label</span></div>
+                  <pre>&lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+&lt;input id=&quot;email&quot; type=&quot;email&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <label for="email-demo">Email</label>
+                    <input id="email-demo" type="email" placeholder="you@example.com" style="margin-left: 8px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-input">
+              <h3><code>&lt;input&gt;</code></h3>
+              <p class="desc">Single-line input. The type changes behavior (text, email, password, date, file, etc.).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Input</span></div>
+                  <pre>&lt;input type=&quot;text&quot; placeholder=&quot;Your name&quot; /&gt;
+&lt;input type=&quot;password&quot; placeholder=&quot;Password&quot; /&gt;
+&lt;input type=&quot;date&quot; /&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box" style="display:flex; gap:8px; flex-wrap: wrap;">
+                    <input type="text" placeholder="Your name" style="padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                    <input type="password" placeholder="Password" style="padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                    <input type="date" style="padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-textarea">
+              <h3><code>&lt;textarea&gt;</code></h3>
+              <p class="desc">Multi-line text input.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Textarea</span></div>
+                  <pre>&lt;textarea rows=&quot;3&quot; cols=&quot;30&quot;&gt;Write here...&lt;/textarea&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <textarea rows="3" cols="30" style="width:100%; padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);">Write here...</textarea>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-button">
+              <h3><code>&lt;button&gt;</code></h3>
+              <p class="desc">Clickable button (submit/reset/button). Prefer this over clickable divs.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Button</span></div>
+                  <pre>&lt;button type=&quot;button&quot;&gt;Click me&lt;/button&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <button type="button" style="padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: var(--text);">Click me</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-select">
+              <h3><code>&lt;select&gt;</code>, <code>&lt;option&gt;</code>, <code>&lt;optgroup&gt;</code></h3>
+              <p class="desc">Dropdown selection with options (optionally grouped).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Select</span></div>
+                  <pre>&lt;select&gt;
+  &lt;optgroup label=&quot;Fruits&quot;&gt;
+    &lt;option&gt;Apple&lt;/option&gt;
+    &lt;option&gt;Banana&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <select style="padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);">
+                      <optgroup label="Fruits">
+                        <option>Apple</option>
+                        <option>Banana</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-datalist">
+              <h3><code>&lt;datalist&gt;</code></h3>
+              <p class="desc">Provides autocomplete options for an <code>&lt;input&gt;</code>.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Autocomplete</span></div>
+                  <pre>&lt;input list=&quot;cities&quot; /&gt;
+&lt;datalist id=&quot;cities&quot;&gt;
+  &lt;option value=&quot;Mumbai&quot; /&gt;
+  &lt;option value=&quot;Pune&quot; /&gt;
+&lt;/datalist&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <input list="cities-demo" placeholder="Start typing..." style="padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                    <datalist id="cities-demo">
+                      <option value="Mumbai"></option>
+                      <option value="Pune"></option>
+                      <option value="Bengaluru"></option>
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-fieldset">
+              <h3><code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code></h3>
+              <p class="desc">Groups related controls; <code>&lt;legend&gt;</code> provides a caption for the group.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Group</span></div>
+                  <pre>&lt;fieldset&gt;
+  &lt;legend&gt;Contact&lt;/legend&gt;
+  &lt;label&gt;Email &lt;input type=&quot;email&quot; /&gt;&lt;/label&gt;
+&lt;/fieldset&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <fieldset style="border-radius: 12px; border: 1px solid rgba(255,255,255,.18);">
+                    <legend style="padding: 0 6px; color: rgba(255,255,255,.82);">Contact</legend>
+                    <label>Email <input type="email" style="margin-left: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" /></label>
+                  </fieldset>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-output">
+              <h3><code>&lt;output&gt;</code></h3>
+              <p class="desc">Represents the result of a calculation or user action.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Result</span></div>
+                  <pre>&lt;form oninput=&quot;result.value = Number(a.value) + Number(b.value)&quot;&gt;
+  &lt;input id=&quot;a&quot; type=&quot;number&quot; value=&quot;2&quot; /&gt; +
+  &lt;input id=&quot;b&quot; type=&quot;number&quot; value=&quot;3&quot; /&gt; =
+  &lt;output name=&quot;result&quot;&gt;5&lt;/output&gt;
+&lt;/form&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <form oninput="out.value = Number(x.value) + Number(y.value);" style="display:flex; gap:6px; align-items:center; flex-wrap: wrap;">
+                      <input id="x" type="number" value="2" style="width: 80px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                      <span>+</span>
+                      <input id="y" type="number" value="3" style="width: 80px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.25); color: var(--text);" />
+                      <span>=</span>
+                      <output name="out" for="x y" style="padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.06);">5</output>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-progress-meter">
+              <h3><code>&lt;progress&gt;</code> and <code>&lt;meter&gt;</code></h3>
+              <p class="desc"><code>&lt;progress&gt;</code> shows task progress; <code>&lt;meter&gt;</code> shows a scalar measurement within a known range.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Indicators</span></div>
+                  <pre>&lt;progress value=&quot;60&quot; max=&quot;100&quot;&gt;60%&lt;/progress&gt;
+&lt;meter value=&quot;0.7&quot;&gt;70%&lt;/meter&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box" style="display:flex; gap:10px; align-items:center; flex-wrap: wrap;">
+                    <progress value="60" max="100">60%</progress>
+                    <meter value="0.7">70%</meter>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="layout">
+          <header>
+            <h2>Semantic layout</h2>
+            <p class="hint">Modern structural tags for page layout.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-header-footer">
+              <h3><code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code></h3>
+              <p class="desc">Header/footer for a page or a section (not only for the whole page).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Layout</span></div>
+                  <pre>&lt;header&gt;
+  &lt;h1&gt;Site&lt;/h1&gt;
+&lt;/header&gt;
+&lt;footer&gt;
+  &lt;small&gt;© 2026&lt;/small&gt;
+&lt;/footer&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <header style="padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
+                      <strong>Site</strong>
+                    </header>
+                    <footer style="margin-top: 8px; padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
+                      <small>© 2026</small>
+                    </footer>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-nav">
+              <h3><code>&lt;nav&gt;</code></h3>
+              <p class="desc">Represents a section with navigation links.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Navigation</span></div>
+                  <pre>&lt;nav&gt;
+  &lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;
+  &lt;a href=&quot;/about&quot;&gt;About&lt;/a&gt;
+&lt;/nav&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box" style="display:flex; gap:10px;">
+                    <nav>
+                      <a href="#skeleton">Home</a>
+                      <a href="#forms" style="margin-left: 10px;">Forms</a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-main">
+              <h3><code>&lt;main&gt;</code></h3>
+              <p class="desc">Main content of the document. Only one visible <code>&lt;main&gt;</code> per page.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Main</span></div>
+                  <pre>&lt;main&gt;
+  &lt;h1&gt;Article&lt;/h1&gt;
+  ...
+&lt;/main&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">This page uses <code>&lt;main&gt;</code> for the content area.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-section-article-aside">
+              <h3><code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code></h3>
+              <p class="desc"><code>&lt;section&gt;</code> is a thematic grouping, <code>&lt;article&gt;</code> is self-contained, <code>&lt;aside&gt;</code> is tangential content.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Sections</span></div>
+                  <pre>&lt;section&gt;
+  &lt;h2&gt;Features&lt;/h2&gt;
+  &lt;article&gt;...&lt;/article&gt;
+  &lt;aside&gt;Tip...&lt;/aside&gt;
+&lt;/section&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <section>
+                      <h4 style="margin:0 0 6px;">Features</h4>
+                      <article style="padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">Self-contained article</article>
+                      <aside style="margin-top: 8px; padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.02); color: rgba(255,255,255,.78);">Related tip (aside)</aside>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-address">
+              <h3><code>&lt;address&gt;</code></h3>
+              <p class="desc">Contact information for the nearest <code>&lt;article&gt;</code> or for the whole page.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Contact</span></div>
+                  <pre>&lt;address&gt;
+  Contact: &lt;a href=&quot;mailto:me@example.com&quot;&gt;me@example.com&lt;/a&gt;
+&lt;/address&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box"><address>Contact: <a href="mailto:me@example.com">me@example.com</a></address></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="grouping">
+          <header>
+            <h2>Grouping</h2>
+            <p class="hint">Generic container for grouping content.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-div">
+              <h3><code>&lt;div&gt;</code></h3>
+              <p class="desc">Generic block-level container when no semantic element fits.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Container</span></div>
+                  <pre>&lt;div&gt;
+  &lt;p&gt;Grouped content&lt;/p&gt;
+&lt;/div&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <div style="padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.02);">Grouped content</div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="interactive">
+          <header>
+            <h2>Disclosure / interactive</h2>
+            <p class="hint">Built-in interactive HTML elements.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-details-summary">
+              <h3><code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code></h3>
+              <p class="desc">Creates a disclosure widget: click summary to show/hide details.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Disclosure</span></div>
+                  <pre>&lt;details&gt;
+  &lt;summary&gt;More info&lt;/summary&gt;
+  &lt;p&gt;Hidden content.&lt;/p&gt;
+&lt;/details&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">
+                    <details>
+                      <summary>More info</summary>
+                      <p style="margin: 8px 0 0; color: rgba(255,255,255,.82);">Hidden content.</p>
+                    </details>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-dialog">
+              <h3><code>&lt;dialog&gt;</code></h3>
+              <p class="desc">Native dialog/modal element. You can open it with JavaScript (<code>showModal()</code>).</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Dialog</span></div>
+                  <pre>&lt;button id=&quot;open&quot;&gt;Open&lt;/button&gt;
+&lt;dialog id=&quot;dlg&quot;&gt;
+  &lt;p&gt;Hello!&lt;/p&gt;
+  &lt;button id=&quot;close&quot;&gt;Close&lt;/button&gt;
+&lt;/dialog&gt;
+&lt;script&gt;
+  open.onclick = () =&gt; dlg.showModal();
+  close.onclick = () =&gt; dlg.close();
+&lt;/script&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Dialog needs JS to open; example shows the pattern.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category" id="templates">
+          <header>
+            <h2>Templates &amp; web components hooks</h2>
+            <p class="hint">Use with JavaScript frameworks or custom elements.</p>
+          </header>
+          <div class="tags">
+            <article class="tag" id="tag-template">
+              <h3><code>&lt;template&gt;</code></h3>
+              <p class="desc">Holds HTML that is not rendered until you clone/insert it with JavaScript.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Template</span></div>
+                  <pre>&lt;template id=&quot;card&quot;&gt;
+  &lt;div class=&quot;card&quot;&gt;Hello&lt;/div&gt;
+&lt;/template&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Template content is inert until used by JS.</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="tag" id="tag-slot">
+              <h3><code>&lt;slot&gt;</code></h3>
+              <p class="desc">Placeholder used inside Web Components’ shadow DOM for projected content.</p>
+              <div class="cols">
+                <div class="code">
+                  <div class="label"><span>Example</span><span class="chip">Web components</span></div>
+                  <pre>&lt;!-- Inside a web component template --&gt;
+&lt;slot&gt;Fallback content&lt;/slot&gt;</pre>
+                </div>
+                <div class="demo">
+                  <p class="demo-title">Demo</p>
+                  <div class="box">Typically used with custom elements.</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <footer class="page">
+          <p style="margin:0;">File: <code style="font-family: var(--mono);">html-notes.html</code></p>
+        </footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
