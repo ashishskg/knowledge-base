@@ -1,0 +1,4060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Mastery — From Basic to Enterprise Angular</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS MASTER TUTORIAL — stylesheet
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Fonts ────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+/* ── Design Tokens ───────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand:       #16c79a;
+  --brand-dark:  #0ea87f;
+  --brand-light: #d1fae5;
+
+  /* Surface */
+  --bg:          #0d0f14;
+  --bg-2:        #13161e;
+  --surface:     #1a1d27;
+  --surface-2:   #222637;
+  --surface-3:   #2a2f42;
+  --border:      #2e3347;
+  --border-2:    #3d4460;
+
+  /* Text */
+  --text:        #e8eaf0;
+  --text-2:      #8b91a7;
+  --text-3:      #555d7a;
+
+  /* Accent colors */
+  --blue:   #60a5fa;
+  --purple: #a78bfa;
+  --orange: #fb923c;
+  --red:    #f87171;
+  --yellow: #fbbf24;
+  --green:  #34d399;
+  --pink:   #f472b6;
+
+  /* Semantic */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger:  #ef4444;
+  --info:    #3b82f6;
+
+  /* Spacing */
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem;
+  --sp-4: 1rem;    --sp-5: 1.25rem; --sp-6: 1.5rem;
+  --sp-8: 2rem;    --sp-10: 2.5rem; --sp-12: 3rem;
+  --sp-16: 4rem;   --sp-20: 5rem;   --sp-24: 6rem;
+
+  /* Typography */
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Radii */
+  --r-sm:   4px;   --r-md:  8px;   --r-lg:  12px;
+  --r-xl:   16px;  --r-2xl: 24px;  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
+  --shadow-brand: 0 0 24px rgba(22,199,154,.2);
+
+  /* Layout */
+  --sidebar-w: 280px;
+  --topbar-h: 56px;
+
+  /* Motion */
+  --ease: cubic-bezier(.4,0,.2,1);
+  --ease-out: cubic-bezier(0,0,.2,1);
+  --fast: 120ms;
+  --mid:  220ms;
+  --slow: 380ms;
+}
+
+/* Light theme override */
+[data-theme="light"] {
+  --bg:        #f0f4f8;
+  --bg-2:      #e6ecf4;
+  --surface:   #ffffff;
+  --surface-2: #f8fafb;
+  --surface-3: #f0f4f8;
+  --border:    #e2e8f0;
+  --border-2:  #cbd5e1;
+  --text:      #0f172a;
+  --text-2:    #475569;
+  --text-3:    #94a3b8;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; height: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+img, video { max-width: 100%; display: block; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: var(--font-mono); }
+
+/* ── Layout shell ────────────────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 200;
+  transition: transform var(--mid) var(--ease);
+}
+
+.topbar {
+  position: fixed;
+  left: var(--sidebar-w);
+  right: 0;
+  top: 0;
+  height: var(--topbar-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-6);
+  gap: var(--sp-4);
+  z-index: 100;
+  transition: left var(--mid) var(--ease);
+}
+
+.content {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--topbar-h);
+  min-height: calc(100vh - var(--topbar-h));
+  transition: margin-left var(--mid) var(--ease);
+}
+
+/* ── Sidebar components ──────────────────────────────────────────────── */
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-5);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--brand);
+  color: #000;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 0.9rem;
+}
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.logo-text em { color: var(--brand); font-style: normal; }
+
+.sidebar__search {
+  padding: var(--sp-3) var(--sp-4);
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar__search input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 7px 12px 7px 32px;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color var(--fast);
+}
+.sidebar__search input:focus { border-color: var(--brand); }
+.sidebar__search input::placeholder { color: var(--text-3); }
+.search-icon {
+  position: absolute;
+  left: 24px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-3) 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.nav-section { margin-bottom: var(--sp-4); }
+.nav-section__title {
+  padding: var(--sp-1) var(--sp-5);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: var(--sp-1);
+}
+.nav-link {
+  display: block;
+  padding: 6px var(--sp-5);
+  font-size: 0.82rem;
+  color: var(--text-2);
+  border-left: 2px solid transparent;
+  transition: all var(--fast);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-link:hover { color: var(--text); background: var(--surface-2); text-decoration: none; }
+.nav-link.active {
+  color: var(--brand);
+  border-left-color: var(--brand);
+  background: rgba(22,199,154,.07);
+  font-weight: 600;
+}
+.nav-link.highlight {
+  color: var(--brand);
+  background: rgba(22,199,154,.1);
+  font-weight: 600;
+}
+
+.sidebar__footer {
+  padding: var(--sp-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+}
+.progress-ring { position: relative; display: flex; align-items: center; justify-content: center; }
+.ring-bg  { fill: none; stroke: var(--border); stroke-width: 3; }
+.ring-fill {
+  fill: none; stroke: var(--brand); stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 125.6;
+  stroke-dashoffset: 125.6;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.6s var(--ease);
+}
+#progressPct {
+  position: absolute;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--brand);
+}
+.progress-label { font-size: 0.75rem; color: var(--text-3); }
+
+/* ── Topbar components ───────────────────────────────────────────────── */
+.topbar__burger {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); font-size: 1.2rem;
+  padding: var(--sp-2);
+}
+.topbar__breadcrumb {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-2);
+}
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.btn-theme {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r-md);
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--fast);
+}
+.btn-theme:hover { border-color: var(--brand); color: var(--brand); }
+.version-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 3px 12px;
+  font-size: 0.7rem;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* ── Content layout ──────────────────────────────────────────────────── */
+.hero {
+  max-width: 800px;
+  padding: var(--sp-16) var(--sp-10) var(--sp-12);
+}
+.hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--brand);
+  margin-bottom: var(--sp-4);
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: var(--sp-5);
+}
+.hero__title em {
+  color: var(--brand);
+  font-style: italic;
+}
+.hero__subtitle {
+  font-size: 1.125rem;
+  color: var(--text-2);
+  line-height: 1.7;
+  max-width: 580px;
+  margin-bottom: var(--sp-6);
+}
+.hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-8);
+}
+.tag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+}
+.hero__stats {
+  display: flex;
+  gap: var(--sp-8);
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat__n {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--brand);
+  line-height: 1;
+}
+.stat__l { font-size: 0.8rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── Topic sections ──────────────────────────────────────────────────── */
+.topic-section {
+  max-width: 1000px;
+  padding: var(--sp-10) var(--sp-10);
+  border-bottom: 1px solid var(--border);
+}
+.topic-section:last-of-type { border-bottom: none; }
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--brand);
+  background: rgba(22,199,154,.1);
+  border: 1px solid rgba(22,199,154,.2);
+  border-radius: var(--r-full);
+  padding: 4px 10px;
+  white-space: nowrap;
+  margin-top: 6px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.section-sub {
+  font-size: 0.95rem;
+  color: var(--text-2);
+  margin-top: var(--sp-2);
+}
+.subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: var(--sp-8) 0 var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Concept grid cards ──────────────────────────────────────────────── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.concept-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5);
+  transition: border-color var(--fast);
+}
+.concept-card:hover { border-color: var(--border-2); }
+.concept-card__icon { font-size: 1.75rem; margin-bottom: var(--sp-3); }
+.concept-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: var(--sp-2); color: var(--text); }
+.concept-card p { font-size: 0.875rem; color: var(--text-2); line-height: 1.6; }
+.concept-card ul { list-style: none; }
+.concept-card ul li { font-size: 0.875rem; color: var(--text-2); padding: 3px 0; }
+.concept-card ul li::before { content: '→ '; color: var(--brand); font-size: 0.8em; }
+.concept-card--why  { border-top: 2px solid var(--blue); }
+.concept-card--use  { border-top: 2px solid var(--brand); }
+.concept-card--angular { border-top: 2px solid var(--red); }
+
+/* ── Info boxes ──────────────────────────────────────────────────────── */
+.info-box {
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  margin: var(--sp-6) 0;
+  border-left: 4px solid;
+}
+.info-box__title { font-weight: 700; margin-bottom: var(--sp-2); font-size: 0.9rem; }
+.info-box p { font-size: 0.875rem; line-height: 1.7; }
+.info-box code { background: rgba(255,255,255,.1); padding: 1px 5px; border-radius: 3px; font-size: 0.8em; }
+.info-box--blue   { background: rgba(96,165,250,.08);  border-color: var(--blue);   color: #bfdbfe; }
+.info-box--blue .info-box__title { color: var(--blue); }
+.info-box--green  { background: rgba(52,211,153,.08);  border-color: var(--brand);  color: #a7f3d0; }
+.info-box--green .info-box__title { color: var(--brand); }
+.info-box--orange { background: rgba(251,146,60,.08);  border-color: var(--orange); color: #fed7aa; }
+.info-box--orange .info-box__title { color: var(--orange); }
+
+/* ── Code blocks ─────────────────────────────────────────────────────── */
+.code-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  margin: var(--sp-5) 0;
+}
+.code-demo__tabs {
+  display: flex;
+  gap: 2px;
+  padding: var(--sp-2);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.code-demo__tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 5px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all var(--fast);
+}
+.tab:hover { color: var(--text-2); background: var(--surface-3); }
+.tab.active { background: var(--surface-3); color: var(--brand); font-weight: 600; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.code-demo pre {
+  padding: var(--sp-5);
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.code-demo code {
+  font-family: var(--font-mono);
+  color: var(--text-2);
+}
+
+/* Syntax highlighting by class */
+.lang-css, .lang-scss, .lang-typescript, .lang-bash, .lang-text {
+  color: #abb2bf;
+}
+
+/* ── Live demo box ───────────────────────────────────────────────────── */
+.live-demo {
+  padding: var(--sp-6);
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.demo-card-basic {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  max-width: 320px;
+  width: 100%;
+}
+.demo-card-basic h4 { color: #1a1a2e; font-size: 1.25rem; font-weight: 700; }
+.demo-card-basic p { color: #666; margin-top: 8px; font-size: 0.875rem; }
+
+/* ── Selector grid ───────────────────────────────────────────────────── */
+.selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-3);
+  margin: var(--sp-5) 0;
+}
+.selector-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  transition: border-color var(--fast), transform var(--fast);
+}
+.selector-card:hover { border-color: var(--brand); transform: translateY(-2px); }
+.selector-card__type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+  margin-bottom: var(--sp-2);
+}
+.selector-card code {
+  display: block;
+  background: var(--surface-2);
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  font-size: 0.8rem;
+  color: var(--orange);
+  margin-bottom: var(--sp-2);
+}
+.selector-card p { font-size: 0.8rem; color: var(--text-2); margin-bottom: var(--sp-2); }
+.selector-card__use { font-size: 0.75rem; color: var(--text-3); font-style: italic; }
+
+/* ── Specificity calc ────────────────────────────────────────────────── */
+.specificity-calc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  margin: var(--sp-5) 0;
+}
+.spec-title { font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: var(--sp-4); }
+.spec-columns { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--sp-4); margin-bottom: var(--sp-4); }
+.spec-col { text-align: center; }
+.spec-col__label {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.spec-col--a .spec-col__label { color: var(--red); }
+.spec-col--b .spec-col__label { color: var(--orange); }
+.spec-col--c .spec-col__label { color: var(--blue); }
+.spec-col--d .spec-col__label { color: var(--brand); }
+.spec-col__type { font-size: 0.7rem; color: var(--text-3); margin: 4px 0; }
+.spec-col__value { font-family: var(--font-mono); font-size: 2.5rem; font-weight: 700; color: var(--text); }
+.spec-col__example { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); }
+.spec-examples { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.spec-example {
+  padding: 6px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all var(--fast);
+}
+.spec-example:hover { border-color: var(--brand); color: var(--brand); }
+.spec-example.active { background: rgba(22,199,154,.1); border-color: var(--brand); color: var(--brand); }
+
+/* ── Box model visual ────────────────────────────────────────────────── */
+.box-model-visual {
+  display: flex;
+  justify-content: center;
+  margin: var(--sp-6) 0;
+}
+.bm-margin {
+  background: rgba(251,146,60,.15);
+  border: 2px dashed var(--orange);
+  border-radius: var(--r-md);
+  padding: 24px;
+  position: relative;
+}
+.bm-border {
+  background: rgba(96,165,250,.15);
+  border: 4px solid var(--blue);
+  border-radius: var(--r-sm);
+  padding: 20px;
+  position: relative;
+}
+.bm-padding {
+  background: rgba(52,211,153,.15);
+  border: 2px dashed var(--brand);
+  padding: 16px;
+  position: relative;
+}
+.bm-content {
+  background: rgba(167,139,250,.25);
+  border: 2px solid var(--purple);
+  min-width: 180px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+}
+.bm-label { font-size: 0.7rem; font-weight: 700; position: absolute; top: 4px; left: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.bm-label--margin { color: var(--orange); }
+.bm-label--border { color: var(--blue); }
+.bm-label--padding { color: var(--brand); }
+.bm-label--content { position: static; color: var(--purple); }
+.bm-dims { font-size: 0.75rem; color: var(--text-3); }
+
+/* ── Color formats ───────────────────────────────────────────────────── */
+.color-formats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: var(--sp-3); margin: var(--sp-5) 0; }
+.color-format { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-3); display: flex; gap: var(--sp-3); align-items: center; }
+.cf-swatch { width: 40px; height: 40px; border-radius: var(--r-md); flex-shrink: 0; }
+.cf-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cf-info code { font-size: 0.78rem; color: var(--orange); white-space: nowrap; }
+.cf-info span { font-size: 0.72rem; color: var(--text-3); }
+
+/* ── Gradient demo ───────────────────────────────────────────────────── */
+.gradient-demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: var(--sp-3); margin: var(--sp-4) 0; }
+.grad-tile {
+  height: 100px;
+  border-radius: var(--r-lg);
+  display: flex; align-items: flex-end;
+  padding: var(--sp-3);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,.85);
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+  line-height: 1.4;
+}
+
+/* ── Typography showcase ─────────────────────────────────────────────── */
+.typography-showcase { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); padding: var(--sp-6); margin: var(--sp-5) 0; display: flex; flex-direction: column; gap: var(--sp-4); }
+.typo-sample { color: var(--text); }
+
+/* ── Units table ─────────────────────────────────────────────────────── */
+.units-table-wrap { overflow-x: auto; margin: var(--sp-5) 0; border-radius: var(--r-xl); border: 1px solid var(--border); }
+.units-table { width: 100%; border-collapse: collapse; }
+.units-table th { background: var(--surface-2); color: var(--text-2); font-size: 0.78rem; font-weight: 600; padding: var(--sp-3) var(--sp-4); text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.units-table td { padding: var(--sp-3) var(--sp-4); font-size: 0.82rem; color: var(--text-2); border-bottom: 1px solid var(--border); vertical-align: top; }
+.units-table tr:last-child td { border-bottom: none; }
+.units-table tr:nth-child(even) { background: var(--surface-2); }
+.units-table td:first-child { font-family: var(--font-mono); color: var(--orange); font-weight: 600; }
+.units-table td:nth-child(4) { color: var(--brand); }
+
+/* ── Display demos ───────────────────────────────────────────────────── */
+.display-demo-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: var(--sp-4); margin: var(--sp-5) 0; }
+.display-demo { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-4); }
+.display-demo__label { font-family: var(--font-mono); font-size: 0.78rem; color: var(--brand); margin-bottom: var(--sp-3); font-weight: 600; }
+.display-demo__visual { background: var(--surface-2); border-radius: var(--r-md); padding: var(--sp-3); margin-bottom: var(--sp-3); min-height: 80px; }
+.display-demo p { font-size: 0.78rem; color: var(--text-2); line-height: 1.5; }
+.display-demo code { background: var(--surface-3); padding: 1px 5px; border-radius: 3px; font-size: 0.75em; }
+.disp-block { background: rgba(96,165,250,.2); border: 1px solid var(--blue); border-radius: 4px; padding: 6px 10px; font-size: 0.75rem; margin-bottom: 4px; color: var(--text-2); }
+.disp-inline { background: rgba(52,211,153,.15); border: 1px solid var(--brand); border-radius: 4px; padding: 4px 8px; font-size: 0.75rem; color: var(--text-2); }
+.disp-inlineblock { background: rgba(167,139,250,.15); border: 1px solid var(--purple); border-radius: 4px; padding: 8px 16px; display: inline-block; font-size: 0.75rem; margin: 2px; color: var(--text-2); }
+
+/* ── Positioning demos ───────────────────────────────────────────────── */
+.position-visual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: var(--sp-4); margin: var(--sp-5) 0; }
+.pos-demo { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-4); position: relative; overflow: hidden; min-height: 180px; }
+.pos-demo__label { font-family: var(--font-mono); font-size: 0.78rem; color: var(--brand); margin-bottom: var(--sp-3); font-weight: 600; }
+.pos-demo p { font-size: 0.78rem; color: var(--text-2); margin-top: var(--sp-3); line-height: 1.5; }
+.pos-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 6px 10px; font-size: 0.72rem; color: var(--text-2); margin-bottom: 4px; }
+.pos-box--1 { background: rgba(96,165,250,.1); border-color: var(--blue); }
+.pos-box--2 { background: rgba(52,211,153,.1); border-color: var(--brand); }
+.pos-box--3 { background: rgba(167,139,250,.1); border-color: var(--purple); }
+.pos-box--rel-shifted { position: relative; top: 14px; left: 14px; }
+.pos-box--abs { position: absolute; top: 40px; right: 10px; min-width: 80px; }
+.pos-box--sticky { position: sticky; top: 0; background: rgba(251,146,60,.15); border-color: var(--orange); font-weight: 600; z-index: 1; }
+
+/* ── Flex diagram ────────────────────────────────────────────────────── */
+.flex-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); padding: var(--sp-6); margin: var(--sp-5) 0; }
+.flex-container-diagram { border: 2px dashed var(--brand); border-radius: var(--r-lg); padding: var(--sp-4); position: relative; }
+.fd-label { font-size: 0.75rem; font-weight: 700; color: var(--brand); margin-bottom: var(--sp-3); font-family: var(--font-mono); }
+.fd-items { display: flex; gap: var(--sp-3); align-items: flex-start; }
+.fd-item { background: rgba(22,199,154,.15); border: 1px solid var(--brand); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-5); font-size: 0.8rem; color: var(--brand); font-family: var(--font-mono); }
+.fd-item--tall { padding-top: var(--sp-8); padding-bottom: var(--sp-8); }
+.fd-axis { font-size: 0.72rem; color: var(--text-3); font-family: var(--font-mono); margin: var(--sp-2) 0; }
+.fd-axis--main { color: var(--orange); }
+.fd-axis--cross { color: var(--purple); }
+
+/* ── Flex playground ─────────────────────────────────────────────────── */
+.flex-playground { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; margin: var(--sp-4) 0; }
+.flex-controls {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.flex-controls label { font-size: 0.78rem; color: var(--text-2); display: flex; align-items: center; gap: var(--sp-2); }
+.flex-controls select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.flex-preview {
+  height: 180px;
+  display: flex;
+  padding: var(--sp-4);
+  transition: all var(--mid) var(--ease);
+  background: var(--bg);
+}
+.fp-item {
+  background: rgba(22,199,154,.15);
+  border: 1px solid var(--brand);
+  border-radius: var(--r-md);
+  min-width: 60px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 0.8rem;
+  color: var(--brand);
+  transition: all var(--mid) var(--ease);
+  flex-shrink: 0;
+}
+
+/* ── Grid live demo ──────────────────────────────────────────────────── */
+.grid-live-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-4);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 50px 1fr;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+  min-height: 340px;
+}
+.gld-header { grid-column: 1 / -1; background: rgba(22,199,154,.1); border: 1px solid var(--brand); border-radius: var(--r-md); display: flex; align-items: center; padding: 0 var(--sp-4); font-family: var(--font-mono); font-size: 0.78rem; color: var(--brand); }
+.gld-sidebar { background: rgba(96,165,250,.08); border: 1px solid var(--blue); border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.78rem; color: var(--blue); }
+.gld-main { display: flex; flex-direction: column; gap: var(--sp-3); }
+.gld-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--sp-2); }
+.gld-stat { background: rgba(167,139,250,.1); border: 1px solid var(--purple); border-radius: var(--r-md); padding: var(--sp-3); font-size: 0.72rem; color: var(--purple); text-align: center; }
+.gld-chart { background: rgba(251,146,60,.08); border: 1px solid var(--orange); border-radius: var(--r-md); padding: var(--sp-3); font-size: 0.78rem; color: var(--orange); min-height: 80px; display: flex; align-items: center; justify-content: center; }
+.gld-table { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-3); font-size: 0.78rem; color: var(--text-2); min-height: 60px; display: flex; align-items: center; justify-content: center; }
+
+/* ── Transition demos ────────────────────────────────────────────────── */
+.transition-demos { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: var(--sp-4) 0; }
+.td-item {
+  width: 100px; height: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem;
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+.td-item--scale  { transition: transform 300ms ease; }
+.td-item--scale:hover  { transform: scale(1.2); }
+.td-item--slide  { transition: transform 300ms cubic-bezier(.34,1.56,.64,1); }
+.td-item--slide:hover  { transform: translateX(12px); }
+.td-item--color  { transition: background 300ms ease, color 300ms ease; }
+.td-item--color:hover  { background: var(--brand); color: #000; border-color: var(--brand); }
+.td-item--rotate { transition: transform 400ms ease; }
+.td-item--rotate:hover { transform: rotate(180deg); }
+.td-item--shadow { transition: box-shadow 300ms ease, transform 300ms ease; }
+.td-item--shadow:hover { box-shadow: var(--shadow-brand); transform: translateY(-4px); }
+.td-item--border { transition: border-radius 300ms ease, border-color 300ms ease; }
+.td-item--border:hover { border-radius: 50%; border-color: var(--brand); }
+
+/* ── Animation showcase ──────────────────────────────────────────────── */
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes pulse   { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+@keyframes shimmer { from { background-position: -200% center; } to { background-position: 200% center; } }
+@keyframes wave    { 0%,100% { transform: skewX(-5deg) scaleY(0.95); } 50% { transform: skewX(5deg) scaleY(1.05); } }
+@keyframes swing   { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.anim-showcase { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: var(--sp-4) 0; }
+.anim-card {
+  width: 110px; height: 110px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; color: var(--text-2);
+  font-family: var(--font-mono);
+}
+.anim-card--bounce  { animation: bounce 1.4s ease-in-out infinite; border-color: var(--orange); color: var(--orange); }
+.anim-card--spin    { animation: spin 2s linear infinite; border-color: var(--blue); color: var(--blue); }
+.anim-card--pulse   { animation: pulse 1.8s ease-in-out infinite; border-color: var(--purple); color: var(--purple); }
+.anim-card--shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-3) 50%, var(--surface) 75%);
+  background-size: 200%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-color: var(--brand); color: var(--brand);
+}
+.anim-card--wave    { animation: wave 1.2s ease-in-out infinite; border-color: var(--pink); color: var(--pink); }
+.anim-card--swing   { animation: swing 1s ease-in-out infinite; border-color: var(--yellow); color: var(--yellow); transform-origin: top center; }
+
+/* ── Transforms demo ─────────────────────────────────────────────────── */
+.transforms-demo-grid { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin: var(--sp-4) 0; }
+.tr-item {
+  width: 130px; height: 130px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; color: var(--text-2);
+  font-family: var(--font-mono);
+  text-align: center; padding: var(--sp-2);
+  transition: transform 0.4s var(--ease);
+  cursor: pointer;
+}
+.tr-item--translate:hover { transform: translate(12px, -8px); }
+.tr-item--scale:hover     { transform: scale(1.3); }
+.tr-item--rotate:hover    { transform: rotate(45deg); }
+.tr-item--skew:hover      { transform: skew(15deg, 5deg); }
+.tr-item--3d              { transform: perspective(400px) rotateY(15deg); }
+.tr-item--3d:hover        { transform: perspective(400px) rotateY(40deg); }
+.tr-item--combo:hover     { transform: translate(6px,-6px) scale(1.1) rotate(5deg); }
+
+/* ── Filter demos ────────────────────────────────────────────────────── */
+.filter-demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: var(--sp-3); margin: var(--sp-4) 0; }
+.filter-item { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); }
+.filter-item span { font-size: 0.72rem; color: var(--text-3); font-family: var(--font-mono); text-align: center; }
+.filter-box {
+  width: 100%; height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 0.78rem; font-weight: 600;
+  transition: filter 0.3s ease;
+}
+.filter-box--none     { filter: none; }
+.filter-box--blur     { filter: blur(3px); }
+.filter-box--bright   { filter: brightness(1.6); }
+.filter-box--gray     { filter: grayscale(100%); }
+.filter-box--sepia    { filter: sepia(100%); }
+.filter-box--invert   { filter: invert(100%); }
+.filter-box--contrast { filter: contrast(2.5); }
+.filter-box--glass {
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.3);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23667eea'/%3E%3Ccircle cx='30' cy='60' r='25' fill='%23764ba2'/%3E%3Ccircle cx='70' cy='40' r='20' fill='%23f093fb'/%3E%3C/svg%3E");
+}
+
+/* ── Rule anatomy ────────────────────────────────────────────────────── */
+.rule-anatomy {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-8);
+  margin: var(--sp-6) 0;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  line-height: 2;
+}
+.rule-anatomy__label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.rule-anatomy__label--selector { color: var(--blue); }
+.rule-anatomy__label--prop     { color: var(--orange); }
+.rule-anatomy__label--val      { color: var(--brand); }
+.rule-anatomy__code { margin: var(--sp-2) 0; padding: var(--sp-4); background: var(--bg); border-radius: var(--r-lg); }
+.rule-anatomy__labels { display: flex; gap: var(--sp-8); }
+.rule-selector { color: var(--blue); }
+.rule-brace    { color: var(--text-3); }
+.rule-prop     { color: var(--orange); }
+.rule-colon    { color: var(--text-3); }
+.rule-val      { color: var(--brand); }
+.rule-semi     { color: var(--red); }
+
+/* ── BEM diagram ─────────────────────────────────────────────────────── */
+.bem-diagram { margin: var(--sp-5) 0; }
+.bem-block { background: var(--surface); border: 2px solid var(--brand); border-radius: var(--r-xl); padding: var(--sp-5); }
+.bem-block__label { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--brand); margin-bottom: var(--sp-3); }
+.bem-block__visual { border: 1px dashed var(--border); border-radius: var(--r-lg); padding: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-2); }
+.bem-elem { background: var(--surface-2); border: 1px solid var(--blue); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); }
+.bem-elem__label { font-family: var(--font-mono); font-size: 0.78rem; color: var(--blue); }
+.bem-mod { background: rgba(251,146,60,.08); border: 1px dashed var(--orange); border-radius: var(--r-sm); padding: 4px 8px; margin-top: var(--sp-2); }
+.bem-mod__label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--orange); }
+
+/* ── Performance cards ───────────────────────────────────────────────── */
+.perf-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: var(--sp-4); margin: var(--sp-5) 0; }
+.perf-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); padding: var(--sp-5); }
+.perf-card__title { font-weight: 700; font-size: 0.95rem; margin-bottom: var(--sp-3); }
+.perf-card--good { border-left: 3px solid var(--success); }
+.perf-card--good .perf-card__title { color: var(--success); }
+.perf-card--bad  { border-left: 3px solid var(--warning); }
+.perf-card--bad .perf-card__title  { color: var(--warning); }
+.perf-card p { font-size: 0.85rem; color: var(--text-2); margin-bottom: var(--sp-2); }
+.perf-card ul { list-style: none; }
+.perf-card ul li { font-size: 0.82rem; color: var(--text-2); padding: 3px 0; }
+.perf-card ul li::before { content: '• '; }
+.perf-card code { font-size: 0.8em; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; color: var(--orange); }
+
+/* ── Full App Demo ───────────────────────────────────────────────────── */
+.full-app-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  margin: var(--sp-6) 0;
+  transition: all var(--mid);
+}
+.fad-header {
+  height: 56px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-5);
+  gap: var(--sp-6);
+}
+.fad-logo { font-family: var(--font-display); font-weight: 900; font-size: 1rem; color: var(--brand); }
+.fad-nav { display: flex; gap: var(--sp-4); flex: 1; }
+.fad-nav__link { font-size: 0.82rem; color: var(--text-3); cursor: pointer; padding: 4px 0; border-bottom: 2px solid transparent; transition: all var(--fast); text-decoration: none; }
+.fad-nav__link:hover { color: var(--text-2); text-decoration: none; }
+.fad-nav__link--active { color: var(--brand); border-bottom-color: var(--brand); }
+.fad-actions { display: flex; align-items: center; gap: var(--sp-3); }
+.fad-theme-btn { background: none; border: 1px solid var(--border); border-radius: var(--r-md); padding: 4px 8px; color: var(--text-2); cursor: pointer; font-size: 0.9rem; }
+.fad-avatar { width: 30px; height: 30px; background: var(--brand); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; }
+.fad-body { display: flex; min-height: 440px; }
+.fad-sidebar { width: 160px; flex-shrink: 0; background: var(--bg); border-right: 1px solid var(--border); padding: var(--sp-3) 0; }
+.fad-menu__item { padding: 8px 16px; font-size: 0.78rem; color: var(--text-3); cursor: pointer; transition: all var(--fast); border-left: 2px solid transparent; }
+.fad-menu__item:hover { color: var(--text); background: var(--surface); }
+.fad-menu__item--active { color: var(--brand); border-left-color: var(--brand); background: rgba(22,199,154,.06); font-weight: 600; }
+.fad-main { flex: 1; padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-4); overflow: auto; }
+.fad-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: var(--sp-3); }
+.fad-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  transition: all var(--mid);
+}
+.fad-stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.fad-stat-card__label { font-size: 0.7rem; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.fad-stat-card__value { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1; }
+.fad-stat-card__change { font-size: 0.72rem; font-weight: 600; margin-top: 4px; }
+.fad-stat-card__change--up   { color: var(--success); }
+.fad-stat-card__change--down { color: var(--danger); }
+.fad-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); flex: 1; }
+.fad-chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-4); }
+.fad-chart-card__title { font-size: 0.82rem; font-weight: 600; color: var(--text-2); margin-bottom: var(--sp-3); }
+.fad-bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+.fad-bar {
+  flex: 1;
+  background: rgba(22,199,154,.2);
+  border-radius: 4px 4px 0 0;
+  height: var(--h);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 4px;
+  font-size: 0.6rem; color: var(--text-3);
+  transition: background var(--fast);
+  cursor: pointer;
+}
+.fad-bar:hover { background: rgba(22,199,154,.4); }
+.fad-bar--active { background: var(--brand); }
+.fad-bar--active:hover { background: var(--brand-dark); }
+.fad-bar span { color: inherit; }
+.fad-product-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
+.fad-row { display: flex; align-items: center; gap: var(--sp-2); font-size: 0.75rem; color: var(--text-2); }
+.fad-row__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fad-row__name { width: 100px; flex-shrink: 0; }
+.fad-row__bar { flex: 1; height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.fad-row__bar div { height: 100%; border-radius: 99px; }
+
+/* ── Content footer ──────────────────────────────────────────────────── */
+.content-footer { background: var(--surface); border-top: 1px solid var(--border); padding: var(--sp-12) var(--sp-10); margin-top: var(--sp-8); }
+.cf-inner { max-width: 600px; }
+.cf-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: var(--brand); margin-bottom: var(--sp-2); }
+.content-footer p { color: var(--text-2); font-size: 0.875rem; margin-bottom: var(--sp-4); }
+.cf-topics { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.cf-topics span { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-full); padding: 3px 10px; font-size: 0.72rem; color: var(--text-3); }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .topbar { left: 0; }
+  .topbar__burger { display: flex; }
+  .content { margin-left: 0; }
+  .gld-stats { grid-template-columns: repeat(2,1fr); }
+  .fad-grid-2 { grid-template-columns: 1fr; }
+  .fad-sidebar { display: none; }
+  .spec-columns { grid-template-columns: repeat(2,1fr); }
+}
+
+@media (max-width: 600px) {
+  .hero { padding: var(--sp-8) var(--sp-5); }
+  .topic-section { padding: var(--sp-8) var(--sp-5); }
+  .hero__stats { gap: var(--sp-5); }
+  .fad-stats { grid-template-columns: repeat(2,1fr); }
+  .fad-nav { display: none; }
+  .flex-controls { flex-direction: column; }
+}
+
+/* ── Scroll animations ───────────────────────────────────────────────── */
+.topic-section {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+/* ── Selection ────────────────────────────────────────────────────────── */
+::selection { background: rgba(22,199,154,.25); color: var(--text); }
+
+/* ── Scrollbar ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── Focus ────────────────────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR NAV ═══════════════════════════════════════════════════════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__logo">
+    <span class="logo-icon">&#123;&#125;</span>
+    <span class="logo-text">CSS<em>Master</em></span>
+  </div>
+
+  <div class="sidebar__search">
+    <input type="text" id="searchInput" placeholder="Search topics..." autocomplete="off">
+    <span class="search-icon">⌕</span>
+  </div>
+
+  <div class="sidebar__nav" id="navTree">
+    <div class="nav-section">
+      <div class="nav-section__title">Getting Started</div>
+      <a href="#intro" class="nav-link active">What is CSS?</a>
+      <a href="#syntax" class="nav-link">Syntax & Selectors</a>
+      <a href="#cascade" class="nav-link">Cascade & Specificity</a>
+      <a href="#box-model" class="nav-link">Box Model</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section__title">CSS Foundations</div>
+      <a href="#colors" class="nav-link">Colors & Backgrounds</a>
+      <a href="#typography" class="nav-link">Typography & Fonts</a>
+      <a href="#units" class="nav-link">Units & Values</a>
+      <a href="#display" class="nav-link">Display & Visibility</a>
+      <a href="#position" class="nav-link">Positioning</a>
+      <a href="#float" class="nav-link">Float & Clear</a>
+      <a href="#overflow" class="nav-link">Overflow</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section__title">Modern Layouts</div>
+      <a href="#flexbox" class="nav-link">Flexbox</a>
+      <a href="#grid" class="nav-link">CSS Grid</a>
+      <a href="#responsive" class="nav-link">Responsive Design</a>
+      <a href="#media-queries" class="nav-link">Media Queries</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section__title">CSS3 Features</div>
+      <a href="#variables" class="nav-link">Custom Properties (Vars)</a>
+      <a href="#transitions" class="nav-link">Transitions</a>
+      <a href="#animations" class="nav-link">Animations & Keyframes</a>
+      <a href="#transforms" class="nav-link">2D & 3D Transforms</a>
+      <a href="#filters" class="nav-link">Filters & Effects</a>
+      <a href="#gradients" class="nav-link">Gradients</a>
+      <a href="#shadows" class="nav-link">Box & Text Shadows</a>
+      <a href="#pseudo" class="nav-link">Pseudo-classes & Elements</a>
+      <a href="#calc" class="nav-link">calc() & Functions</a>
+      <a href="#clip" class="nav-link">Clip-path & Masks</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section__title">Angular Integration</div>
+      <a href="#angular-basic" class="nav-link">Angular Basics CSS</a>
+      <a href="#encapsulation" class="nav-link">View Encapsulation</a>
+      <a href="#component-scss" class="nav-link">Component SCSS</a>
+      <a href="#ngclass" class="nav-link">NgClass & NgStyle</a>
+      <a href="#dynamic-css" class="nav-link">Dynamic CSS Vars</a>
+      <a href="#angular-animations" class="nav-link">Angular Animations</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section__title">Enterprise Angular</div>
+      <a href="#design-system" class="nav-link">Design System Setup</a>
+      <a href="#scss-arch" class="nav-link">SCSS Architecture</a>
+      <a href="#tokens" class="nav-link">Design Tokens</a>
+      <a href="#themes" class="nav-link">Theming & Dark Mode</a>
+      <a href="#bem" class="nav-link">BEM Methodology</a>
+      <a href="#performance" class="nav-link">CSS Performance</a>
+      <a href="#accessibility" class="nav-link">Accessibility (A11y)</a>
+      <a href="#full-app" class="nav-link">🚀 Full App Example</a>
+    </div>
+  </div>
+
+  <div class="sidebar__footer">
+    <div class="progress-ring">
+      <svg width="48" height="48"><circle cx="24" cy="24" r="20" class="ring-bg"/><circle cx="24" cy="24" r="20" class="ring-fill" id="progressRing"/></svg>
+      <span id="progressPct">0%</span>
+    </div>
+    <span class="progress-label">Progress</span>
+  </div>
+</nav>
+
+<!-- ═══ TOPBAR ═══════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <button class="topbar__burger" id="burgerBtn" aria-label="Toggle menu">☰</button>
+  <div class="topbar__breadcrumb" id="breadcrumb">Getting Started › What is CSS?</div>
+  <div class="topbar__actions">
+    <button class="btn-theme" id="themeBtn" title="Toggle theme">◐</button>
+    <span class="version-badge">CSS3 + Angular 17</span>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═════════════════════════════════════════════════════ -->
+<main class="content" id="mainContent">
+
+  <!-- ─── HERO ────────────────────────────────────────────────────────── -->
+  <section class="hero" id="intro">
+    <div class="hero__eyebrow">Complete Reference Guide</div>
+    <h1 class="hero__title">CSS Mastery<br><em>Basic to Enterprise</em></h1>
+    <p class="hero__subtitle">Every CSS & CSS3 concept explained with live demos, Angular integration examples, and enterprise-grade patterns.</p>
+    <div class="hero__tags">
+      <span class="tag">CSS3</span><span class="tag">SCSS</span><span class="tag">Angular 17</span>
+      <span class="tag">Flexbox</span><span class="tag">Grid</span><span class="tag">Animations</span>
+      <span class="tag">BEM</span><span class="tag">Dark Mode</span><span class="tag">Design Tokens</span>
+    </div>
+    <div class="hero__stats">
+      <div class="stat"><span class="stat__n">35+</span><span class="stat__l">Topics</span></div>
+      <div class="stat"><span class="stat__n">100+</span><span class="stat__l">Live Examples</span></div>
+      <div class="stat"><span class="stat__n">3</span><span class="stat__l">Full Apps</span></div>
+    </div>
+  </section>
+
+  <!-- ─── WHAT IS CSS ──────────────────────────────────────────────────── -->
+  <section class="topic-section" data-section="intro">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <h2 class="section-title">What is CSS?</h2>
+        <p class="section-sub">Cascading Style Sheets — the language of visual design on the web</p>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card concept-card--why">
+        <div class="concept-card__icon">🎨</div>
+        <h3>Why CSS?</h3>
+        <p>HTML defines <em>structure</em>. CSS defines <em>appearance</em>. Without CSS, every website would be plain black text on a white background. CSS lets you control layout, color, fonts, animation, responsiveness — everything visual.</p>
+      </div>
+      <div class="concept-card concept-card--use">
+        <div class="concept-card__icon">🔧</div>
+        <h3>When to Use</h3>
+        <ul>
+          <li>Style HTML elements (color, font, size)</li>
+          <li>Control layout (flexbox, grid)</li>
+          <li>Create animations and transitions</li>
+          <li>Make responsive designs</li>
+          <li>Apply themes and brand identity</li>
+        </ul>
+      </div>
+      <div class="concept-card concept-card--angular">
+        <div class="concept-card__icon">🅰️</div>
+        <h3>CSS in Angular</h3>
+        <p>Angular supports plain CSS, SCSS (Sass), and Less per component. Each component has its own stylesheet that is <strong>automatically scoped</strong> — styles don't leak between components.</p>
+      </div>
+    </div>
+
+    <div class="info-box info-box--blue">
+      <div class="info-box__title">CSS3 vs CSS2</div>
+      <p>CSS3 is the modern version. It adds variables, animations, flexbox, grid, gradients, transforms, filters, and much more. All modern browsers support CSS3. In this guide, "CSS" means CSS3 unless stated otherwise.</p>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="html1">HTML</button>
+        <button class="tab" data-tab="css1">CSS</button>
+        <button class="tab" data-tab="angular1">Angular</button>
+      </div>
+      <div class="tab-content active" id="html1">
+        <pre><code class="lang-html">&lt;!-- index.html --&gt;
+&lt;link rel="stylesheet" href="styles.css"&gt;
+
+&lt;div class="card"&gt;
+  &lt;h1 class="card__title"&gt;Hello CSS!&lt;/h1&gt;
+  &lt;p class="card__body"&gt;I am styled with CSS.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+      <div class="tab-content" id="css1">
+        <pre><code class="lang-css">/* styles.css */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+}
+
+.card__title {
+  color: #1a1a2e;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.card__body {
+  color: #666;
+  margin-top: 8px;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="angular1">
+        <pre><code class="lang-typescript">// app.component.ts
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+  // or: styles: [`.card { ... }`]  ← inline
+})
+export class AppComponent { }
+
+// Angular CLI creates 3 ways to style:
+// 1. Component stylesheet (most common)
+// 2. Inline styles array
+// 3. Global styles.scss</code></pre>
+      </div>
+      <div class="live-demo">
+        <div class="demo-card-basic">
+          <h4>Hello CSS!</h4>
+          <p>I am styled with CSS. See the padding, rounded corners, and shadow?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SYNTAX & SELECTORS ───────────────────────────────────────────── -->
+  <section class="topic-section" id="syntax">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <h2 class="section-title">Syntax & Selectors</h2>
+        <p class="section-sub">Targeting elements precisely — the foundation of all CSS</p>
+      </div>
+    </div>
+
+    <div class="rule-anatomy">
+      <div class="rule-anatomy__label rule-anatomy__label--selector">selector</div>
+      <div class="rule-anatomy__code">
+        <span class="rule-selector">h1</span>
+        <span class="rule-brace"> {</span><br>
+        &nbsp;&nbsp;<span class="rule-prop">color</span>
+        <span class="rule-colon">:</span>
+        <span class="rule-val"> #2563eb</span>
+        <span class="rule-semi">;</span><br>
+        &nbsp;&nbsp;<span class="rule-prop">font-size</span>
+        <span class="rule-colon">:</span>
+        <span class="rule-val"> 2rem</span>
+        <span class="rule-semi">;</span><br>
+        <span class="rule-brace">}</span>
+      </div>
+      <div class="rule-anatomy__labels">
+        <span class="rule-anatomy__label rule-anatomy__label--prop">property</span>
+        <span class="rule-anatomy__label rule-anatomy__label--val">value</span>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">All Selector Types</h3>
+    <div class="selector-grid">
+      <div class="selector-card">
+        <div class="selector-card__type">Universal</div>
+        <code>* { margin: 0; }</code>
+        <p>Selects every element. Use for CSS resets.</p>
+        <div class="selector-card__use">⚠️ Use carefully — affects performance</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Element</div>
+        <code>p { color: #333; }</code>
+        <p>Selects all &lt;p&gt; tags. Low specificity.</p>
+        <div class="selector-card__use">✅ Good for base typography styles</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Class</div>
+        <code>.btn { padding: 8px; }</code>
+        <p>Selects elements with class="btn". Most common selector.</p>
+        <div class="selector-card__use">✅ Use classes for reusable styles</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">ID</div>
+        <code>#header { ... }</code>
+        <p>Selects element with id="header". Very high specificity.</p>
+        <div class="selector-card__use">⚠️ Avoid in components — use classes</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Attribute</div>
+        <code>[type="text"] { ... }</code>
+        <p>Selects elements by attribute value.</p>
+        <div class="selector-card__use">✅ Great for form inputs</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Descendant</div>
+        <code>.card p { ... }</code>
+        <p>Selects &lt;p&gt; inside any .card at any depth.</p>
+        <div class="selector-card__use">✅ Common for layout components</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Child ></div>
+        <code>.nav > li { ... }</code>
+        <p>Only direct children, not nested.</p>
+        <div class="selector-card__use">✅ Safer than descendant</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Adjacent +</div>
+        <code>h2 + p { ... }</code>
+        <p>Selects &lt;p&gt; immediately after h2.</p>
+        <div class="selector-card__use">✅ Typography spacing patterns</div>
+      </div>
+      <div class="selector-card">
+        <div class="selector-card__type">Sibling ~</div>
+        <code>h2 ~ p { ... }</code>
+        <p>All &lt;p&gt; siblings after h2.</p>
+        <div class="selector-card__use">✅ CSS-only state tricks</div>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Angular-Specific Selectors</h3>
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="ang-sel">Angular SCSS</button>
+        <button class="tab" data-tab="ang-host">:host selector</button>
+        <button class="tab" data-tab="ang-deep">::ng-deep</button>
+      </div>
+      <div class="tab-content active" id="ang-sel">
+        <pre><code class="lang-scss">// component.scss — scoped to this component only
+.btn { padding: 12px 24px; }  // only affects THIS component's .btn
+
+// SCSS nesting (Angular uses SCSS by default)
+.card {
+  padding: 16px;
+
+  &__title { font-size: 1.5rem; }  // .card__title
+  &__body  { color: #666; }        // .card__body
+
+  &:hover  { box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+  &--large { padding: 32px; }      // .card--large modifier
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ang-host">
+        <pre><code class="lang-scss">// :host = the component's own element tag
+// e.g. if selector is 'app-card', :host = <app-card>
+
+:host {
+  display: block;          // Components are inline by default!
+  width: 100%;
+}
+
+:host(.featured) {         // Conditional on parent passing a class
+  border: 2px solid gold;
+}
+
+:host-context(.dark-theme) {  // When ancestor has dark-theme class
+  background: #1a1a2e;
+  color: white;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ang-deep">
+        <pre><code class="lang-scss">// ::ng-deep — override child component styles
+// USE SPARINGLY — it breaks encapsulation
+
+// Scenario: you use Angular Material and need to style its internals
+::ng-deep .mat-button {
+  border-radius: 8px !important;
+}
+
+// Better: combine with :host to scope it
+:host ::ng-deep .mat-form-field {
+  width: 100%;
+}
+
+// Enterprise note: prefer theme overrides or CSS vars
+// over ::ng-deep wherever possible</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CASCADE & SPECIFICITY ────────────────────────────────────────── -->
+  <section class="topic-section" id="cascade">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <h2 class="section-title">Cascade & Specificity</h2>
+        <p class="section-sub">Understanding why CSS rules win or lose</p>
+      </div>
+    </div>
+
+    <div class="specificity-calc">
+      <div class="spec-title">Specificity Calculator</div>
+      <div class="spec-columns">
+        <div class="spec-col spec-col--a">
+          <div class="spec-col__label">A</div>
+          <div class="spec-col__type">Inline / !important</div>
+          <div class="spec-col__value" id="specA">0</div>
+          <div class="spec-col__example">style="..."</div>
+        </div>
+        <div class="spec-col spec-col--b">
+          <div class="spec-col__label">B</div>
+          <div class="spec-col__type">IDs</div>
+          <div class="spec-col__value" id="specB">0</div>
+          <div class="spec-col__example">#header</div>
+        </div>
+        <div class="spec-col spec-col--c">
+          <div class="spec-col__label">C</div>
+          <div class="spec-col__type">Classes / Attrs / Pseudo-classes</div>
+          <div class="spec-col__value" id="specC">0</div>
+          <div class="spec-col__example">.btn :hover [type]</div>
+        </div>
+        <div class="spec-col spec-col--d">
+          <div class="spec-col__label">D</div>
+          <div class="spec-col__type">Elements / Pseudo-elements</div>
+          <div class="spec-col__value" id="specD">0</div>
+          <div class="spec-col__example">p ::before</div>
+        </div>
+      </div>
+      <div class="spec-examples">
+        <div class="spec-example" data-a="0" data-b="0" data-c="0" data-d="1">p → (0,0,0,1)</div>
+        <div class="spec-example" data-a="0" data-b="0" data-c="1" data-d="0">.btn → (0,0,1,0)</div>
+        <div class="spec-example" data-a="0" data-b="0" data-c="1" data-d="1">.btn p → (0,0,1,1)</div>
+        <div class="spec-example" data-a="0" data-b="1" data-c="0" data-d="0">#nav → (0,1,0,0)</div>
+        <div class="spec-example" data-a="0" data-b="1" data-c="1" data-d="1">#nav .btn p → (0,1,1,1)</div>
+        <div class="spec-example" data-a="1" data-b="0" data-c="0" data-d="0">style="" → (1,0,0,0)</div>
+      </div>
+    </div>
+
+    <div class="info-box info-box--orange">
+      <div class="info-box__title">⚠️ The !important Nuclear Option</div>
+      <p><code>!important</code> overrides ALL specificity. In enterprise Angular, avoid it — use it as a last resort only. Prefer increasing specificity with an extra class or :host scope. Excessive !important creates unmaintainable CSS.</p>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-css">/* Cascade order (highest wins): */
+/* 1. !important                    */
+/* 2. Inline styles                 */
+/* 3. ID selectors                  */
+/* 4. Class, attribute, pseudo-class*/
+/* 5. Element, pseudo-element       */
+/* 6. Source order (last rule wins) */
+
+p { color: blue; }           /* specificity: (0,0,0,1) */
+.text { color: red; }        /* specificity: (0,0,1,0) — wins */
+#main .text { color: green;} /* specificity: (0,1,1,0) — wins */
+
+/* Angular tip: avoid deep selectors */
+/* BAD:  div > section > article > .card { } */
+/* GOOD: .card { } in the card's own stylesheet */</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── BOX MODEL ────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="box-model">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <h2 class="section-title">The Box Model</h2>
+        <p class="section-sub">Every element is a box — understanding how space is calculated</p>
+      </div>
+    </div>
+
+    <div class="box-model-visual">
+      <div class="bm-margin">
+        <div class="bm-label bm-label--margin">margin</div>
+        <div class="bm-border">
+          <div class="bm-label bm-label--border">border</div>
+          <div class="bm-padding">
+            <div class="bm-label bm-label--padding">padding</div>
+            <div class="bm-content">
+              <div class="bm-label bm-label--content">content</div>
+              <div class="bm-dims">width × height</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="bm-standard">Standard Box Model</button>
+        <button class="tab" data-tab="bm-border">box-sizing: border-box</button>
+        <button class="tab" data-tab="bm-angular">Angular Reset</button>
+      </div>
+      <div class="tab-content active" id="bm-standard">
+        <pre><code class="lang-css">/* Default (content-box): */
+/* Total width = width + padding-left + padding-right + border-left + border-right */
+.box {
+  width: 200px;
+  padding: 20px;
+  border: 4px solid #333;
+  /* Actual rendered width = 200 + 40 + 8 = 248px ← CONFUSING! */
+}</code></pre>
+      </div>
+      <div class="tab-content" id="bm-border">
+        <pre><code class="lang-css">/* border-box: width INCLUDES padding and border */
+/* This is what every developer actually wants */
+.box {
+  box-sizing: border-box;
+  width: 200px;
+  padding: 20px;
+  border: 4px solid #333;
+  /* Actual rendered width = exactly 200px ← PREDICTABLE! */
+}
+
+/* Apply to everything (universal reset): */
+*, *::before, *::after {
+  box-sizing: border-box;  /* Do this in every project */
+}</code></pre>
+      </div>
+      <div class="tab-content" id="bm-angular">
+        <pre><code class="lang-scss">/* styles.scss — global Angular reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; /* 1rem = 16px */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.5;
+  font-family: var(--font-body); /* use CSS variable */
+  color: var(--color-text);
+}
+
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+/* This reset goes in src/styles.scss — applies globally */</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COLORS ───────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="colors">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div>
+        <h2 class="section-title">Colors & Backgrounds</h2>
+        <p class="section-sub">Every color format, gradient, and background technique</p>
+      </div>
+    </div>
+
+    <div class="color-formats">
+      <div class="color-format">
+        <div class="cf-swatch" style="background:#3b82f6"></div>
+        <div class="cf-info">
+          <code>#3b82f6</code>
+          <span>Hex (most common)</span>
+        </div>
+      </div>
+      <div class="color-format">
+        <div class="cf-swatch" style="background:rgb(59,130,246)"></div>
+        <div class="cf-info">
+          <code>rgb(59,130,246)</code>
+          <span>RGB</span>
+        </div>
+      </div>
+      <div class="color-format">
+        <div class="cf-swatch" style="background:rgba(59,130,246,0.5)"></div>
+        <div class="cf-info">
+          <code>rgba(59,130,246,0.5)</code>
+          <span>RGBA (with opacity)</span>
+        </div>
+      </div>
+      <div class="color-format">
+        <div class="cf-swatch" style="background:hsl(217,91%,60%)"></div>
+        <div class="cf-info">
+          <code>hsl(217,91%,60%)</code>
+          <span>HSL (most intuitive)</span>
+        </div>
+      </div>
+      <div class="color-format">
+        <div class="cf-swatch" style="background:oklch(60% 0.2 250)"></div>
+        <div class="cf-info">
+          <code>oklch(60% 0.2 250)</code>
+          <span>OKLCH (modern, CSS4)</span>
+        </div>
+      </div>
+      <div class="color-format">
+        <div class="cf-swatch" style="background:currentColor;color:#ff6b6b;border:3px solid currentColor"></div>
+        <div class="cf-info">
+          <code>currentColor</code>
+          <span>Inherits color value</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="bg-colors">Background Properties</button>
+        <button class="tab" data-tab="bg-grad">Gradients</button>
+        <button class="tab" data-tab="bg-angular">Angular Theme Colors</button>
+      </div>
+      <div class="tab-content active" id="bg-colors">
+        <pre><code class="lang-css">.element {
+  /* Solid background */
+  background-color: #f0f9ff;
+
+  /* Background image */
+  background-image: url('hero.jpg');
+  background-size: cover;        /* cover | contain | 100px | 50% */
+  background-position: center;   /* center | top | 20% 80% */
+  background-repeat: no-repeat;  /* no-repeat | repeat-x | repeat-y */
+  background-attachment: fixed;  /* scroll | fixed | local */
+
+  /* Shorthand */
+  background: #f0f9ff url('hero.jpg') center/cover no-repeat;
+
+  /* Multiple backgrounds (CSS3) */
+  background:
+    url('overlay.png') center/cover no-repeat,
+    linear-gradient(135deg, #667eea, #764ba2);
+}</code></pre>
+      </div>
+      <div class="tab-content" id="bg-grad">
+        <pre><code class="lang-css">/* Linear gradient */
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to right, red, yellow, green);
+
+/* Radial gradient */
+background: radial-gradient(circle at center, #a855f7, #3b82f6);
+background: radial-gradient(ellipse 200px 100px at 30% 70%, #fff, #000);
+
+/* Conic gradient (CSS4) */
+background: conic-gradient(from 0deg, red, yellow, green, blue, red);
+background: conic-gradient(#fff 0 25%, #000 25% 50%, #fff 50% 75%, #000 75%);
+
+/* Repeating gradients */
+background: repeating-linear-gradient(
+  45deg, #3b82f6 0px, #3b82f6 10px, transparent 10px, transparent 20px
+);</code></pre>
+      </div>
+      <div class="tab-content" id="bg-angular">
+        <pre><code class="lang-scss">// Design tokens approach (enterprise Angular)
+// src/styles/_tokens.scss
+:root {
+  // Brand palette
+  --color-primary-50:  hsl(217, 100%, 97%);
+  --color-primary-100: hsl(217, 96%, 93%);
+  --color-primary-500: hsl(217, 91%, 60%);
+  --color-primary-600: hsl(221, 83%, 53%);
+  --color-primary-900: hsl(226, 71%, 40%);
+
+  // Semantic colors
+  --color-background: var(--color-primary-50);
+  --color-surface:    #ffffff;
+  --color-text:       hsl(222, 84%, 5%);
+  --color-text-muted: hsl(215, 16%, 47%);
+}
+
+// Usage in any component:
+.card {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-primary-100);
+}</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Live Gradient Demo</h3>
+    <div class="gradient-demo-grid">
+      <div class="grad-tile" style="background:linear-gradient(135deg,#667eea,#764ba2)">linear-gradient<br>135deg</div>
+      <div class="grad-tile" style="background:radial-gradient(circle,#f093fb,#f5576c)">radial-gradient<br>circle</div>
+      <div class="grad-tile" style="background:conic-gradient(from 0deg,#fc466b,#3f5efb,#fc466b)">conic-gradient</div>
+      <div class="grad-tile" style="background:linear-gradient(to right,#11998e,#38ef7d)">to right</div>
+      <div class="grad-tile" style="background:linear-gradient(45deg,#f7971e,#ffd200)">45deg</div>
+      <div class="grad-tile" style="background:radial-gradient(ellipse at top,#e96c6c,#1e3c72)">ellipse at top</div>
+    </div>
+  </section>
+
+  <!-- ─── TYPOGRAPHY ───────────────────────────────────────────────────── -->
+  <section class="topic-section" id="typography">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div>
+        <h2 class="section-title">Typography & Fonts</h2>
+        <p class="section-sub">Text is 95% of the web — master every text property</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="font-props">Font Properties</button>
+        <button class="tab" data-tab="text-props">Text Properties</button>
+        <button class="tab" data-tab="webfonts">Web Fonts</button>
+        <button class="tab" data-tab="fluid-type">Fluid Typography</button>
+      </div>
+      <div class="tab-content active" id="font-props">
+        <pre><code class="lang-css">.text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;           /* 16px default */
+  font-weight: 400;          /* 100–900 or named: bold, light */
+  font-style: italic;        /* normal | italic | oblique */
+  font-variant: small-caps;  /* normal | small-caps */
+  line-height: 1.6;          /* unitless — preferred */
+  letter-spacing: 0.05em;   /* tracking */
+  word-spacing: 0.1em;
+
+  /* Font shorthand: style variant weight size/line-height family */
+  font: italic small-caps 700 1.25rem/1.6 'Inter', sans-serif;
+
+  /* Variable fonts (CSS4) */
+  font-variation-settings: 'wght' 650, 'wdth' 75;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="text-props">
+        <pre><code class="lang-css">.text {
+  color: #1e293b;
+  text-align: left;          /* left | right | center | justify */
+  text-decoration: underline; /* none | underline | line-through | overline */
+  text-decoration-color: #3b82f6;
+  text-decoration-style: wavy; /* solid | dashed | dotted | wavy | double */
+  text-transform: uppercase;   /* none | uppercase | lowercase | capitalize */
+  text-indent: 2em;            /* first line indent */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-overflow: ellipsis;     /* clip | ellipsis */
+  white-space: nowrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  /* Multi-line truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="webfonts">
+        <pre><code class="lang-css">/* Option 1: Google Fonts (in index.html or styles.scss) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+/* Option 2: @font-face (self-hosted — better performance/privacy) */
+@font-face {
+  font-family: 'MyFont';
+  src: url('/assets/fonts/myfont.woff2') format('woff2'),
+       url('/assets/fonts/myfont.woff')  format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* prevents FOIT (Flash of Invisible Text) */
+}
+
+/* Angular: put @font-face in src/styles.scss or angular.json assets */
+/* angular.json: "assets": ["src/assets/fonts"] */</code></pre>
+      </div>
+      <div class="tab-content" id="fluid-type">
+        <pre><code class="lang-css">/* Fluid typography — scales smoothly between viewport sizes */
+/* clamp(min, preferred, max) */
+
+h1 { font-size: clamp(1.75rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.4rem, 3.5vw, 2.5rem); }
+p  { font-size: clamp(0.9rem, 1.5vw, 1.1rem); }
+
+/* Formula: clamp(min, (viewport_reference * slope + intercept), max) */
+
+/* Angular + SCSS: define a fluid() mixin */
+@mixin fluid-type($min, $max) {
+  font-size: clamp(#{$min}, 3vw + 0.5rem, #{$max});
+}
+
+.hero-title { @include fluid-type(2rem, 5rem); }
+.body-text  { @include fluid-type(0.9rem, 1.1rem); }</code></pre>
+      </div>
+    </div>
+
+    <div class="typography-showcase">
+      <div class="typo-sample" style="font-size:3rem;font-weight:900;letter-spacing:-0.03em">Display / Hero</div>
+      <div class="typo-sample" style="font-size:1.75rem;font-weight:700">Heading H2</div>
+      <div class="typo-sample" style="font-size:1.25rem;font-weight:600">Subheading H3</div>
+      <div class="typo-sample" style="font-size:1rem;line-height:1.6">Body text — readable line-height 1.6 makes long form content comfortable to read on any device.</div>
+      <div class="typo-sample" style="font-size:0.875rem;color:#64748b">Caption / Meta text</div>
+      <div class="typo-sample" style="font-family:monospace;font-size:0.875rem;background:rgba(0,0,0,.05);padding:4px 8px;border-radius:4px">code snippet { }</div>
+    </div>
+  </section>
+
+  <!-- ─── UNITS ────────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="units">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div>
+        <h2 class="section-title">Units & Values</h2>
+        <p class="section-sub">px, em, rem, %, vw, vh, vmin, vmax, ch — when to use each</p>
+      </div>
+    </div>
+
+    <div class="units-table-wrap">
+      <table class="units-table">
+        <thead>
+          <tr><th>Unit</th><th>Type</th><th>Relative to</th><th>Best Use</th><th>Angular Tip</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>px</code></td><td>Absolute</td><td>Screen pixel</td><td>Borders, box-shadow</td><td>Avoid for font-sizes — blocks user zoom</td></tr>
+          <tr><td><code>em</code></td><td>Relative</td><td>Parent font-size</td><td>Component spacing</td><td>Useful for button padding that scales with text</td></tr>
+          <tr><td><code>rem</code></td><td>Relative</td><td>Root (html) font-size</td><td>Font sizes, spacing</td><td>Most used in design tokens</td></tr>
+          <tr><td><code>%</code></td><td>Relative</td><td>Parent dimension</td><td>Widths, heights</td><td>Grid columns, responsive widths</td></tr>
+          <tr><td><code>vw</code></td><td>Viewport</td><td>Viewport width</td><td>Hero sections, fluid type</td><td>Full-width components</td></tr>
+          <tr><td><code>vh</code></td><td>Viewport</td><td>Viewport height</td><td>Full-screen layouts</td><td>min-height: 100vh for page height</td></tr>
+          <tr><td><code>svh/dvh</code></td><td>Viewport</td><td>Small/Dynamic viewport</td><td>Mobile full-screen</td><td>Avoids mobile browser chrome issues</td></tr>
+          <tr><td><code>ch</code></td><td>Relative</td><td>Width of "0" char</td><td>max-width for text</td><td>max-width: 65ch = readable line length</td></tr>
+          <tr><td><code>fr</code></td><td>Grid</td><td>Available space</td><td>CSS Grid tracks</td><td>grid-template-columns: 1fr 2fr</td></tr>
+          <tr><td><code>clamp()</code></td><td>Function</td><td>Variable</td><td>Fluid typography</td><td>Replaces multiple media queries</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-scss">/* Enterprise Angular spacing scale (design tokens) */
+:root {
+  --space-1:  0.25rem;  /* 4px  */
+  --space-2:  0.5rem;   /* 8px  */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-6:  1.5rem;   /* 24px */
+  --space-8:  2rem;     /* 32px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+}
+
+/* Usage */
+.card { padding: var(--space-6); gap: var(--space-4); }
+
+/* SCSS map alternative */
+$spacing: (1: 4px, 2: 8px, 3: 12px, 4: 16px, 6: 24px, 8: 32px);
+
+@each $key, $val in $spacing {
+  .p-#{$key} { padding: $val; }
+  .m-#{$key} { margin: $val; }
+  .gap-#{$key} { gap: $val; }
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── DISPLAY ──────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="display">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div>
+        <h2 class="section-title">Display & Visibility</h2>
+        <p class="section-sub">block, inline, flex, grid, none — the foundation of layout</p>
+      </div>
+    </div>
+
+    <div class="display-demo-grid">
+      <div class="display-demo">
+        <div class="display-demo__label">display: block</div>
+        <div class="display-demo__visual">
+          <div class="disp-block">Block 1</div>
+          <div class="disp-block">Block 2</div>
+          <div class="disp-block">Block 3</div>
+        </div>
+        <p>Each element takes full width. Stacks vertically. &lt;div&gt;, &lt;p&gt;, &lt;h1&gt; are block by default.</p>
+      </div>
+      <div class="display-demo">
+        <div class="display-demo__label">display: inline</div>
+        <div class="display-demo__visual">
+          <span class="disp-inline">Inline 1</span>
+          <span class="disp-inline">Inline 2</span>
+          <span class="disp-inline">Inline 3</span>
+        </div>
+        <p>Flows like text. Cannot set width/height. &lt;span&gt;, &lt;a&gt;, &lt;strong&gt; are inline.</p>
+      </div>
+      <div class="display-demo">
+        <div class="display-demo__label">display: inline-block</div>
+        <div class="display-demo__visual">
+          <div class="disp-inlineblock">IB 1</div>
+          <div class="disp-inlineblock">IB 2</div>
+          <div class="disp-inlineblock">IB 3</div>
+        </div>
+        <p>Flows inline but accepts width/height. Useful for buttons and badges.</p>
+      </div>
+      <div class="display-demo">
+        <div class="display-demo__label">display: none vs visibility: hidden</div>
+        <div class="display-demo__visual" style="display:flex;gap:8px">
+          <div class="disp-block">Visible</div>
+          <div class="disp-block" style="display:none">display:none</div>
+          <div class="disp-block" style="visibility:hidden">vis:hidden</div>
+          <div class="disp-block">After</div>
+        </div>
+        <p><code>display:none</code> removes from layout. <code>visibility:hidden</code> hides but keeps space.</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-scss">/* Angular *ngIf vs CSS visibility */
+
+// *ngIf removes element from DOM entirely
+// [style.display] toggles display:none
+
+// Component TS:
+isVisible = true;
+
+// Template:
+// &lt;div *ngIf="isVisible"&gt;   ← DOM removal
+// &lt;div [class.hidden]="!isVisible"&gt;  ← CSS hide
+
+// Component SCSS:
+.hidden {
+  visibility: hidden;   // keeps layout space
+  // or:
+  display: none;        // collapses layout space
+  // or:
+  opacity: 0;           // invisible but interactive
+  pointer-events: none; // + non-interactive
+}
+
+// For Angular animations, use visibility or opacity
+// (display:none cannot be animated)</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── POSITION ─────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="position">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div>
+        <h2 class="section-title">Positioning</h2>
+        <p class="section-sub">static, relative, absolute, fixed, sticky — controlling element placement</p>
+      </div>
+    </div>
+
+    <div class="position-visual-grid">
+      <div class="pos-demo pos-demo--relative">
+        <div class="pos-demo__label">position: relative</div>
+        <div class="pos-box pos-box--1">Normal flow</div>
+        <div class="pos-box pos-box--2 pos-box--rel-shifted">top:20px<br>left:20px</div>
+        <div class="pos-box pos-box--3">Space preserved</div>
+        <p>Moves from its natural position. Original space is preserved in flow. Used as parent anchor for absolute children.</p>
+      </div>
+      <div class="pos-demo pos-demo--absolute">
+        <div class="pos-demo__label">position: absolute</div>
+        <div class="pos-box pos-box--1">Normal flow</div>
+        <div class="pos-box pos-box--2 pos-box--abs">top:0<br>right:0</div>
+        <div class="pos-box pos-box--3">Gaps here</div>
+        <p>Removed from flow. Positioned relative to nearest positioned ancestor (relative/absolute/fixed). Used for badges, dropdowns, tooltips.</p>
+      </div>
+      <div class="pos-demo pos-demo--sticky">
+        <div class="pos-demo__label">position: sticky + fixed</div>
+        <div class="pos-box pos-box--sticky">sticky — stays at top while scrolling</div>
+        <div class="pos-box pos-box--1">Scroll content</div>
+        <div class="pos-box pos-box--1">Scroll content</div>
+        <p><code>sticky</code> = scrolls normally then "sticks" at threshold. <code>fixed</code> = always in same viewport position. Used for headers, nav bars, floating buttons.</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-scss">/* Angular sticky header pattern */
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;     /* z-index only works on positioned elements */
+  background: var(--color-surface);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+/* Notification badge on icon */
+.icon-wrapper {
+  position: relative;  /* anchor for the badge */
+  display: inline-block;
+}
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;         /* top-right corner of icon */
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-danger);
+}
+
+/* z-index management — define a scale */
+:root {
+  --z-base:    0;
+  --z-raised:  10;
+  --z-dropdown: 100;
+  --z-sticky:  200;
+  --z-overlay: 300;
+  --z-modal:   400;
+  --z-toast:   500;
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── FLEXBOX ──────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="flexbox">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div>
+        <h2 class="section-title">Flexbox</h2>
+        <p class="section-sub">The one-dimensional layout system — rows and columns made simple</p>
+      </div>
+    </div>
+
+    <div class="flex-diagram">
+      <div class="flex-container-diagram">
+        <div class="fd-label">Flex Container (display: flex)</div>
+        <div class="fd-axis fd-axis--main">← main axis →</div>
+        <div class="fd-items">
+          <div class="fd-item">Item 1</div>
+          <div class="fd-item fd-item--tall">Item 2</div>
+          <div class="fd-item">Item 3</div>
+        </div>
+        <div class="fd-axis fd-axis--cross">↕ cross axis</div>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="flex-container">Container Properties</button>
+        <button class="tab" data-tab="flex-item">Item Properties</button>
+        <button class="tab" data-tab="flex-patterns">Common Patterns</button>
+        <button class="tab" data-tab="flex-angular">Angular Usage</button>
+      </div>
+      <div class="tab-content active" id="flex-container">
+        <pre><code class="lang-css">.container {
+  display: flex;                   /* or inline-flex */
+
+  /* Direction */
+  flex-direction: row;             /* row | row-reverse | column | column-reverse */
+
+  /* Wrapping */
+  flex-wrap: nowrap;               /* nowrap | wrap | wrap-reverse */
+
+  /* Shorthand: direction + wrap */
+  flex-flow: row wrap;
+
+  /* Main axis alignment (horizontal by default) */
+  justify-content: flex-start;    /* flex-start | flex-end | center | space-between | space-around | space-evenly */
+
+  /* Cross axis alignment (vertical by default) */
+  align-items: stretch;            /* stretch | flex-start | flex-end | center | baseline */
+
+  /* Multi-line cross alignment */
+  align-content: flex-start;       /* same values as justify-content */
+
+  /* Spacing between items */
+  gap: 16px;                       /* Modern, preferred over margins */
+  row-gap: 16px;
+  column-gap: 24px;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="flex-item">
+        <pre><code class="lang-css">.item {
+  /* flex-grow: how much to grow when space available */
+  flex-grow: 0;     /* default: don't grow */
+  flex-grow: 1;     /* take 1 share of remaining space */
+  flex-grow: 2;     /* take twice as much as flex-grow: 1 */
+
+  /* flex-shrink: how much to shrink when space is tight */
+  flex-shrink: 1;   /* default: shrink equally */
+  flex-shrink: 0;   /* never shrink — useful for icons */
+
+  /* flex-basis: initial main axis size */
+  flex-basis: auto; /* default */
+  flex-basis: 200px;
+  flex-basis: 25%;
+
+  /* Shorthand: grow shrink basis */
+  flex: 1;           /* 1 1 0%     — most common, equal columns */
+  flex: 0 0 200px;   /* fixed 200px, no grow/shrink */
+  flex: auto;        /* 1 1 auto   */
+
+  /* Override container alignment for this item */
+  align-self: flex-end;
+
+  /* Order (default 0) */
+  order: -1;  /* appear before others */
+  order: 1;   /* appear after others */
+}</code></pre>
+      </div>
+      <div class="tab-content" id="flex-patterns">
+        <pre><code class="lang-css">/* 1. Perfect centering */
+.center { display: flex; justify-content: center; align-items: center; }
+
+/* 2. Space-between header (logo left, actions right) */
+.header { display: flex; justify-content: space-between; align-items: center; }
+
+/* 3. Equal columns */
+.cols-3 { display: flex; gap: 24px; }
+.cols-3 > * { flex: 1; }
+
+/* 4. Sidebar + main layout */
+.layout { display: flex; min-height: 100vh; }
+.sidebar { flex: 0 0 280px; }  /* fixed width */
+.main { flex: 1; overflow: auto; }
+
+/* 5. Sticky footer */
+.page { display: flex; flex-direction: column; min-height: 100vh; }
+.footer { margin-top: auto; }  /* pushes to bottom */
+
+/* 6. Cards that fill remaining height */
+.card-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+.card { flex: 1 1 300px; display: flex; flex-direction: column; }
+.card__body { flex: 1; }  /* expands to fill */
+.card__footer { margin-top: auto; }</code></pre>
+      </div>
+      <div class="tab-content" id="flex-angular">
+        <pre><code class="lang-scss">// Angular component: navbar
+// header.component.scss
+:host {
+  display: flex;         // Make the component itself a flex container
+  align-items: center;
+  padding: 0 var(--space-6);
+  height: 64px;
+  gap: var(--space-4);
+}
+
+.logo { flex: 0 0 auto; }
+.search { flex: 1; max-width: 600px; }
+.actions { flex: 0 0 auto; display: flex; gap: var(--space-2); }
+
+// product-grid.component.scss
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+
+  app-product-card {  // Target child component element
+    flex: 1 1 280px;
+    max-width: 320px;
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Live Flexbox Playground</h3>
+    <div class="flex-playground">
+      <div class="flex-controls">
+        <label>justify-content:
+          <select id="jcSelect">
+            <option>flex-start</option><option>flex-end</option>
+            <option selected>center</option><option>space-between</option>
+            <option>space-around</option><option>space-evenly</option>
+          </select>
+        </label>
+        <label>align-items:
+          <select id="aiSelect">
+            <option>flex-start</option><option>flex-end</option>
+            <option selected>center</option><option>stretch</option><option>baseline</option>
+          </select>
+        </label>
+        <label>flex-direction:
+          <select id="fdSelect">
+            <option selected>row</option><option>column</option>
+            <option>row-reverse</option><option>column-reverse</option>
+          </select>
+        </label>
+        <label>flex-wrap:
+          <select id="fwSelect">
+            <option selected>nowrap</option><option>wrap</option>
+          </select>
+        </label>
+      </div>
+      <div class="flex-preview" id="flexPreview">
+        <div class="fp-item" style="height:60px">1</div>
+        <div class="fp-item" style="height:90px">2</div>
+        <div class="fp-item" style="height:50px">3</div>
+        <div class="fp-item" style="height:70px">4</div>
+        <div class="fp-item" style="height:80px">5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CSS GRID ─────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="grid">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div>
+        <h2 class="section-title">CSS Grid</h2>
+        <p class="section-sub">Two-dimensional layouts — rows AND columns simultaneously</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="grid-container">Container</button>
+        <button class="tab" data-tab="grid-items">Item Placement</button>
+        <button class="tab" data-tab="grid-areas">Named Areas</button>
+        <button class="tab" data-tab="grid-patterns">App Layouts</button>
+      </div>
+      <div class="tab-content active" id="grid-container">
+        <pre><code class="lang-css">.grid {
+  display: grid;
+
+  /* Define columns */
+  grid-template-columns: 200px 1fr 1fr;      /* fixed + 2 equal */
+  grid-template-columns: repeat(3, 1fr);      /* 3 equal columns */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* responsive! */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* collapses empty */
+
+  /* Define rows */
+  grid-template-rows: auto 1fr auto;          /* header, content, footer */
+  grid-auto-rows: 200px;                      /* implicit rows */
+  grid-auto-rows: minmax(100px, auto);
+
+  /* Gaps */
+  gap: 24px;
+  column-gap: 24px;
+  row-gap: 16px;
+
+  /* Alignment of ALL items */
+  justify-items: stretch;   /* horizontal: start|end|center|stretch */
+  align-items: stretch;     /* vertical:   start|end|center|stretch */
+
+  /* Alignment of grid within container */
+  justify-content: start;
+  align-content: start;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="grid-items">
+        <pre><code class="lang-css">.item {
+  /* Span columns: start / end (1-based) */
+  grid-column: 1 / 3;        /* from column line 1 to 3 = spans 2 cols */
+  grid-column: 1 / -1;       /* from first to last line (full width) */
+  grid-column: span 2;        /* span 2 columns from current position */
+
+  /* Span rows */
+  grid-row: 1 / 3;            /* spans 2 rows */
+  grid-row: span 2;
+
+  /* Shorthand: row-start / column-start / row-end / column-end */
+  grid-area: 1 / 1 / 3 / 3;
+
+  /* Individual item alignment */
+  justify-self: center;
+  align-self: end;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="grid-areas">
+        <pre><code class="lang-css">/* Named template areas — visually maps the layout */
+.page {
+  display: grid;
+  grid-template-areas:
+    "header  header  header"
+    "sidebar main    main  "
+    "footer  footer  footer";
+  grid-template-columns: 280px 1fr 1fr;
+  grid-template-rows: 64px 1fr 80px;
+  min-height: 100vh;
+}
+
+.page-header  { grid-area: header; }
+.page-sidebar { grid-area: sidebar; }
+.page-main    { grid-area: main; }
+.page-footer  { grid-area: footer; }
+
+/* Responsive: change areas with media query */
+@media (max-width: 768px) {
+  .page {
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+  .page-sidebar { display: none; }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="grid-patterns">
+        <pre><code class="lang-scss">/* Angular dashboard layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4);
+}
+
+// Widget sizes using BEM + grid-span
+.widget {
+  &--full  { grid-column: span 12; }
+  &--half  { grid-column: span 6; }
+  &--third { grid-column: span 4; }
+  &--quarter { grid-column: span 3; }
+}
+
+/* Responsive product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Mosaic / masonry-style (experimental) */
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px;
+  gap: 8px;
+}
+.masonry__item--tall  { grid-row: span 4; }
+.masonry__item--short { grid-row: span 2; }</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Live Grid Demo — Dashboard Layout</h3>
+    <div class="grid-live-demo">
+      <div class="gld-header">Header (grid-column: 1 / -1)</div>
+      <div class="gld-sidebar">Sidebar</div>
+      <div class="gld-main">
+        <div class="gld-stats">
+          <div class="gld-stat">Stat 1</div>
+          <div class="gld-stat">Stat 2</div>
+          <div class="gld-stat">Stat 3</div>
+          <div class="gld-stat">Stat 4</div>
+        </div>
+        <div class="gld-chart">Chart Area (span 2)</div>
+        <div class="gld-table">Data Table</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── RESPONSIVE ───────────────────────────────────────────────────── -->
+  <section class="topic-section" id="responsive">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <div>
+        <h2 class="section-title">Responsive Design</h2>
+        <p class="section-sub">Building layouts that work on every device and screen size</p>
+      </div>
+    </div>
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="media-basics">Media Queries</button>
+        <button class="tab" data-tab="breakpoints">Breakpoint System</button>
+        <button class="tab" data-tab="container-q">Container Queries</button>
+        <button class="tab" data-tab="resp-angular">Angular + SCSS</button>
+      </div>
+      <div class="tab-content active" id="media-basics">
+        <pre><code class="lang-css">/* Media query syntax */
+@media (max-width: 768px) { /* mobile-first: use min-width */ }
+@media (min-width: 768px) { /* tablet and above */ }
+@media (min-width: 768px) and (max-width: 1024px) { /* only tablet */ }
+
+/* Media features */
+@media (orientation: portrait) { }
+@media (prefers-color-scheme: dark) { }   /* dark mode */
+@media (prefers-reduced-motion: reduce) { } /* accessibility */
+@media (hover: hover) { }                 /* devices with hover */
+@media print { }                          /* print styles */
+@media (min-resolution: 2dppx) { }       /* retina displays */</code></pre>
+      </div>
+      <div class="tab-content" id="breakpoints">
+        <pre><code class="lang-scss">/* Enterprise breakpoint system (SCSS) */
+$breakpoints: (
+  'xs':  0,
+  'sm':  576px,
+  'md':  768px,
+  'lg':  1024px,
+  'xl':  1280px,
+  '2xl': 1536px,
+);
+
+// Mixin: mobile-first (min-width)
+@mixin bp($name) {
+  @if map-has-key($breakpoints, $name) {
+    @media (min-width: map-get($breakpoints, $name)) {
+      @content;
+    }
+  }
+}
+
+// Usage
+.hero {
+  font-size: 1.5rem;              /* mobile default */
+  @include bp('md') { font-size: 2.5rem; }
+  @include bp('xl') { font-size: 4rem; }
+}
+
+.grid {
+  grid-template-columns: 1fr;
+  @include bp('md') { grid-template-columns: repeat(2, 1fr); }
+  @include bp('lg') { grid-template-columns: repeat(3, 1fr); }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="container-q">
+        <pre><code class="lang-css">/* Container Queries (CSS4) — respond to PARENT size, not viewport */
+/* This is revolutionary for component libraries! */
+
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+}
+
+@container card (min-width: 400px) {
+  .card {
+    display: flex;         /* side-by-side layout when container is wide */
+    gap: 16px;
+  }
+  .card__image { width: 40%; }
+}
+
+@container card (max-width: 399px) {
+  .card__image { width: 100%; }
+}
+
+/* Angular component using container queries */
+/* Great for design systems — card adapts to where it is placed,
+   not the viewport. Works in sidebars AND full-width layouts! */</code></pre>
+      </div>
+      <div class="tab-content" id="resp-angular">
+        <pre><code class="lang-scss">// src/styles/_breakpoints.scss — shared across all components
+
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+@mixin mobile        { @media (max-width: #{$bp-md - 1}) { @content; } }
+@mixin tablet        { @media (min-width: $bp-md) and (max-width: #{$bp-lg - 1}) { @content; } }
+@mixin desktop       { @media (min-width: $bp-lg) { @content; } }
+@mixin not-desktop   { @media (max-width: #{$bp-lg - 1}) { @content; } }
+
+// In any component.scss:
+@use 'src/styles/breakpoints' as *;
+
+.hero {
+  padding: var(--space-8) var(--space-4);
+
+  @include desktop {
+    padding: var(--space-16) var(--space-12);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+  }
+
+  @include mobile {
+    text-align: center;
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CSS VARIABLES ───────────────────────────────────────────────── -->
+  <section class="topic-section" id="variables">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <div>
+        <h2 class="section-title">Custom Properties (CSS Variables)</h2>
+        <p class="section-sub">Dynamic, cascading, JavaScript-accessible design tokens</p>
+      </div>
+    </div>
+
+    <div class="info-box info-box--green">
+      <div class="info-box__title">CSS Variables vs SCSS Variables</div>
+      <p>SCSS variables (<code>$color: red</code>) are compiled away — they're just text substitution. CSS custom properties (<code>--color: red</code>) exist at runtime, can be changed by JavaScript, cascade through the DOM, and enable dynamic theming. Use both!</p>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="vars-basic">Basic Usage</button>
+        <button class="tab" data-tab="vars-fallback">Fallbacks</button>
+        <button class="tab" data-tab="vars-js">JS Integration</button>
+        <button class="tab" data-tab="vars-angular">Angular Dynamic Vars</button>
+      </div>
+      <div class="tab-content active" id="vars-basic">
+        <pre><code class="lang-css">/* Define on :root — available everywhere */
+:root {
+  --color-primary: #3b82f6;
+  --color-text: #1e293b;
+  --space-4: 1rem;
+  --radius-md: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.1);
+}
+
+/* Use with var() */
+.button {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Override in a scope — only affects children */
+.dark-section {
+  --color-text: #f1f5f9;
+  --color-primary: #60a5fa;
+}
+/* All elements inside .dark-section use the new values */</code></pre>
+      </div>
+      <div class="tab-content" id="vars-fallback">
+        <pre><code class="lang-css">/* var(--name, fallback) */
+.element {
+  color: var(--color-text, #333);         /* if --color-text undefined, use #333 */
+  font-family: var(--font-body, sans-serif);
+}
+
+/* Chain fallbacks */
+color: var(--color-custom, var(--color-primary, blue));
+
+/* Use in calculations */
+.element {
+  width: calc(100% - var(--sidebar-width, 280px));
+  height: calc(var(--header-height, 64px) + var(--banner-height, 0px));
+}
+
+/* Conditional component styling via var trick */
+:root { --is-dark: ; }   /* empty = false */
+/* In dark mode: */
+.dark { --is-dark: 1; }
+.text { color: var(--is-dark, black); }</code></pre>
+      </div>
+      <div class="tab-content" id="vars-js">
+        <pre><code class="lang-typescript">// Angular service to manage CSS variables dynamically
+@Injectable({ providedIn: 'root' })
+export class ThemeService {
+  private root = document.documentElement;
+
+  setColor(name: string, value: string): void {
+    this.root.style.setProperty(`--color-${name}`, value);
+  }
+
+  getColor(name: string): string {
+    return getComputedStyle(this.root)
+      .getPropertyValue(`--color-${name}`).trim();
+  }
+
+  // Apply full theme object
+  applyTheme(theme: Record<string, string>): void {
+    Object.entries(theme).forEach(([key, val]) => {
+      this.root.style.setProperty(key, val);
+    });
+  }
+}
+
+// In component:
+constructor(private theme: ThemeService) {}
+
+setBrandColor(hex: string) {
+  this.theme.setColor('primary', hex);
+  // All elements using var(--color-primary) update instantly!
+}</code></pre>
+      </div>
+      <div class="tab-content" id="vars-angular">
+        <pre><code class="lang-typescript">// Dynamic per-component CSS variables
+// product-card.component.ts
+@Component({
+  selector: 'app-product-card',
+  template: `
+    &lt;div class="card" [style]="cardStyles"&gt;
+      &lt;span class="badge"&gt;{{ discount }}%&lt;/span&gt;
+    &lt;/div&gt;
+  `
+})
+export class ProductCardComponent {
+  @Input() categoryColor = '#3b82f6';
+  @Input() discount = 0;
+
+  get cardStyles() {
+    return {
+      '--card-accent': this.categoryColor,
+      '--card-accent-light': this.categoryColor + '20'
+    };
+  }
+}
+
+// product-card.component.scss
+.card {
+  border-top: 3px solid var(--card-accent);
+  background: var(--card-accent-light);
+}
+.badge {
+  background: var(--card-accent);
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TRANSITIONS ──────────────────────────────────────────────────── -->
+  <section class="topic-section" id="transitions">
+    <div class="section-header">
+      <div class="section-num">14</div>
+      <div>
+        <h2 class="section-title">Transitions</h2>
+        <p class="section-sub">Smooth state changes between two CSS values</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-css">/* transition: property duration timing-function delay */
+.button {
+  background: #3b82f6;
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+
+  /* Transition multiple properties */
+  transition:
+    background 200ms ease,
+    transform  200ms ease,
+    box-shadow 200ms ease;
+
+  /* Or shorthand for all */
+  transition: all 200ms ease;  /* ⚠️ 'all' hurts performance */
+}
+
+.button:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(59,130,246,.4);
+}
+
+/* Timing functions */
+transition-timing-function:
+  ease,           /* slow-fast-slow (default) */
+  ease-in,        /* accelerate */
+  ease-out,       /* decelerate — best for exits */
+  ease-in-out,    /* smooth both ways */
+  linear,         /* constant speed */
+  cubic-bezier(.17,.67,.83,.67), /* custom */
+  steps(4, end);  /* discrete steps</code></pre>
+    </div>
+
+    <h3 class="subsection-title">Transition Demos</h3>
+    <div class="transition-demos">
+      <div class="td-item td-item--scale" title="Hover me">Scale</div>
+      <div class="td-item td-item--slide" title="Hover me">Slide</div>
+      <div class="td-item td-item--color" title="Hover me">Color</div>
+      <div class="td-item td-item--rotate" title="Hover me">Rotate</div>
+      <div class="td-item td-item--shadow" title="Hover me">Shadow</div>
+      <div class="td-item td-item--border" title="Hover me">Border</div>
+    </div>
+  </section>
+
+  <!-- ─── ANIMATIONS ───────────────────────────────────────────────────── -->
+  <section class="topic-section" id="animations">
+    <div class="section-header">
+      <div class="section-num">15</div>
+      <div>
+        <h2 class="section-title">Animations & Keyframes</h2>
+        <p class="section-sub">Multi-step, repeatable, controllable animations with @keyframes</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="anim-basic">@keyframes Basics</button>
+        <button class="tab" data-tab="anim-props">Animation Properties</button>
+        <button class="tab" data-tab="anim-stagger">Staggered Animations</button>
+        <button class="tab" data-tab="anim-angular">Angular Animations API</button>
+      </div>
+      <div class="tab-content active" id="anim-basic">
+        <pre><code class="lang-css">/* Define keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+
+/* Apply animation */
+.card {
+  animation: fadeInUp 0.4s ease-out both;
+}
+
+.loader {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="anim-props">
+        <pre><code class="lang-css">/* All animation properties */
+.element {
+  animation-name: fadeInUp;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-out;
+  animation-delay: 0.1s;
+  animation-iteration-count: 1;      /* number | infinite */
+  animation-direction: normal;        /* normal | reverse | alternate | alternate-reverse */
+  animation-fill-mode: both;          /* none | forwards | backwards | both */
+  animation-play-state: running;      /* running | paused */
+
+  /* Shorthand: name duration timing delay count direction fill-mode */
+  animation: fadeInUp 0.4s ease-out 0.1s 1 normal both;
+
+  /* Multiple animations */
+  animation: fadeInUp 0.4s ease-out, pulse 2s 0.5s infinite;
+}
+
+/* Pause on hover */
+.anim-card:hover {
+  animation-play-state: paused;
+}
+
+/* Respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="anim-stagger">
+        <pre><code class="lang-css">/* CSS stagger with animation-delay */
+.card { animation: fadeInUp 0.4s ease-out both; }
+.card:nth-child(1) { animation-delay: 0ms; }
+.card:nth-child(2) { animation-delay: 80ms; }
+.card:nth-child(3) { animation-delay: 160ms; }
+.card:nth-child(4) { animation-delay: 240ms; }
+
+/* SCSS stagger loop — cleaner */
+@for $i from 1 through 12 {
+  .card:nth-child(#{$i}) {
+    animation-delay: #{$i * 60}ms;
+  }
+}
+
+/* Angular: dynamic delay via style binding */
+/* Template: [style.animation-delay.ms]="i * 60" */
+/* TypeScript: in *ngFor, use index variable */</code></pre>
+      </div>
+      <div class="tab-content" id="anim-angular">
+        <pre><code class="lang-typescript">// Angular Animations API (BrowserAnimationsModule)
+// Better than CSS for complex state-driven animations
+
+import { trigger, state, style, transition, animate, query, stagger } from '@angular/animations';
+
+@Component({
+  animations: [
+    trigger('slideInOut', [
+      state('in',  style({ transform: 'translateX(0)',    opacity: 1 })),
+      state('out', style({ transform: 'translateX(100%)', opacity: 0 })),
+      transition('out => in',  [animate('300ms ease-out')]),
+      transition('in => out',  [animate('300ms ease-in')]),
+    ]),
+
+    // Stagger items entering a list
+    trigger('listAnimation', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(60, [
+            animate('0.3s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
+})
+export class ProductGridComponent {
+  @HostBinding('@listAnimation') get animation() { return this.products.length; }
+}</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Animation Showcase</h3>
+    <div class="anim-showcase">
+      <div class="anim-card anim-card--bounce">Bounce</div>
+      <div class="anim-card anim-card--spin">Spin</div>
+      <div class="anim-card anim-card--pulse">Pulse</div>
+      <div class="anim-card anim-card--shimmer">Shimmer</div>
+      <div class="anim-card anim-card--wave">Wave</div>
+      <div class="anim-card anim-card--swing">Swing</div>
+    </div>
+  </section>
+
+  <!-- ─── TRANSFORMS ───────────────────────────────────────────────────── -->
+  <section class="topic-section" id="transforms">
+    <div class="section-header">
+      <div class="section-num">16</div>
+      <div>
+        <h2 class="section-title">2D & 3D Transforms</h2>
+        <p class="section-sub">Move, rotate, scale, and skew elements without affecting layout flow</p>
+      </div>
+    </div>
+    <div class="code-demo">
+      <pre><code class="lang-css">/* 2D Transforms */
+.element {
+  transform: translate(50px, 100px);     /* move X, Y */
+  transform: translateX(50px);
+  transform: translateY(-20px);
+  transform: scale(1.5);                 /* scale both axes */
+  transform: scaleX(2) scaleY(0.5);
+  transform: rotate(45deg);
+  transform: rotateZ(45deg);             /* same as rotate */
+  transform: skew(10deg, 5deg);
+  transform: skewX(15deg);
+
+  /* Multiple transforms — ORDER MATTERS (right to left) */
+  transform: translateY(-4px) scale(1.02) rotate(2deg);
+
+  /* Transform origin */
+  transform-origin: center;              /* default */
+  transform-origin: top left;
+  transform-origin: 0% 100%;
+}
+
+/* 3D Transforms */
+.card-3d {
+  transform-style: preserve-3d;         /* required for 3D children */
+  perspective: 1000px;                  /* depth effect */
+
+  transform: rotateX(20deg);
+  transform: rotateY(45deg);
+  transform: rotate3d(1, 1, 0, 30deg);
+  transform: perspective(500px) rotateY(30deg);
+  transform: translateZ(50px);          /* toward/away from viewer */
+}
+
+/* Card flip effect */
+.card { perspective: 1000px; }
+.card__inner { transform-style: preserve-3d; transition: transform 0.6s; }
+.card:hover .card__inner { transform: rotateY(180deg); }
+.card__front, .card__back { backface-visibility: hidden; }
+.card__back { transform: rotateY(180deg); }</code></pre>
+    </div>
+
+    <div class="transforms-demo-grid">
+      <div class="tr-item tr-item--translate">translate(20px,-10px)</div>
+      <div class="tr-item tr-item--scale">scale(1.3)</div>
+      <div class="tr-item tr-item--rotate">rotate(45deg)</div>
+      <div class="tr-item tr-item--skew">skew(15deg)</div>
+      <div class="tr-item tr-item--3d">rotateY(40deg)</div>
+      <div class="tr-item tr-item--combo">translate+scale+rotate</div>
+    </div>
+  </section>
+
+  <!-- ─── PSEUDO ───────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="pseudo">
+    <div class="section-header">
+      <div class="section-num">17</div>
+      <div>
+        <h2 class="section-title">Pseudo-classes & Pseudo-elements</h2>
+        <p class="section-sub">:hover, :focus, :nth-child, ::before, ::after — and many more</p>
+      </div>
+    </div>
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="pseudo-class">Pseudo-classes</button>
+        <button class="tab" data-tab="pseudo-elem">Pseudo-elements</button>
+        <button class="tab" data-tab="pseudo-angular">Angular Forms</button>
+      </div>
+      <div class="tab-content active" id="pseudo-class">
+        <pre><code class="lang-css">/* User interaction */
+:hover    { }  /* mouse over */
+:focus    { }  /* keyboard/click focused */
+:active   { }  /* being clicked */
+:visited  { }  /* visited links */
+
+/* Form states */
+:checked  { }  /* checkbox/radio checked */
+:disabled { }  /* disabled inputs */
+:enabled  { }
+:required { }
+:valid    { }  /* valid input value */
+:invalid  { }
+:focus-within { }  /* parent when any child has focus */
+:focus-visible { }  /* focus only shown for keyboard users */
+:placeholder-shown { }
+
+/* Structural */
+:first-child       { }  /* first sibling */
+:last-child        { }
+:nth-child(2)      { }  /* exact position */
+:nth-child(even)   { }  /* even rows */
+:nth-child(odd)    { }  /* odd rows */
+:nth-child(3n+1)   { }  /* every 3rd starting at 1 */
+:first-of-type     { }
+:last-of-type      { }
+:only-child        { }
+:not(.excluded)    { }  /* negation */
+:is(h1, h2, h3)   { }  /* matches any */
+:where(h1, h2)    { }  /* same but 0 specificity */
+:has(> img)        { }  /* parent with child (CSS4!) */</code></pre>
+      </div>
+      <div class="tab-content" id="pseudo-elem">
+        <pre><code class="lang-css">/* Pseudo-elements: virtual elements in the DOM */
+
+/* ::before / ::after — most used */
+.card::before {
+  content: '';              /* REQUIRED — can be empty string */
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-primary);
+}
+
+/* Decorative quote */
+blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--color-primary);
+  line-height: 0;
+  vertical-align: -0.4em;
+}
+
+/* Counter badge */
+.nav-item::after {
+  content: attr(data-count);   /* reads from HTML attribute */
+  display: inline-block;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+}
+
+/* Other pseudo-elements */
+::placeholder { color: #94a3b8; }
+::selection   { background: #bfdbfe; color: #1e3a5f; }
+::first-line  { font-weight: bold; }
+::first-letter { font-size: 2em; float: left; }
+::marker      { color: var(--color-primary); }  /* list bullet */
+::backdrop    { background: rgba(0,0,0,.5); }    /* modal overlay */</code></pre>
+      </div>
+      <div class="tab-content" id="pseudo-angular">
+        <pre><code class="lang-scss">// Angular forms — ngModel/Reactive Forms CSS states
+// Angular adds these classes automatically:
+
+// .ng-pristine  — untouched field
+// .ng-dirty     — user has typed
+// .ng-touched   — field has been blurred
+// .ng-valid     — passes validation
+// .ng-invalid   — fails validation
+
+.form-field {
+  input {
+    border: 2px solid var(--color-border);
+    transition: border-color 0.2s;
+
+    &:focus { border-color: var(--color-primary); outline: none; }
+
+    &.ng-invalid.ng-touched {
+      border-color: var(--color-danger);
+    }
+
+    &.ng-valid.ng-dirty {
+      border-color: var(--color-success);
+    }
+  }
+
+  // Error message: show only when invalid + touched
+  .error-msg {
+    display: none;
+  }
+
+  &:has(input.ng-invalid.ng-touched) .error-msg {
+    display: block;   // CSS :has() selector!
+    color: var(--color-danger);
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FILTERS ──────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="filters">
+    <div class="section-header">
+      <div class="section-num">18</div>
+      <div>
+        <h2 class="section-title">Filters & Effects</h2>
+        <p class="section-sub">blur, brightness, contrast, grayscale, drop-shadow, and backdrop-filter</p>
+      </div>
+    </div>
+    <div class="code-demo">
+      <pre><code class="lang-css">/* CSS filter — applies to element and its children */
+.element {
+  filter: blur(4px);                    /* Gaussian blur */
+  filter: brightness(0.7);              /* 0=black, 1=normal, 2=double brightness */
+  filter: contrast(1.5);               /* increase contrast */
+  filter: grayscale(100%);             /* convert to grayscale */
+  filter: hue-rotate(90deg);           /* rotate hue wheel */
+  filter: invert(100%);                /* invert colors */
+  filter: saturate(2);                 /* increase saturation */
+  filter: sepia(80%);                  /* warm brown tone */
+  filter: opacity(0.5);                /* same as opacity property */
+  filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.4)); /* shadow follows shape */
+
+  /* Multiple filters */
+  filter: brightness(1.1) saturate(1.3) contrast(1.1);
+}
+
+/* backdrop-filter — affects what's BEHIND the element */
+/* Glass morphism effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+}
+
+/* Angular use: loading overlay */
+.loading-overlay {
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; inset: 0;
+}</code></pre>
+    </div>
+
+    <div class="filter-demo-grid">
+      <div class="filter-item"><div class="filter-box filter-box--none">Normal</div><span>none</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--blur">Blur</div><span>blur(4px)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--bright">Bright</div><span>brightness(1.5)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--gray">Gray</div><span>grayscale(100%)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--sepia">Sepia</div><span>sepia(100%)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--invert">Invert</div><span>invert(100%)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--contrast">Contrast</div><span>contrast(2)</span></div>
+      <div class="filter-item"><div class="filter-box filter-box--glass">Glass</div><span>backdrop-filter: blur</span></div>
+    </div>
+  </section>
+
+  <!-- ─── ANGULAR BASIC ────────────────────────────────────────────────── -->
+  <section class="topic-section" id="angular-basic">
+    <div class="section-header">
+      <div class="section-num">19</div>
+      <div>
+        <h2 class="section-title">CSS in Angular — Basics</h2>
+        <p class="section-sub">Setting up styles, global vs component, and the three stylesheet options</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="ng-setup">Project Setup</button>
+        <button class="tab" data-tab="ng-global">Global Styles</button>
+        <button class="tab" data-tab="ng-component">Component Styles</button>
+        <button class="tab" data-tab="ng-inline">Inline Styles</button>
+      </div>
+      <div class="tab-content active" id="ng-setup">
+        <pre><code class="lang-bash"># Create Angular app with SCSS
+ng new my-app --style=scss
+
+# Add SCSS to existing project
+ng config schematics.@schematics/angular:component.style scss
+
+# angular.json stylesheet configuration
+{
+  "styles": [
+    "src/styles.scss",                    // global
+    "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"  // library
+  ],
+  "stylePreprocessorOptions": {
+    "includePaths": ["src/styles"]        // import without paths
+  }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ng-global">
+        <pre><code class="lang-scss">// src/styles.scss — applies to ALL components
+
+// 1. Import SCSS partials
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'typography';
+@use 'reset';
+@use 'utilities';
+
+// 2. Global reset
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+// 3. Design tokens
+:root {
+  --color-primary: #3b82f6;
+  --color-bg: #f8fafc;
+  --font-body: 'Inter', sans-serif;
+  --radius-md: 8px;
+}
+
+// 4. Base element styles
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+// 5. Utility classes (optional)
+.sr-only { position: absolute; width: 1px; height: 1px; clip: rect(0,0,0,0); }</code></pre>
+      </div>
+      <div class="tab-content" id="ng-component">
+        <pre><code class="lang-scss">// button.component.scss
+// Automatically scoped to this component only
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);  // global var available here!
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+
+  &--primary {
+    background: var(--color-primary);
+    color: white;
+    &:hover { filter: brightness(1.1); }
+  }
+
+  &--outline {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    &:hover { background: var(--color-primary); color: white; }
+  }
+
+  &--sm { padding: 6px 14px; font-size: 0.875rem; }
+  &--lg { padding: 14px 28px; font-size: 1.125rem; }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ng-inline">
+        <pre><code class="lang-typescript">// Inline styles in the component decorator
+@Component({
+  selector: 'app-badge',
+  template: '&lt;span class="badge"&gt;{{ label }}&lt;/span&gt;',
+  styles: [`                        // backtick string
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  `]
+})
+
+// Dynamic styles with [style] binding
+@Component({
+  template: `
+    &lt;div class="chip"
+         [style.background]="color"
+         [style.color]="textColor"
+         [style.--chip-border]="color + '60'"&gt;
+      {{ label }}
+    &lt;/div&gt;
+  `
+})
+export class ChipComponent {
+  @Input() color = '#3b82f6';
+  get textColor() { return this.getLuminance(this.color) > 0.5 ? '#000' : '#fff'; }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BEM ──────────────────────────────────────────────────────────── -->
+  <section class="topic-section" id="bem">
+    <div class="section-header">
+      <div class="section-num">20</div>
+      <div>
+        <h2 class="section-title">BEM Methodology</h2>
+        <p class="section-sub">Block Element Modifier — the naming convention for scalable CSS</p>
+      </div>
+    </div>
+
+    <div class="bem-diagram">
+      <div class="bem-block">
+        <div class="bem-block__label">.card</div>
+        <div class="bem-block__visual">
+          <div class="bem-elem"><span class="bem-elem__label">.card__image</span></div>
+          <div class="bem-elem"><span class="bem-elem__label">.card__body</span>
+            <div class="bem-elem"><span class="bem-elem__label">.card__title</span></div>
+            <div class="bem-elem"><span class="bem-elem__label">.card__desc</span></div>
+          </div>
+          <div class="bem-elem"><span class="bem-elem__label">.card__footer</span>
+            <div class="bem-mod"><span class="bem-mod__label">.card--featured (modifier)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-scss">/* BEM in SCSS — using & for nesting */
+
+// Block
+.product-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  // Element (__ double underscore)
+  &__image     { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  &__body      { padding: var(--space-4); }
+  &__title     { font-size: 1.125rem; font-weight: 600; }
+  &__price     { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); }
+  &__badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  &__actions   { padding: var(--space-4); border-top: 1px solid var(--color-border); }
+
+  // Modifier (-- double dash) — variations of the block
+  &--featured  { border: 2px solid var(--color-primary); }
+  &--out-of-stock { opacity: 0.6; pointer-events: none; }
+  &--horizontal {
+    display: flex;
+    .product-card__image { width: 40%; flex-shrink: 0; }
+  }
+}
+
+// Never do this (element of element):
+.product-card__body__title { }  // ❌ WRONG
+
+// Always flatten to one level:
+.product-card__title { }  // ✅ CORRECT
+
+// Don't chain blocks:
+.nav .product-card { }    // ❌ Avoid
+.product-card--in-nav { } // ✅ Use a modifier instead</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── DESIGN SYSTEM ────────────────────────────────────────────────── -->
+  <section class="topic-section" id="design-system">
+    <div class="section-header">
+      <div class="section-num">21</div>
+      <div>
+        <h2 class="section-title">Enterprise Design System</h2>
+        <p class="section-sub">Building a scalable, consistent UI system for large Angular applications</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="ds-tokens">Design Tokens</button>
+        <button class="tab" data-tab="ds-arch">SCSS Architecture</button>
+        <button class="tab" data-tab="ds-lib">Component Library</button>
+        <button class="tab" data-tab="ds-themes">Multi-theme</button>
+      </div>
+      <div class="tab-content active" id="ds-tokens">
+        <pre><code class="lang-scss">// src/styles/_tokens.scss — Single source of truth
+
+// ── Primitives (raw values) ───────────────────────
+$blue-50:  #eff6ff; $blue-100: #dbeafe; $blue-500: #3b82f6;
+$blue-600: #2563eb; $blue-700: #1d4ed8; $blue-900: #1e3a8a;
+
+$gray-50:  #f8fafc; $gray-100: #f1f5f9; $gray-200: #e2e8f0;
+$gray-500: #64748b; $gray-700: #334155; $gray-900: #0f172a;
+
+// ── Semantic tokens (use these in components) ─────
+:root {
+  // Colors
+  --color-brand:     #{$blue-600};
+  --color-brand-hover: #{$blue-700};
+  --color-surface:   #ffffff;
+  --color-bg:        #{$gray-50};
+  --color-border:    #{$gray-200};
+  --color-text:      #{$gray-900};
+  --color-text-muted: #{$gray-500};
+  --color-success:   #16a34a;
+  --color-warning:   #d97706;
+  --color-danger:    #dc2626;
+
+  // Typography
+  --font-sans:  'Inter', -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+  --text-xs:    0.75rem;  --text-sm: 0.875rem; --text-base: 1rem;
+  --text-lg:    1.125rem; --text-xl: 1.25rem;  --text-2xl:  1.5rem;
+  --text-3xl:   1.875rem; --text-4xl: 2.25rem; --text-5xl:  3rem;
+
+  // Spacing (4px base)
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem;
+  --sp-4: 1rem;    --sp-6: 1.5rem;  --sp-8: 2rem;
+  --sp-12: 3rem;   --sp-16: 4rem;   --sp-24: 6rem;
+
+  // Radii
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 16px; --radius-full: 9999px;
+
+  // Shadows
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,.1),  0 2px 4px rgba(0,0,0,.05);
+  --shadow-lg:  0 10px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+  --shadow-xl:  0 25px 60px rgba(0,0,0,.15);
+
+  // Motion
+  --duration-fast:   100ms; --duration-base: 200ms;
+  --duration-slow:   400ms; --duration-slower: 600ms;
+  --ease-out:   cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Layout
+  --container-sm:  640px; --container-md: 768px;
+  --container-lg: 1024px; --container-xl: 1280px;
+  --container-2xl: 1536px;
+  --sidebar-width: 280px;
+  --header-height: 64px;
+  --z-header: 100; --z-modal: 400; --z-toast: 500;
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ds-arch">
+        <pre><code class="lang-text">/* SCSS 7-1 Architecture — enterprise standard */
+
+src/styles/
+├── _tokens.scss          ← design tokens (:root vars)
+├── _reset.scss           ← CSS reset / normalize
+├── _typography.scss      ← type scale, heading styles
+├── _mixins.scss          ← reusable SCSS mixins
+├── _functions.scss       ← SCSS functions (px to rem, etc)
+├── _breakpoints.scss     ← responsive breakpoint mixins
+├── _animations.scss      ← shared @keyframes
+├── _utilities.scss       ← utility classes (.sr-only, .truncate)
+├── _grid.scss            ← layout grid system
+├── _print.scss           ← print styles
+└── styles.scss           ← entry file (@use all of the above)
+
+/* styles.scss — imports everything */
+@use 'tokens';
+@use 'reset';
+@use 'typography';
+@use 'utilities';
+@use 'grid';
+@use 'animations';
+@use 'print';
+
+/* Each component uses: */
+// @use 'src/styles/mixins' as *;
+// @use 'src/styles/breakpoints' as *;</code></pre>
+      </div>
+      <div class="tab-content" id="ds-lib">
+        <pre><code class="lang-typescript">// Shared UI library with Angular workspace
+// ng generate library ui-lib
+
+// ui-lib/src/lib/button/button.component.ts
+@Component({
+  selector: 'ui-button',
+  standalone: true,
+  template: `
+    &lt;button
+      [class]="classes"
+      [disabled]="disabled"
+      (click)="clicked.emit($event)"&gt;
+      &lt;ng-content select="[icon-start]"&gt;&lt;/ng-content&gt;
+      &lt;ng-content&gt;&lt;/ng-content&gt;
+      &lt;ng-content select="[icon-end]"&gt;&lt;/ng-content&gt;
+    &lt;/button&gt;
+  `,
+  styleUrls: ['./button.component.scss']
+})
+export class ButtonComponent {
+  @Input() variant: 'primary' | 'outline' | 'ghost' | 'danger' = 'primary';
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() disabled = false;
+  @Output() clicked = new EventEmitter&lt;MouseEvent&gt;();
+
+  get classes(): string {
+    return `btn btn--${this.variant} btn--${this.size}`;
+  }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="ds-themes">
+        <pre><code class="lang-scss">// _themes.scss — multi-theme support
+
+// Light theme (default)
+:root, [data-theme="light"] {
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-border: #e2e8f0;
+  --color-brand: #2563eb;
+}
+
+// Dark theme
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f1f5f9;
+  --color-border: #334155;
+  --color-brand: #60a5fa;
+}
+
+// High contrast
+[data-theme="high-contrast"] {
+  --color-bg: #000000;
+  --color-surface: #1a1a1a;
+  --color-text: #ffffff;
+  --color-brand: #ffff00;
+}
+
+// Angular ThemeService
+@Injectable({ providedIn: 'root' })
+export class ThemeService {
+  private current$ = new BehaviorSubject&lt;string&gt;('light');
+  readonly theme$ = this.current$.asObservable();
+
+  setTheme(theme: string): void {
+    document.documentElement.setAttribute('data-theme', theme);
+    this.current$.next(theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  init(): void {
+    const saved = localStorage.getItem('theme');
+    const system = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    this.setTheme(saved ?? system);
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FULL APP EXAMPLE ─────────────────────────────────────────────── -->
+  <section class="topic-section" id="full-app">
+    <div class="section-header">
+      <div class="section-num">22</div>
+      <div>
+        <h2 class="section-title">🚀 Full Enterprise Angular App</h2>
+        <p class="section-sub">A complete, production-ready Angular app with every CSS concept applied</p>
+      </div>
+    </div>
+
+    <div class="full-app-demo">
+      <div class="fad-header">
+        <div class="fad-logo">◉ AppName</div>
+        <nav class="fad-nav">
+          <a class="fad-nav__link fad-nav__link--active">Dashboard</a>
+          <a class="fad-nav__link">Products</a>
+          <a class="fad-nav__link">Analytics</a>
+          <a class="fad-nav__link">Settings</a>
+        </nav>
+        <div class="fad-actions">
+          <button class="fad-theme-btn" id="fadThemeBtn">◐</button>
+          <div class="fad-avatar">JD</div>
+        </div>
+      </div>
+      <div class="fad-body">
+        <aside class="fad-sidebar">
+          <div class="fad-menu">
+            <div class="fad-menu__item fad-menu__item--active">📊 Overview</div>
+            <div class="fad-menu__item">🛍️ Products</div>
+            <div class="fad-menu__item">👥 Users</div>
+            <div class="fad-menu__item">📈 Reports</div>
+            <div class="fad-menu__item">⚙️ Settings</div>
+          </div>
+        </aside>
+        <main class="fad-main">
+          <div class="fad-stats">
+            <div class="fad-stat-card" style="--accent:#3b82f6">
+              <div class="fad-stat-card__label">Total Sales</div>
+              <div class="fad-stat-card__value">₹48,295</div>
+              <div class="fad-stat-card__change fad-stat-card__change--up">+12.5%</div>
+            </div>
+            <div class="fad-stat-card" style="--accent:#10b981">
+              <div class="fad-stat-card__label">New Users</div>
+              <div class="fad-stat-card__value">2,847</div>
+              <div class="fad-stat-card__change fad-stat-card__change--up">+8.3%</div>
+            </div>
+            <div class="fad-stat-card" style="--accent:#f59e0b">
+              <div class="fad-stat-card__label">Active Orders</div>
+              <div class="fad-stat-card__value">139</div>
+              <div class="fad-stat-card__change fad-stat-card__change--down">-2.1%</div>
+            </div>
+            <div class="fad-stat-card" style="--accent:#8b5cf6">
+              <div class="fad-stat-card__label">Conversion</div>
+              <div class="fad-stat-card__value">3.24%</div>
+              <div class="fad-stat-card__change fad-stat-card__change--up">+0.5%</div>
+            </div>
+          </div>
+          <div class="fad-grid-2">
+            <div class="fad-chart-card">
+              <div class="fad-chart-card__title">Revenue Trend</div>
+              <div class="fad-bar-chart">
+                <div class="fad-bar" style="--h:60%"><span>Jan</span></div>
+                <div class="fad-bar" style="--h:75%"><span>Feb</span></div>
+                <div class="fad-bar" style="--h:55%"><span>Mar</span></div>
+                <div class="fad-bar" style="--h:85%"><span>Apr</span></div>
+                <div class="fad-bar" style="--h:70%"><span>May</span></div>
+                <div class="fad-bar fad-bar--active" style="--h:92%"><span>Jun</span></div>
+              </div>
+            </div>
+            <div class="fad-chart-card">
+              <div class="fad-chart-card__title">Top Products</div>
+              <div class="fad-product-rows">
+                <div class="fad-row"><span class="fad-row__dot" style="background:#3b82f6"></span><span class="fad-row__name">Organic Apples</span><span class="fad-row__bar"><div style="width:82%;background:#3b82f6"></div></span><span>82%</span></div>
+                <div class="fad-row"><span class="fad-row__dot" style="background:#10b981"></span><span class="fad-row__name">Dairy Bundle</span><span class="fad-row__bar"><div style="width:65%;background:#10b981"></div></span><span>65%</span></div>
+                <div class="fad-row"><span class="fad-row__dot" style="background:#f59e0b"></span><span class="fad-row__name">Snack Pack</span><span class="fad-row__bar"><div style="width:48%;background:#f59e0b"></div></span><span>48%</span></div>
+                <div class="fad-row"><span class="fad-row__dot" style="background:#8b5cf6"></span><span class="fad-row__name">Beverages</span><span class="fad-row__bar"><div style="width:31%;background:#8b5cf6"></div></span><span>31%</span></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="code-demo" style="margin-top:32px">
+      <div class="code-demo__tabs">
+        <button class="tab active" data-tab="app-layout">App Layout SCSS</button>
+        <button class="tab" data-tab="app-card">Stat Card</button>
+        <button class="tab" data-tab="app-comp">Angular Component</button>
+      </div>
+      <div class="tab-content active" id="app-layout">
+        <pre><code class="lang-scss">// app-shell.component.scss
+:host {
+  display: grid;
+  grid-template-rows: var(--header-height) 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  min-height: 100vh;
+}
+
+app-header  { grid-area: header; position: sticky; top: 0; z-index: var(--z-header); }
+app-sidebar { grid-area: sidebar; }
+router-outlet + * { grid-area: main; overflow: auto; }
+
+// Responsive: collapse sidebar on mobile
+@media (max-width: 768px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-areas: "header" "main";
+  }
+  app-sidebar {
+    position: fixed;
+    left: 0; top: var(--header-height);
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform var(--duration-base) var(--ease-out);
+    z-index: var(--z-sidebar);
+    &.open { transform: translateX(0); }
+  }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="app-card">
+        <pre><code class="lang-scss">// stat-card.component.scss
+.stat-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--accent); // dynamic via CSS var
+  transition: box-shadow var(--duration-base) var(--ease-out);
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &__label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__value {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--sp-2);
+    line-height: 1;
+  }
+
+  &__change {
+    margin-top: var(--sp-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    &--up   { color: var(--color-success); }
+    &--down { color: var(--color-danger); }
+  }
+}</code></pre>
+      </div>
+      <div class="tab-content" id="app-comp">
+        <pre><code class="lang-typescript">// stat-card.component.ts
+@Component({
+  selector: 'app-stat-card',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    &lt;div class="stat-card" [style.--accent]="color"&gt;
+      &lt;div class="stat-card__label"&gt;{{ label }}&lt;/div&gt;
+      &lt;div class="stat-card__value"
+           [style.font-variant-numeric]="'tabular-nums'"&gt;
+        {{ value | currency:'INR':'symbol-narrow':'1.0-0' }}
+      &lt;/div&gt;
+      &lt;div class="stat-card__change"
+           [class.stat-card__change--up]="change &gt; 0"
+           [class.stat-card__change--down]="change &lt; 0"&gt;
+        {{ change &gt; 0 ? '+' : '' }}{{ change }}%
+        &lt;span class="sr-only"&gt;{{ change &gt; 0 ? 'increase' : 'decrease' }}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+  styleUrls: ['./stat-card.component.scss']
+})
+export class StatCardComponent {
+  @Input() label = '';
+  @Input() value = 0;
+  @Input() change = 0;
+  @Input() color = 'var(--color-brand)';
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PERFORMANCE ──────────────────────────────────────────────────── -->
+  <section class="topic-section" id="performance">
+    <div class="section-header">
+      <div class="section-num">23</div>
+      <div>
+        <h2 class="section-title">CSS Performance</h2>
+        <p class="section-sub">Writing CSS that doesn't slow down the browser</p>
+      </div>
+    </div>
+
+    <div class="perf-cards">
+      <div class="perf-card perf-card--good">
+        <div class="perf-card__title">✅ GPU-Accelerated Properties</div>
+        <p>Only these properties trigger compositing (no layout recalculation):</p>
+        <ul>
+          <li><code>transform: translate/rotate/scale</code></li>
+          <li><code>opacity</code></li>
+          <li><code>filter</code></li>
+        </ul>
+        <p>Use <code>will-change: transform</code> to hint the browser for complex animations.</p>
+      </div>
+      <div class="perf-card perf-card--bad">
+        <div class="perf-card__title">⚠️ Layout-Triggering Properties</div>
+        <p>These force browser to recalculate layout (expensive):</p>
+        <ul>
+          <li><code>width, height, top, left</code></li>
+          <li><code>margin, padding, border-width</code></li>
+          <li><code>font-size, line-height</code></li>
+          <li><code>display</code> changes</li>
+        </ul>
+        <p>Animate with <code>transform</code> instead of <code>top/left</code>.</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-css">/* ❌ Slow — triggers layout on every frame */
+@keyframes bad-slide {
+  from { left: -100px; }
+  to   { left: 0; }
+}
+
+/* ✅ Fast — GPU accelerated, no layout */
+@keyframes good-slide {
+  from { transform: translateX(-100px); }
+  to   { transform: translateX(0); }
+}
+
+/* ✅ Angular: prefer transform-based animations */
+/* In Angular Animation API */
+transition('* => visible', [
+  style({ transform: 'translateY(-20px)', opacity: 0 }),
+  animate('200ms ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+]),
+
+/* will-change: tells browser to prepare a layer */
+.animated-card {
+  will-change: transform; /* use ONLY on elements that WILL animate */
+  /* ⚠️ Don't add to everything — wastes GPU memory */
+}
+
+/* Contain layout: scope repaints */
+.widget {
+  contain: layout;    /* layout changes don't affect outside */
+  contain: strict;    /* maximum containment */
+}
+
+/* content-visibility: skip off-screen rendering (huge perf win) */
+.long-list-item {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 200px; /* estimated height */
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── ACCESSIBILITY ────────────────────────────────────────────────── -->
+  <section class="topic-section" id="accessibility">
+    <div class="section-header">
+      <div class="section-num">24</div>
+      <div>
+        <h2 class="section-title">Accessibility (A11y)</h2>
+        <p class="section-sub">CSS patterns that make your Angular app usable by everyone</p>
+      </div>
+    </div>
+
+    <div class="code-demo">
+      <pre><code class="lang-scss">/* 1. Visible focus indicators — never do outline:none without replacement */
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 2. Screen reader only — visible only to assistive technology */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 3. Skip navigation link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  padding: 8px 16px;
+  background: var(--color-brand);
+  color: white;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s;
+  &:focus { top: 0; } /* reveals on Tab keypress */
+}
+
+/* 4. Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 5. High contrast mode */
+@media (forced-colors: active) {
+  .btn { border: 2px solid ButtonText; }
+  .icon { forced-color-adjust: none; }
+}
+
+/* 6. Color contrast — minimum 4.5:1 for normal text */
+/* Use: https://webaim.org/resources/contrastchecker/ */
+
+/* 7. Touch targets — minimum 44×44px */
+.btn, .link, .checkbox { min-height: 44px; min-width: 44px; }
+
+/* 8. Angular CDK focus trap for modals */
+/* &lt;div cdkTrapFocus&gt; — keeps focus inside modal */</code></pre>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────────────────── -->
+  <footer class="content-footer">
+    <div class="cf-inner">
+      <div class="cf-title">{} CSS Master</div>
+      <p>Complete CSS &amp; CSS3 reference from basic selectors to enterprise Angular architecture.</p>
+      <div class="cf-topics">
+        <span>Selectors</span><span>Box Model</span><span>Flexbox</span>
+        <span>Grid</span><span>Transitions</span><span>Animations</span>
+        <span>Variables</span><span>BEM</span><span>Design Tokens</span>
+        <span>Dark Mode</span><span>Performance</span><span>A11y</span>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+'use strict';
+
+// ── Tab switching ─────────────────────────────────────────────────────
+document.querySelectorAll('.code-demo').forEach(demo => {
+  const tabs    = demo.querySelectorAll('.tab');
+  const panels  = demo.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = demo.querySelector('#' + tab.dataset.tab);
+      if (target) target.classList.add('active');
+    });
+  });
+});
+
+// ── Sidebar burger ────────────────────────────────────────────────────
+const sidebar   = document.getElementById('sidebar');
+const burgerBtn = document.getElementById('burgerBtn');
+
+burgerBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 900 &&
+      !sidebar.contains(e.target) &&
+      !burgerBtn.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// ── Theme toggle ──────────────────────────────────────────────────────
+const themeBtn = document.getElementById('themeBtn');
+const fadThemeBtn = document.getElementById('fadThemeBtn');
+let dark = true;
+
+function applyTheme(isDark) {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  localStorage.setItem('css-tutorial-theme', isDark ? 'dark' : 'light');
+}
+
+// Init theme
+const savedTheme = localStorage.getItem('css-tutorial-theme');
+if (savedTheme === 'light') { dark = false; applyTheme(false); }
+
+themeBtn.addEventListener('click', () => {
+  dark = !dark;
+  applyTheme(dark);
+});
+
+if (fadThemeBtn) {
+  fadThemeBtn.addEventListener('click', () => {
+    dark = !dark;
+    applyTheme(dark);
+  });
+}
+
+// ── Specificity calculator ────────────────────────────────────────────
+const specExamples = document.querySelectorAll('.spec-example');
+const specA = document.getElementById('specA');
+const specB = document.getElementById('specB');
+const specC = document.getElementById('specC');
+const specD = document.getElementById('specD');
+
+specExamples.forEach(ex => {
+  ex.addEventListener('click', () => {
+    specExamples.forEach(e => e.classList.remove('active'));
+    ex.classList.add('active');
+    if (specA) specA.textContent = ex.dataset.a;
+    if (specB) specB.textContent = ex.dataset.b;
+    if (specC) specC.textContent = ex.dataset.c;
+    if (specD) specD.textContent = ex.dataset.d;
+  });
+});
+
+// ── Flexbox playground ────────────────────────────────────────────────
+const flexPreview = document.getElementById('flexPreview');
+const jcSelect    = document.getElementById('jcSelect');
+const aiSelect    = document.getElementById('aiSelect');
+const fdSelect    = document.getElementById('fdSelect');
+const fwSelect    = document.getElementById('fwSelect');
+
+function updateFlex() {
+  if (!flexPreview) return;
+  if (jcSelect) flexPreview.style.justifyContent = jcSelect.value;
+  if (aiSelect) flexPreview.style.alignItems     = aiSelect.value;
+  if (fdSelect) flexPreview.style.flexDirection  = fdSelect.value;
+  if (fwSelect) flexPreview.style.flexWrap       = fwSelect.value;
+}
+
+[jcSelect, aiSelect, fdSelect, fwSelect].forEach(sel => {
+  if (sel) sel.addEventListener('change', updateFlex);
+});
+updateFlex();
+
+// ── Active nav + progress tracking ────────────────────────────────────
+const sections     = document.querySelectorAll('.topic-section, .hero');
+const navLinks     = document.querySelectorAll('.nav-link');
+const breadcrumb   = document.getElementById('breadcrumb');
+const progressRing = document.getElementById('progressRing');
+const progressPct  = document.getElementById('progressPct');
+
+const sectionLabels = {
+  'intro':         'Getting Started › What is CSS?',
+  'syntax':        'Getting Started › Syntax & Selectors',
+  'cascade':       'Getting Started › Cascade & Specificity',
+  'box-model':     'Getting Started › Box Model',
+  'colors':        'Foundations › Colors & Backgrounds',
+  'typography':    'Foundations › Typography',
+  'units':         'Foundations › Units & Values',
+  'display':       'Foundations › Display',
+  'position':      'Foundations › Positioning',
+  'float':         'Foundations › Float',
+  'overflow':      'Foundations › Overflow',
+  'flexbox':       'Modern Layouts › Flexbox',
+  'grid':          'Modern Layouts › CSS Grid',
+  'responsive':    'Modern Layouts › Responsive Design',
+  'media-queries': 'Modern Layouts › Media Queries',
+  'variables':     'CSS3 › Custom Properties',
+  'transitions':   'CSS3 › Transitions',
+  'animations':    'CSS3 › Animations',
+  'transforms':    'CSS3 › Transforms',
+  'filters':       'CSS3 › Filters',
+  'gradients':     'CSS3 › Gradients',
+  'shadows':       'CSS3 › Shadows',
+  'pseudo':        'CSS3 › Pseudo-classes',
+  'calc':          'CSS3 › Functions',
+  'clip':          'CSS3 › Clip & Masks',
+  'angular-basic': 'Angular › Basics',
+  'encapsulation': 'Angular › Encapsulation',
+  'component-scss':'Angular › Component SCSS',
+  'ngclass':       'Angular › NgClass',
+  'dynamic-css':   'Angular › Dynamic CSS',
+  'angular-animations': 'Angular › Animations',
+  'design-system': 'Enterprise › Design System',
+  'scss-arch':     'Enterprise › SCSS Architecture',
+  'tokens':        'Enterprise › Design Tokens',
+  'themes':        'Enterprise › Theming',
+  'bem':           'Enterprise › BEM',
+  'performance':   'Enterprise › Performance',
+  'accessibility': 'Enterprise › Accessibility',
+  'full-app':      'Enterprise › Full App Example',
+};
+
+const visitedSections = new Set();
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      visitedSections.add(id);
+
+      // Active nav link
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + id) {
+          link.classList.add('active');
+          // Scroll link into view in sidebar
+          link.scrollIntoView({ block: 'nearest' });
+        }
+      });
+
+      // Breadcrumb
+      if (breadcrumb && sectionLabels[id]) {
+        breadcrumb.textContent = sectionLabels[id];
+      }
+
+      // Progress
+      const total    = sections.length;
+      const visited  = visitedSections.size;
+      const pct      = Math.round((visited / total) * 100);
+      const circumference = 125.6;
+      const offset   = circumference - (pct / 100) * circumference;
+
+      if (progressRing) progressRing.style.strokeDashoffset = offset;
+      if (progressPct)  progressPct.textContent = pct + '%';
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-56px 0px 0px 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// ── Search filter ─────────────────────────────────────────────────────
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase().trim();
+    navLinks.forEach(link => {
+      const text = link.textContent.toLowerCase();
+      const matches = !q || text.includes(q);
+      link.style.display = matches ? '' : 'none';
+      if (matches && q) link.classList.add('highlight');
+      else link.classList.remove('highlight');
+    });
+  });
+}
+
+// ── Smooth scroll for nav links ───────────────────────────────────────
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').slice(1);
+    const target   = document.getElementById(targetId);
+    if (target) {
+      const topOffset = 56 + 16;
+      const pos = target.getBoundingClientRect().top + window.scrollY - topOffset;
+      window.scrollTo({ top: pos, behavior: 'smooth' });
+      if (window.innerWidth <= 900) {
+        sidebar.classList.remove('open');
+      }
+    }
+  });
+});
+
+// ── Copy code on click ─────────────────────────────────────────────────
+document.querySelectorAll('.code-demo pre').forEach(pre => {
+  pre.style.cursor = 'pointer';
+  pre.title = 'Click to copy';
+
+  pre.addEventListener('click', async () => {
+    const text = pre.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      const orig = pre.style.outline;
+      pre.style.outline = '2px solid #16c79a';
+      pre.style.outlineOffset = '-2px';
+      setTimeout(() => {
+        pre.style.outline = orig;
+        pre.style.outlineOffset = '';
+      }, 700);
+    } catch (_) {}
+  });
+});
+
+// ── Stagger topic sections on load ─────────────────────────────────────
+document.querySelectorAll('.topic-section').forEach((sec, i) => {
+  sec.style.animationDelay = `${i * 40}ms`;
+});
+
+</script>
+</body>
+</html>
