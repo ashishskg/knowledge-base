@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--
+  FlexPro Responsive Landing Page
+  - Demonstrates semantic HTML5 structure (header, main, sections, footer)
+  - Uses CSS and flexbox for hero, card grids, and CTA layouts
+  - Connects to the dashboard page to show an app-style layout
+  - See html-css-flexbox-responsive-guide.md for a full explanation of each tag and style
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlexPro SaaS - Responsive Landing</title>
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="logo">FlexPro</a>
+        <nav class="nav">
+          <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+            ☰
+          </button>
+          <ul class="nav-list">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="container hero-inner">
+          <div class="hero-content">
+            <h1>Build Production-Ready Responsive Apps</h1>
+            <p>
+              Learn HTML5, CSS3, Flexbox, and responsive design by exploring this real-world example
+              application and accompanying guide.
+            </p>
+            <div class="hero-actions">
+              <a href="#features" class="btn btn-primary">Explore Features</a>
+              <a href="dashboard.html" class="btn btn-outline">View Dashboard</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-card hero-card--primary">
+              <h2>Live Preview</h2>
+              <p>Resize the window to see the layout adapt gracefully.</p>
+            </div>
+            <div class="hero-card hero-card--secondary">
+              <p>Mobile-first • Accessible • Production-grade patterns</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="container">
+          <header class="section-header">
+            <h2>Features</h2>
+            <p>Key layout and responsive techniques demonstrated in this app.</p>
+          </header>
+          <div class="feature-grid">
+            <article class="card">
+              <h3>Semantic HTML5</h3>
+              <p>Clean document structure using modern HTML sectioning elements.</p>
+            </article>
+            <article class="card">
+              <h3>Flexbox Layouts</h3>
+              <p>Headers, navbars, cards, and dashboards built with flexbox.</p>
+            </article>
+            <article class="card">
+              <h3>Responsive Design</h3>
+              <p>Mobile-first media queries and flexible units across the app.</p>
+            </article>
+            <article class="card">
+              <h3>Reusable Components</h3>
+              <p>Buttons, cards, and forms styled for consistency and reuse.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt" id="pricing">
+        <div class="container">
+          <header class="section-header">
+            <h2>Pricing</h2>
+            <p>Example pricing layout demonstrating responsive card grids.</p>
+          </header>
+          <div class="pricing-grid">
+            <article class="card pricing-card">
+              <h3>Starter</h3>
+              <p class="pricing-card__price">$0</p>
+              <ul>
+                <li>Single user</li>
+                <li>Basic layouts</li>
+                <li>Email support</li>
+              </ul>
+              <button class="btn btn-primary btn-block">Get Started</button>
+            </article>
+            <article class="card pricing-card pricing-card--highlight">
+              <h3>Pro</h3>
+              <p class="pricing-card__price">$19</p>
+              <ul>
+                <li>Team access</li>
+                <li>Advanced components</li>
+                <li>Priority support</li>
+              </ul>
+              <button class="btn btn-primary btn-block">Upgrade</button>
+            </article>
+            <article class="card pricing-card">
+              <h3>Enterprise</h3>
+              <p class="pricing-card__price">Custom</p>
+              <ul>
+                <li>Custom layouts</li>
+                <li>Architecture reviews</li>
+                <li>Dedicated consultant</li>
+              </ul>
+              <button class="btn btn-outline btn-block">Contact Sales</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="testimonials">
+        <div class="container">
+          <header class="section-header">
+            <h2>Testimonials</h2>
+            <p>Layout designed to highlight quotes using flexbox cards.</p>
+          </header>
+          <div class="testimonial-grid">
+            <figure class="card testimonial-card">
+              <blockquote>
+                “This guide finally made flexbox and responsive design click for our entire team.”
+              </blockquote>
+              <figcaption>— Frontend Lead, SaaS Company</figcaption>
+            </figure>
+            <figure class="card testimonial-card">
+              <blockquote>
+                “We reused these patterns directly in our production Angular and React apps.”
+              </blockquote>
+              <figcaption>— Principal Engineer, Enterprise Platform</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--cta">
+        <div class="container section-cta-inner">
+          <div>
+            <h2>Ready to go deeper?</h2>
+            <p>Open the HTML/CSS/Flexbox/Responsive guide and follow along with the code.</p>
+          </div>
+          <a href="html-css-flexbox-responsive-guide.md" class="btn btn-light">Open Guide</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span id="year"></span> FlexPro Learning. All rights reserved.</p>
+        <nav aria-label="Footer navigation">
+          <a href="#hero">Back to top</a>
+          <a href="dashboard.html">Dashboard</a>
+        </nav>
+      </div>
+      <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </body>
+</html>
+

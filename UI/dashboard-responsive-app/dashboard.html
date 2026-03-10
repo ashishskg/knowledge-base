@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+  FlexPro Responsive Dashboard
+  - Demonstrates a two-column app shell (sidebar + main) using flexbox
+  - Shows stat cards, data table, and settings form with responsive behavior
+  - Shares the same CSS layers as the landing page (base, layout, components, responsive)
+  - See html-css-flexbox-responsive-guide.md for a walkthrough of the structure
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlexPro Dashboard</title>
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span class="logo">FlexPro</span>
+        </div>
+        <nav class="sidebar-nav" aria-label="Dashboard navigation">
+          <a href="#" class="sidebar-link sidebar-link--active">Overview</a>
+          <a href="#" class="sidebar-link">Layout Lessons</a>
+          <a href="#" class="sidebar-link">Components</a>
+          <a href="#" class="sidebar-link">Settings</a>
+        </nav>
+      </aside>
+
+      <div class="dashboard-main">
+        <header class="topbar">
+          <h1 class="topbar-title">Dashboard</h1>
+          <div class="topbar-actions">
+            <button class="btn btn-outline">Export</button>
+            <button class="btn btn-primary">New Layout</button>
+          </div>
+        </header>
+
+        <main class="dashboard-content">
+          <section class="section">
+            <header class="section-header section-header--compact">
+              <h2>Layout Overview</h2>
+              <p>A responsive two-column app shell using flexbox.</p>
+            </header>
+            <div class="card-grid">
+              <article class="card stat-card">
+                <h3>Page Views</h3>
+                <p class="stat-card__value">24,321</p>
+                <p class="stat-card__meta">Past 7 days</p>
+              </article>
+              <article class="card stat-card">
+                <h3>Active Layouts</h3>
+                <p class="stat-card__value">12</p>
+                <p class="stat-card__meta">Using flexbox patterns</p>
+              </article>
+              <article class="card stat-card">
+                <h3>Breakpoints</h3>
+                <p class="stat-card__value">3</p>
+                <p class="stat-card__meta">Mobile, tablet, desktop</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="section">
+            <header class="section-header section-header--compact">
+              <h2>Recent Layouts</h2>
+            </header>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Last Updated</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Marketing Landing</td>
+                    <td>Hero + Cards</td>
+                    <td>2026-03-08</td>
+                    <td><span class="badge badge--success">Published</span></td>
+                  </tr>
+                  <tr>
+                    <td>Analytics Dashboard</td>
+                    <td>Sidebar + Grid</td>
+                    <td>2026-03-06</td>
+                    <td><span class="badge badge--warning">Draft</span></td>
+                  </tr>
+                  <tr>
+                    <td>Pricing Page</td>
+                    <td>Card Grid</td>
+                    <td>2026-03-01</td>
+                    <td><span class="badge badge--success">Published</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <header class="section-header section-header--compact">
+              <h2>Quick Settings</h2>
+            </header>
+            <form class="form-grid">
+              <div class="form-field">
+                <label for="theme">Theme</label>
+                <select id="theme" name="theme">
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="density">Density</label>
+                <select id="density" name="density">
+                  <option value="comfortable">Comfortable</option>
+                  <option value="compact">Compact</option>
+                </select>
+              </div>
+              <div class="form-field form-field--full">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="Save layout notes here..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
+

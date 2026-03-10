@@ -1,0 +1,87 @@
+/*
+  FlexPro Responsive Styles (responsive.css)
+  - Mobile-first media queries to adapt layouts at key breakpoints:
+    - ≤ 767px: phone
+    - 768–1023px: tablet
+    - ≥ 1024px: desktop
+  - Controls stacking vs side-by-side layout for hero, grids, footer, and dashboard shell.
+*/
+
+/* Mobile-first base: stack layouts vertically where needed */
+
+@media (max-width: 767px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .section-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-list {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .dashboard-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .dashboard-content {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-inner {
+    flex-direction: row;
+  }
+
+  .feature-grid .card,
+  .pricing-grid .card {
+    flex: 1 1 calc(50% - var(--spacing-lg));
+  }
+
+  .dashboard-shell {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 220px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-grid .card,
+  .pricing-grid .card,
+  .testimonial-grid .card {
+    flex: 1 1 calc(25% - var(--spacing-lg));
+  }
+
+  .pricing-grid .pricing-card {
+    flex: 1 1 calc(33.333% - var(--spacing-lg));
+  }
+}
+

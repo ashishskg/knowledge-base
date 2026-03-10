@@ -1,0 +1,215 @@
+/*
+  FlexPro Layout Styles (layout.css)
+  - Flexbox-based layouts for:
+    - Site header and navigation
+    - Hero section alignment
+    - Feature/pricing/testimonial/card grids
+    - Dashboard shell (sidebar + main + topbar)
+    - Tables and form grids
+  All structural alignment lives here; visual styling is in base/components.
+*/
+
+.site-header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.nav a:hover {
+  color: var(--color-primary);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  padding: 0.1rem 0.5rem;
+}
+
+.hero {
+  padding: var(--spacing-2xl) 0 var(--spacing-2xl);
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2xl);
+}
+
+.hero-content {
+  flex: 1.2;
+}
+
+.hero-visual {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.feature-grid,
+.pricing-grid,
+.testimonial-grid,
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.feature-grid .card,
+.pricing-grid .card,
+.testimonial-grid .card,
+.card-grid .card {
+  flex: 1 1 min(260px, 100%);
+}
+
+.section-cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: radial-gradient(circle at top, #020617, #020617 55%, #000 110%);
+  border-right: 1px solid rgba(31, 41, 55, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: var(--spacing-lg) var(--spacing-md);
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.sidebar-link--active,
+.sidebar-link:hover {
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--color-primary);
+}
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(16px);
+}
+
+.topbar-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.dashboard-content {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 0.75rem;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  text-align: left;
+}
+
+.table th {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.form-field {
+  flex: 1 1 min(220px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field--full {
+  flex-basis: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-basis: 100%;
+  gap: var(--spacing-sm);
+}
+
