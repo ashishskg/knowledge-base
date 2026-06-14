@@ -1,3 +1,13 @@
+---
+title: Java Threading — Enterprise
+tags: [java, threads, virtual-threads, executors]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: senior → architect
+related: [threading-basic-guide.md]
+---
+
 ## Java Threading — Enterprise & Java 21 Guide
 
 ---

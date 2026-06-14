@@ -1,3 +1,13 @@
+---
+title: ConcurrentHashMap Guide
+tags: [java, collections, concurrency, thread-safe]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: senior
+related: [hashmap-guide.md]
+---
+
 ## Java ConcurrentHashMap — Production Design & Usage Guide (Java 8–21)
 
 ---

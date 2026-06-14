@@ -1,3 +1,13 @@
+---
+title: Java 21 — New Features
+tags: [java, java21, records, sealed-classes]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: intermediate → senior
+related: [java21-concurrency-guide.md]
+---
+
 ## Java 21 Features Guide
 
 A practical overview of **Java 21** (LTS, released September 2023) language and core library features. Each section includes a short concept explanation, code examples, and expected output or behavior.

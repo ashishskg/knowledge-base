@@ -1,3 +1,13 @@
+---
+title: HashMap — Deep Dive
+tags: [java, collections, hashmap, internals]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: intermediate
+related: [concurrent-hashmap-guide.md]
+---
+
 ## Java HashMap — Design, Internals, and Usage Guide (Java 8–21)
 
 ---

@@ -1,3 +1,13 @@
+---
+title: Java 8 — Interview Guide
+tags: [java, java8, interview]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: intermediate → senior
+related: [java8-guide.md]
+---
+
 ## Java 8 — Interview & Coding Guide
 
 This guide complements `Java8-Guide.md` and focuses on:

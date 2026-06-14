@@ -1,3 +1,13 @@
+---
+title: Java List Guide
+tags: [java, collections, list, arraylist]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: beginner → intermediate
+related: [custom-arraylist-guide.md]
+---
+
 ## Java List — Design, Internals, and Usage Guide (Java 8–21)
 
 ---

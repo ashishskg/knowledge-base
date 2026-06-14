@@ -1,3 +1,13 @@
+---
+title: Java 8 — Enterprise Reference
+tags: [java, java8, streams, lambdas, optional]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: beginner → architect
+related: [java8-interview-guide.md]
+---
+
 ## Java 8 — Complete Enterprise Reference Guide
 
 ---

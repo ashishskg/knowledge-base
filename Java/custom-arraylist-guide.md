@@ -1,3 +1,13 @@
+---
+title: Custom ArrayList Implementation
+tags: [java, collections, internals, data-structures]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: senior
+related: [list-guide.md]
+---
+
 ## CustomArrayList — Design, Implementation, and Comparison with ArrayList
 
 ---

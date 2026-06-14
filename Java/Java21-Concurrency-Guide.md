@@ -1,3 +1,13 @@
+---
+title: Java 21 — Concurrency & Virtual Threads
+tags: [java, java21, virtual-threads, structured-concurrency]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: senior → architect
+related: [threading-enterprise-guide.md]
+---
+
 ## Java 21 Concurrency — Virtual Threads & Structured Concurrency (Beginner → Enterprise)
 
 ---

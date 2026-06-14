@@ -1,3 +1,13 @@
+---
+title: Java Threading — Basics
+tags: [java, threads, concurrency, synchronized]
+created: 2024-01-01
+updated: 2026-06-14
+status: stable
+level: beginner → intermediate
+related: [threading-enterprise-guide.md]
+---
+
 ## Java Threading — Basics Guide (Java 21)
 
 ---
