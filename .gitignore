@@ -67,3 +67,5 @@ Thumbs.db
 *.tar.gz
 *.rar
 
+.DS_Store
+.DS_Store
